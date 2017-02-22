@@ -1,9 +1,9 @@
 development:
   app_id: '402242343464282'
   app_secret: '069cd90c3288670c99104d2e18df39c6'
-  callback_url: 'http://localhost:3000/users/auth/facebook/callback'
+  callback_url: 'http://localhost:3000/auth/facebook/callback'
 
 production:
   app_id: '402242343464282'
   app_secret: '069cd90c3288670c99104d2e18df39c6'
-  callback_url: 'http://localhost:3000/users/auth/facebook/callback'  
+  callback_url: 'http://localhost:3000/auth/facebook/callback'  
