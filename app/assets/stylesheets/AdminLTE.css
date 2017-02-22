@@ -4683,6 +4683,26 @@ table.text-center th {
 .chart canvas {
   width: 100%!important;
 }
+.sender-message{
+  display: inline-block;
+  margin-right: 5px !important;
+  float: right;
+}
+
+.reciever-message{
+  display: inline-block;
+  margin-left: 5px !important;
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+
+.settings-menu{
+  height: 85px !important;
+  width: 160px!important;
+}
 /*
  * Misc: print
  * -----------

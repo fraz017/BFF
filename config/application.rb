@@ -16,5 +16,10 @@ module SuggestMe
     CONFIG.each do |k,v|
       ENV[k.upcase] ||= v
     end
+
+    config.to_prepare do
+      Devise::SessionsController.layout "devise"
+      Devise::RegistrationsController.layout "devise"
+    end
   end
 end
