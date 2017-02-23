@@ -1,0 +1,25 @@
+<% user.chat_room.messages.last(10).each do |message| %>
+<!-- Message. Default to the left -->
+  <%if message.sender_id != user.id %>
+    <div class="direct-chat-msg">
+      <div class="direct-chat-info clearfix">
+        <span class="direct-chat-name pull-left">Anonymous</span>
+        <span class="direct-chat-timestamp pull-right"><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
+      </div><!-- /.direct-chat-info -->
+      <div class="direct-chat-text reciever-message">
+        <%= message.content %>
+      </div><!-- /.direct-chat-text -->
+    </div><!-- /.direct-chat-msg -->
+  <%else%>
+    <!-- Message to the right -->
+    <div class="direct-chat-msg right">
+      <div class="direct-chat-info clearfix">
+        <span class="direct-chat-name pull-right">Me</span>
+        <span class="direct-chat-timestamp pull-left"><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
+      </div><!-- /.direct-chat-info -->
+      <div class="direct-chat-text sender-message">
+        <%= message.content %>
+      </div><!-- /.direct-chat-text -->
+    </div><!-- /.direct-chat-msg -->
+  <%end%>
+<%end%>

@@ -1,9 +1,18 @@
 class User < ApplicationRecord
+	has_one :chat_room
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :omniauthable, :omniauth_providers => [:facebook]
+
+  validates_presence_of :location, :education, :gender, :on => :update       
+  after_create :create_room
+
+
+  def create_room
+		ChatRoom.create(user_id: self.id)
+	end
 
   def self.from_omniauth(auth)
 	  where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
@@ -19,8 +28,7 @@ class User < ApplicationRecord
 	    # user.skip_confirmation!
 	  end
 	end
-
-	validates_presence_of :location, :education, :gender, :on => :update   
+   
 	
 	def self.new_with_session(params, session)
     super.tap do |user|

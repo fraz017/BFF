@@ -18,4 +18,5 @@
 //= require fastclick.min
 //= require app
 //= require jquery.geocomplete.min
+//= require cable
 
