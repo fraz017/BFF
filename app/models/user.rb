@@ -18,7 +18,9 @@ class User < ApplicationRecord
 	    # uncomment the line below to skip the confirmation emails.
 	    # user.skip_confirmation!
 	  end
-	end   
+	end
+
+	validates_presence_of :location, :education, :gender, :on => :update   
 	
 	def self.new_with_session(params, session)
     super.tap do |user|

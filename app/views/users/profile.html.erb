@@ -1,0 +1,70 @@
+<div class="content-wrapper" style="min-height: 946px;">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Profile
+      <small>Preview</small>
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6">
+        <!-- general form elements -->
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">Update Profile</h3>
+          </div><!-- /.box-header -->
+          <!-- form start -->
+          <%= form_for(@user, url: update_path(@user), method: :patch) do |f| %>
+            <% if @user.errors.any? %>
+              <div id="error_explanation" class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> 
+                <h2>Error!</h2>
+
+                <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <div class="box-body">
+              <div class="form-group">
+                <label>Location* </label>
+                <%= f.text_field :location, class: "form-control", placeholder: "Enter a location" %>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Education* </label>
+                <%= f.select :education, options_for_select(["School", "High School", "College", "University", "Other"], @user.education), {include_blank: "Please select an education level"}, {class: "form-control"} %>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputFile">Gender* </label>
+                <%= f.select :gender, options_for_select(["Male", "Female"], @user.gender), {include_blank: "Please select a gender"}, {class: "form-control"} %>
+              </div>
+            </div><!-- /.box-body -->
+            <%= f.hidden_field :coordinates, data: {geo: "location"} %>
+            <%= f.hidden_field :city, data: {geo: "locality"} %>
+            <%= f.hidden_field :area, data: {geo: "sublocality"} %>
+            <%= f.hidden_field :state, data: {geo: "administrative_area_level_1"} %>
+            <%= f.hidden_field :country, data: {geo: "country"} %>
+            <%= f.hidden_field :country_code, data: {geo: "country_short"} %>
+            <div class="box-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          <% end %>
+        </div><!-- /.box -->
+      </div><!--/.col (left) -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+</div>
+
+<script type="text/javascript">
+  $("#user_location").geocomplete({
+    details: "form",
+    detailsAttribute: "data-geo",
+    types: ["geocode", "establishment"],
+  });
+</script>

@@ -17,4 +17,5 @@
 //= require jquery.slimscroll.min
 //= require fastclick.min
 //= require app
+//= require jquery.geocomplete.min
 

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get 'users/index'
-
+  get '/profile' => 'users#profile'
+  patch "/users/:id" => 'users#update', as: :update
   get 'messages/index'
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
