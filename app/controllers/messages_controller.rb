@@ -20,13 +20,13 @@ class MessagesController < ApplicationController
 
   def post_reply
     params.permit!
-    @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
-    @message = @reply.message
+    @message = Message.find(params[:message_id])
     match = FuzzyMatch.new(@message.replies, read: :content).find(@reply.content)
     if match.present?
       match.score += 1
       match.save
     end
+    @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
     MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
     MessageBroadcastJob.set(wait: 2.minutes).perform_later(@message.sender, @message.sender.chat_room.id)
   end
