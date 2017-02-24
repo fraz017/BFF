@@ -1,0 +1,1 @@
+$('#room-<%= current_user.chat_room.id %>').html("<%= j render(:partial => 'new_messages', locals: {user: current_user}) %>");
