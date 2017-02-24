@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   patch "/users/:id" => 'users#update', as: :update
   get 'messages/index'
  	post '/messages' => "messages#post_message"
+ 	post '/reply' => "messages#post_reply"
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
  

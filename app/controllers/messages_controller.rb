@@ -15,13 +15,14 @@ class MessagesController < ApplicationController
   		user.chat_room.messages << @message
       MessageBroadcastJob.perform_now(user, user.chat_room.id)
   	end
+  end
 
-    # ActionCable.server.broadcast 'messages',
-    #     user: @users
-    #   head :ok
-    # respond_to do |format|
-    #   format.js
-    # end
+  def post_reply
+    params.permit!
+    @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
+    @message = @reply.message
+    MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
+    MessageBroadcastJob.perform_now(@message.sender, @message.sender.chat_room.id)
   end
 
   private

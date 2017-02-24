@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 	has_one :chat_room
+	has_many :messages, foreign_key: "sender_id", class_name: "Message"
+	has_many :replies, foreign_key: "sender_id", class_name: "Reply"
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

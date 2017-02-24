@@ -9,7 +9,7 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def speak(data)
-  	ActionCable.server.broadcast('messages', user: render_message(data['messages']))
+  	ActionCable.server.broadcast('messages', message: render_message(data.user), id: data.id)
   end
 
   private

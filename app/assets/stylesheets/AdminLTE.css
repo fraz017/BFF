@@ -4703,6 +4703,22 @@ table.text-center th {
   height: 85px !important;
   width: 160px!important;
 }
+.reply-reciever{
+  background: #00a65a !important;
+  border-color: #00a65a !important;
+  color: #fff;
+}
+.reply-reciever:after, .reply-reciever:before{
+  border-left-color: #00a65a !important;
+}
+.reply-sender{
+  background: #f39c12 !important;
+  border-color: #f39c12 !important;
+  color: #fff;
+}
+.reply-sender:after, .reply-sender:before{
+  border-right-color: #f39c12 !important;
+}
 /*
  * Misc: print
  * -----------
