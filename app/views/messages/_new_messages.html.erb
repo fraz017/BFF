@@ -50,7 +50,7 @@
         <%= message.content %>
       </div><!-- /.direct-chat-text -->
       <%
-        reply = message.replies
+        reply = message.replies.order("score desc")
         if reply.present?
       %>
         <div class="clearfix"></div>
