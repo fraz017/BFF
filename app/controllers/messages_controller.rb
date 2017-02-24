@@ -21,7 +21,7 @@ class MessagesController < ApplicationController
   def post_reply
     params.permit!
     @message = Message.find(params[:message_id])
-    match = FuzzyMatch.new(@message.replies, read: :content).find(@reply.content)
+    match = FuzzyMatch.new(@message.replies, read: :content).find(params[:reply])
     if match.present?
       match.score += 1
       match.save
