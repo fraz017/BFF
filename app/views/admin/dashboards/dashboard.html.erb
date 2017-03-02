@@ -1,0 +1,86 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Dashboard
+      <small>Preview</small>
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Responsive Hover Table</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+              <% @users.each do |user| %>
+                <tr>
+                  <td><%= user.id %></td>
+                  <td><%= user.email %></td>
+                  <td>
+                    <span class="users-<%= user.id %>-online <%= user.is_online? == true ? '' : 'hidden' %> label label-success">Online</span>
+                    <span class="users-<%= user.id %>-offline <%= user.is_online? == false ? '' : 'hidden' %> label label-danger">Offline</span>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td colspan="3" class="text-center"><%= will_paginate @users, renderer: BootstrapPagination::Rails %></td>
+              </tr>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div>
+      <div class="col-xs-6">
+        <!-- Box Comment -->
+        <div class="box box-widget">
+          <div class='box-header with-border'>
+            <div class='user-block'>  
+              <h2>BFF Logs</h2>
+            </div><!-- /.user-block -->
+          </div><!-- /.box-header -->
+          <div class='box-footer box-comments log-comments'>
+            <% @logs.each do |log| %>
+              <div class='box-comment'>
+                <div class='comment-text'>
+                  <span class="username">
+                    <%= log.sender.email %>
+                    <span class='text-muted pull-right'><%= log.created_at.strftime("%d %b %l:%M %P ") %></span>
+                  </span><!-- /.username -->
+                  <%= log.content %>
+                </div><!-- /.comment-text -->
+              </div><!-- /.box-comment -->
+            <%end%>
+          </div><!-- /.box-footer -->
+        </div><!-- /.box -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </section>
+</div>  
+
+<style type="text/css">
+  .box-widget{
+    min-height: 600px;
+    max-height: 600px;
+    height: 600px;
+    overflow: auto;
+  }
+  .box-body{
+    max-height: 560px;
+    min-height: 560px;
+    height: 560px;
+    overflow: auto;
+  }
+</style>
+
+<script type="text/javascript">
+  $(".box-widget").animate({ scrollTop: $(".box-widget")[0].scrollHeight}, 1000);
+</script>

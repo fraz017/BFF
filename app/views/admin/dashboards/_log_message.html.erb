@@ -1,0 +1,9 @@
+<div class='box-comment'>
+  <div class='comment-text'>
+    <span class="username">
+      <%= message.sender.email %>
+      <span class='text-muted pull-right'><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
+    </span><!-- /.username -->
+    <%= message.content %>
+  </div><!-- /.comment-text -->
+</div><!-- /.box-comment -->

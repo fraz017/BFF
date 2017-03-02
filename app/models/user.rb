@@ -2,13 +2,16 @@ class User < ApplicationRecord
 	has_one :chat_room
 	has_many :messages, foreign_key: "sender_id", class_name: "Message"
 	has_many :replies, foreign_key: "sender_id", class_name: "Reply"
+	has_many :logs, foreign_key: "sender_id", class_name: "Log"
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :omniauthable, :omniauth_providers => [:facebook]
 
-  validates_presence_of :location, :education, :gender, :on => :update       
+  as_enum :role, admin: 0, user: 1       
+
+  validates_presence_of :name, :location, :education, :gender, :on => :update       
   after_create :create_room
 
 

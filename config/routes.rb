@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 	mount ActionCable.server => '/cable'
+
+	namespace "admin" do
+		get "/dashboard" => "dashboards#dashboard"
+	end
   get '/profile' => 'users#profile'
   patch "/users/:id" => 'users#update', as: :update
   get 'messages/index'

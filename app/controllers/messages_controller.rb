@@ -9,8 +9,10 @@ class MessagesController < ApplicationController
   def post_message
     params.permit!
   	@message = Message.create(content: params[:message], sender_id: current_user.id)
+    log = Log.create(content: params[:message], sender_id: current_user.id, log_type: "message")
     current_user.chat_room.messages << @message  
   	MessageBroadcastJob.perform_now(current_user, current_user.chat_room.id)
+    LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
     @users = User.where(country_code: current_user.country_code).where.not(id: current_user.id)
   	@users.each do |user|
   		user.chat_room.messages << @message
@@ -27,7 +29,9 @@ class MessagesController < ApplicationController
       match.save
     end
     @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
+    log = Log.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id],log_type: "reply")
     MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
+    LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
     MessageBroadcastJob.set(wait: 2.minutes).perform_later(@message.sender, @message.sender.chat_room.id)
   end
 
