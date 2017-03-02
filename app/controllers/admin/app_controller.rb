@@ -1,6 +1,6 @@
 class Admin::AppController < ApplicationController
 	layout "admin"
-	skip_before_action :check_admin
+	# skip_before_action :check_admin
 	before_action :admin_restricted
 
 	private
