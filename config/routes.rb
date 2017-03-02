@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
 	namespace "admin" do
 		get "/dashboard" => "dashboards#dashboard"
+    get '/profile/:id' => "dashboards#profile"
 	end
   get '/profile' => 'users#profile'
   patch "/users/:id" => 'users#update', as: :update
