@@ -13,7 +13,24 @@ class User < ApplicationRecord
 
   validates_presence_of :name, :location, :education, :gender, :on => :update       
   after_create :create_room
+  before_update :set_points
 
+  def set_points
+  	points = 0
+  	if self.location.present?
+  		points+= 10
+  	end
+  	if self.education.present?
+  		points+= 5
+  	end
+  	if self.gender.present?
+  		points+= 5
+  	end
+  	if self.name.present?
+  		points+= 5
+  	end
+  	self.score = points
+  end
 
   def create_room
 		ChatRoom.create(user_id: self.id)

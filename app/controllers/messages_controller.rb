@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
     current_user.chat_room.messages << @message  
   	MessageBroadcastJob.perform_now(current_user, current_user.chat_room.id)
     LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
-    @users = User.where(country_code: current_user.country_code).where.not(id: current_user.id)
+    @users = User.where(country_code: current_user.country_code).where.not(id: current_user.id).order("score DESC").limit(20)
   	@users.each do |user|
   		user.chat_room.messages << @message
       MessageBroadcastJob.perform_now(user, user.chat_room.id)
