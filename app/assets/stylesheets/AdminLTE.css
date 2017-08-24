@@ -1848,6 +1848,13 @@ a:focus {
   font-weight: 400;
   font-size: 12px;
 }
+.reply-text{
+  background: #f7f7f7;
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
 /* Widget: TODO LIST */
 .todo-list {
   margin: 0;

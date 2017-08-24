@@ -1,9 +1,7 @@
-<div class='box-comment'>
-  <div class='comment-text'>
-    <span class="username">
-      <%= message.sender.email %>
-      <span class='text-muted pull-right'><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
-    </span><!-- /.username -->
-    <%= message.content %>
-  </div><!-- /.comment-text -->
-</div><!-- /.box-comment -->
+<div style="margin-left: 10px;">
+	<span class='reply-text'>
+		<strong><%= message.sender.email %>:</strong> <%= message.content %>
+	</span>
+	<span class='text-muted pull-right'><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
+</div>
+</br>
