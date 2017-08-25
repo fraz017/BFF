@@ -6,27 +6,209 @@
       <small>Preview</small>
     </h1>
   </section>
-
-  <!-- Main content -->
   <section class="content">
     <div class="row">
       <div class="col-xs-6">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Responsive Hover Table</h3>
-          </div><!-- /.box-header -->
+            <h3 class="box-title">Users</h3>
+          </div>
+          <div class="users-filters">
+            <strong>Filters</strong>
+            <div class="row">
+              <div class="col-md-12" style="margin-bottom: 10px;">
+                <form action="/admin/dashboard" accept-charset="UTF-8" method="get">
+                  <input name="utf8" type="hidden" value="✓">
+                  <div>
+                    <input class="form-control" type="search" name="search[email]" value="<%= params[:search].try(:[], :email) %>" placeholder="Email search ...">
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4" style="margin-bottom: 10px;">
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <% @education_filter = @search.filter(:education) %>
+                  <%= @education_filter.name.titleize %>
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <% @education_filter.facet.reject(&:selected).each do |facet_value| %>
+                      <% entity = facet_value.entity %>
+                      <% display = entity %>
+                      <li>
+                        <%= link_to(@education_filter.add(entity).path, class: "add-filter") do %>
+                          <span class="education-name"><%= display %></span>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-4" style="margin-bottom: 10px;">
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <% @age_range_filter = @search.filter(:age_range) %>
+                  <%= @age_range_filter.name.titleize %>
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <% @age_range_filter.facet.reject(&:selected).each do |facet_value| %>
+                      <% entity = facet_value.entity %>
+                      <% display = entity %>
+                      <li>
+                        <%= link_to(@age_range_filter.add(entity).path, class: "add-filter") do %>
+                          <span class="age_range-name"><%= display %></span>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-4" style="margin-bottom: 10px;">
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <% @gender_filter = @search.filter(:gender) %>
+                  <%= @gender_filter.name.titleize %>
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <% @gender_filter.facet.reject(&:selected).each do |facet_value| %>
+                      <% entity = facet_value.entity %>
+                      <% display = entity %>
+                      <li>
+                        <%= link_to(@gender_filter.add(entity).path, class: "add-filter") do %>
+                          <span class="gender-name"><%= display %></span>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6" style="margin-bottom: 10px;">
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <% @location_filter = @search.filter(:location) %>
+                  <%= @location_filter.name.titleize %>
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <% @location_filter.facet.reject(&:selected).each do |facet_value| %>
+                      <% entity = facet_value.entity %>
+                      <% display = entity %>
+                      <li>
+                        <%= link_to(@location_filter.add(entity).path, class: "add-filter") do %>
+                          <span class="location-name"><%= display %></span>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6" style="margin-bottom: 10px;">
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <% @city_filter = @search.filter(:city) %>
+                  <%= @city_filter.name.titleize %>
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <% @city_filter.facet.reject(&:selected).each do |facet_value| %>
+                      <% entity = facet_value.entity %>
+                      <% display = entity %>
+                      <li>
+                        <%= link_to(@city_filter.add(entity).path, class: "add-filter") do %>
+                          <span class="city-name"><%= display %></span>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="selected-filters">
+            <strong>Selected Filters:</strong>
+            <div class="row">
+              <div class="col-md-4">
+                <% @education_filter = @search.filter(:education) %>
+                <% @education_filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <div class="currently-box">
+                    <%= link_to @education_filter.remove(entity).path do %>
+                      <strong>Education:</strong> <%= display %> <i class="fa fa-times-circle-o pull-right" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-4">
+                <% @age_range_filter = @search.filter(:age_range) %>
+                <% @age_range_filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <div class="currently-box">
+                    <%= link_to @age_range_filter.remove(entity).path do %>
+                      <strong>Age Range:</strong> <%= display %> <i class="fa fa-times-circle-o pull-right" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-4">
+                <% @gender_filter = @search.filter(:gender) %>
+                <% @gender_filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <div class="currently-box">
+                    <%= link_to @gender_filter.remove(entity).path do %>
+                      <strong>Gender:</strong> <%= display %> <i class="fa fa-times-circle-o pull-right" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <% @location_filter = @search.filter(:location) %>
+                <% @location_filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <div class="currently-box">
+                    <%= link_to @location_filter.remove(entity).path do %>
+                      <strong> Location: </strong> <%= display %> <i class="fa fa-times-circle-o pull-right" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-6">
+                <% @city_filter = @search.filter(:city) %>
+                <% @city_filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <div class="currently-box">
+                    <%= link_to @city_filter.remove(entity).path do %>
+                      <strong> City: </strong> <%= display %> <i class="fa fa-times-circle-o pull-right" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
           <div class="box-body table-responsive no-padding user-table">
             <table class="table table-hover">
               <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Email</th>
+                <th>Location</th>
+                <th>City</th>
+                <th>Education</th>
+                <th>Gender</th>
+                <th>Age Range</th>
                 <th>Status</th>
                 <th>View Profile</th>
               </tr>
               <% @users.each do |user| %>
                 <tr>
-                  <td><%= user.id %></td>
+                  <!-- <td><%= user.id %></td> -->
                   <td><%= user.email %></td>
+                  <td><%= user.location %></td>
+                  <td><%= user.city %></td>
+                  <td><%= user.education %></td>
+                  <td><%= user.gender %></td>
+                  <td><%= user.age_range %></td>
                   <td>
                     <span class="users-<%= user.id %>-online <%= user.is_online? == true ? '' : 'hidden' %> label label-success">Online</span>
                     <span class="users-<%= user.id %>-offline <%= user.is_online? == false ? '' : 'hidden' %> label label-danger">Offline</span>
@@ -115,6 +297,24 @@
     min-height: 560px;
     height: 560px;
     overflow: auto;
+  }
+  .users-filters,
+  .selected-filters{
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+  .currently-box{
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px;
+  }
+  .btn.dropdown-toggle{
+    width: 100%;
+  }
+  .dropdown-menu{
+    width: 100%;
+    color: #818181;
   }
 </style>
 

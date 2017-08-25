@@ -14,6 +14,7 @@ class User < ApplicationRecord
   validates_presence_of :name, :location, :education, :gender, :on => :update       
   after_create :create_room
   before_update :set_points
+  scope :users, -> { where(role_cd: 1) }
 
   def set_points
   	points = 0
