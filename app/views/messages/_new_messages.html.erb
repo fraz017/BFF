@@ -48,7 +48,37 @@
       </div><!-- /.direct-chat-info -->
       <div class="direct-chat-text sender-message">
         <%= message.content %>
+        <% if message.content.include?("?") %>
+          <div class="cat-question" id="<%= message.id %>">
+            <% if message.category.present? %>
+              <span class="label label-warning"><%= message.category.name %></span>
+            <% else %>
+              <label>Select Category:</label>
+              <select name="category" class="cat-select" id="<%= message.id %>">
+                <option value="music">Music</option>
+                <option value="sports">Sports</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="romance">Romance</option>
+                <option value="fashion">Fashion</option>
+                <option value="health_and_fitness">Health & Fitness</option>
+                <option value="other">Other</option>
+              </select>
+            <% end %>  
+          </div>
+        <% end %>
       </div><!-- /.direct-chat-text -->
+      <% if message.replies.present? %>
+          <div class="msg-replies">
+            <label>Top 3 replies:</label>
+            <ul>
+              <% message.replies.order("score desc").first(3).each do |msg| %>
+                <li class="col-md-4">
+                  <span><%= msg.content %></span>
+                </li>
+              <% end %>  
+            </ul>
+          </div>
+        <% end %>
       <%
         reply = message.replies.order("score desc")
         if reply.present?
@@ -78,5 +108,29 @@
     $("#reply-"+id).addClass("hidden");
     $("#"+id+"-cancel").addClass("hidden");
     $(".reply-btn#"+id).removeClass("hidden");
-  })
+  });
+  $(".cat-select").change(function(){
+    var value = $(this).val();
+    var message_id = $(this).attr("id");
+    $.ajax({
+      method: "POST",
+      url: "/save_category",
+      data: { category: value, message_id: message_id }
+    })
+    .done(function( msg ) {
+      $(".cat-question#"+message_id).html('<span class="label label-warning">'+ value +'</span>');
+    });
+  });
 </script>
+<style type="text/css">
+.msg-replies{
+  background-color: darkgray;
+  color: #fff;
+  padding: 5px;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 5px;
+}
+</style>

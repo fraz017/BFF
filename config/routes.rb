@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'messages/index'
  	post '/messages' => "messages#post_message"
  	post '/reply' => "messages#post_reply"
+  post '/save_category' => 'messages#save_category'
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
  

@@ -35,6 +35,19 @@ class MessagesController < ApplicationController
     MessageBroadcastJob.set(wait: 2.minutes).perform_later(@message.sender, @message.sender.chat_room.id)
   end
 
+  def save_category
+    if params[:message_id].present? && params[:category].present?
+      category = Category.new
+      category.message_id = params[:message_id]
+      category.name = params[:category]
+      category.save
+      result = true
+    else
+      result = false  
+    end
+    render json: { success: true }
+  end
+
   private
   def check_profile
   	if user_signed_in? && current_user.complete_profile == false
