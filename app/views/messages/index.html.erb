@@ -43,3 +43,35 @@
     </div><!-- /.row -->
   </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
+<script type="text/javascript">
+  jQuery(function() {
+  return $('#messages').autocomplete({
+    source: "/messages/index"
+  });
+});
+</script>
+<style type="text/css">
+  ul.ui-autocomplete {
+    position: absolute;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: solid 1px #999;
+    cursor: default;
+  }
+  ul.ui-autocomplete li {
+    background-color: #FFF;
+    border-top: solid 1px #DDD;
+    margin: 0;
+    padding: 5px;
+  }
+  ul.ui-autocomplete li div {
+    color: #000;
+    display: block;
+    padding: 3px;
+  }
+  ul.ui-autocomplete li div.ui-state-hover,
+  ul.ui-autocomplete li div.ui-state-active {
+    background-color: #FFFCB2;
+  }
+</style>

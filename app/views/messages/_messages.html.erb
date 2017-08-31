@@ -8,6 +8,9 @@
       </div><!-- /.direct-chat-info -->
       <div class="direct-chat-text reciever-message">
         <%= message.content %>
+        <% if message.category.present? %>
+          <span class="label label-warning"><%= message.category.name %></span>
+        <% end %>
       </div><!-- /.direct-chat-text -->
       <div class="clearfix"></div>
       <%
@@ -72,7 +75,7 @@
             <label>Top 3 replies:</label>
             <ul>
               <% message.replies.order("score desc").first(3).each do |msg| %>
-                <li class="col-md-4">
+                <li>
                   <span><%= msg.content %></span>
                 </li>
               <% end %>  

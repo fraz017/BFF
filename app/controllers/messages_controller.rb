@@ -4,6 +4,12 @@ class MessagesController < ApplicationController
 	before_action :check_profile, :if => proc {|c| !request.xhr?}
 
   def index
+    @messages = Message.where("content ilike ?", "%#{params[:term]}%")
+    @messages = @messages.where("content ilike '%?%'")
+    respond_to do |format|
+      format.html
+      format.js { render json: @messages.map(&:content).uniq.first(5) }
+    end
   end
 
   def post_message
