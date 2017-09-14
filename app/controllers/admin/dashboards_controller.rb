@@ -3,7 +3,29 @@ class Admin::DashboardsController < Admin::AppController
 	def dashboard
 		@search = UserSearch.new(params)
     @users = @search.result.where(:role_cd => 1).paginate(page: params[:page], per_page: 5)
-		@logs = Log.where(log_type: "message").last(100)
+	end
+
+	def logs
+		@logs = Log.where(log_type: "message").order("created_at desc").last(100)
+	end
+
+	def broadcast_message
+	end
+
+	def send_message
+		BroadcastAllJob.perform_now(params[:message])
+	end
+
+	def reported_messages
+		@messages = ReportedMessage.get_messages
+	end
+
+	def delete_message
+		if params[:id].present?
+			msg = Message.find_by_id(params[:id])
+			msg.destroy if msg.present?
+		end
+		redirect_to request.referer, notice: "Successfully Deleted!"
 	end
 
 	def profile

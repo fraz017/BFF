@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829170355) do
+ActiveRecord::Schema.define(version: 20170913103223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,13 @@ ActiveRecord::Schema.define(version: 20170829170355) do
     t.datetime "updated_at",             null: false
     t.integer  "score",      default: 0
     t.index ["message_id"], name: "index_replies_on_message_id", using: :btree
+  end
+
+  create_table "reported_messages", force: :cascade do |t|
+    t.integer  "message_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

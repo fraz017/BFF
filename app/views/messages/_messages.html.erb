@@ -12,6 +12,15 @@
           <span class="label label-warning"><%= message.category.name %></span>
         <% end %>
       </div><!-- /.direct-chat-text -->
+      <% if message_reported(message.id) %>
+        <button type="button" class="btn btn-primary btn-sm report-message" disabled id="<%= message.id %>">
+          <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
+        </button>
+      <% else %>
+        <button type="button" class="btn btn-primary btn-sm report-message" data-toggle="tooltip" title="Report Message ?" id="<%= message.id %>">
+          <i class="fa fa-flag"></i>
+        </button>
+      <% end %>
       <div class="clearfix"></div>
       <%
         reply = message.replies.where(sender_id: current_user.id)
@@ -69,8 +78,7 @@
             <% end %>  
           </div>
         <% end %>
-      </div><!-- /.direct-chat-text -->
-      <% if message.replies.present? %>
+        <% if message.replies.present? %>
           <div class="msg-replies">
             <label>Top 3 replies:</label>
             <ul>
@@ -82,19 +90,20 @@
             </ul>
           </div>
         <% end %>
+      </div><!-- /.direct-chat-text -->
       <%
-        reply = message.replies.order("score desc")
-        if reply.present?
+        #reply = message.replies.order("score desc")
+        #if reply.present?
       %>
-        <div class="clearfix"></div>
+        <!-- <div class="clearfix"></div>
         <div class="direct-chat-info clearfix">
           <span class="direct-chat-name pull-left">Replied By BFF</span>
-          <span class="direct-chat-timestamp pull-right"><%= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
-        </div><!-- /.direct-chat-info -->
-        <div class="direct-chat-text sender-message reply-reciever">
-          <%= reply.first.content %>
+          <span class="direct-chat-timestamp pull-right"><%#= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
         </div>
-      <%end%>
+        <div class="direct-chat-text sender-message reply-reciever">
+          <%#= reply.first.content %>
+        </div> -->
+      <%#end%>
     </div><!-- /.direct-chat-msg -->
   <%end%>
 <%end%>
@@ -124,6 +133,21 @@
     .done(function( msg ) {
       $(".cat-question#"+message_id).html('<span class="label label-warning">'+ value +'</span>');
     });
+  });
+  $(".report-message").click(function(){
+    var message_id = $(this).attr("id");
+    $.ajax({
+      method: "POST",
+      url: "/messages/report",
+      data: { message_id: message_id }
+    })
+    .done(function( msg ) {
+      $(".report-message#"+message_id).attr("disabled", "disabled");
+      alert("Message Reported!");
+    });
+  });
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
   });
 </script>
 <style type="text/css">

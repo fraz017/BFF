@@ -69,8 +69,7 @@
             <% end %>  
           </div>
         <% end %>
-      </div><!-- /.direct-chat-text -->
-      <% if message.replies.present? %>
+        <% if message.replies.present? %>
           <div class="msg-replies">
             <label>Top 3 replies:</label>
             <ul>
@@ -82,20 +81,21 @@
             </ul>
           </div>
         <% end %>
+      </div><!-- /.direct-chat-text -->
       <%
-        reply = message.replies.order("score desc")
-        if reply.present?
+        #reply = message.replies.order("score desc")
+        #if reply.present?
       %>
-        <div class="clearfix"></div>
+        <!-- <div class="clearfix"></div>
         <div class="direct-chat-info clearfix">
           <span class="direct-chat-name pull-left">Replied By BFF</span>
-          <span class="direct-chat-timestamp pull-right"><%= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
-        </div><!-- /.direct-chat-info -->
-        <div class="direct-chat-text sender-message reply-reciever">
-          <%= reply.first.content %>
+          <span class="direct-chat-timestamp pull-right"><%#= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
         </div>
-      <%end%>
-    </div><!-- /.direct-chat-msg -->
+        <div class="direct-chat-text sender-message reply-reciever">
+          <%#= reply.first.content %>
+        </div> -->
+      <%#end%>
+    </div>
   <%end%>
 <%end%>
 <script type="text/javascript">

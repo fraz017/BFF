@@ -1,0 +1,51 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Reported Messages
+    </h1>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="reported-msgs">
+            <% if @messages.present? %>
+              <ul>
+                <% @messages.each do |msg| %>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <%= msg.content %>
+                      </div>
+                      <div class="col-md-2">
+                        <%= msg.sender.email %>
+                      </div>
+                      <div class="col-md-2">
+                        <a href="/admin/delete_message/<%= msg.id %>" class="btn btn-danger" data-confirm="are you sure ?">Delete Message</a>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>  
+</div>
+<style type="text/css">
+  .reported-msgs ul li{
+    width: 100%;
+    float: left;
+    padding: 10px;
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+  }
+  .box{
+    min-height: 100px;
+    height: auto;
+    float: left;
+  }
+</style>

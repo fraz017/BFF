@@ -54,6 +54,16 @@ class MessagesController < ApplicationController
     render json: { success: true }
   end
 
+  def report
+    if params[:message_id].present?
+      report = ReportedMessage.new
+      report.message_id = params[:message_id]
+      report.user_id = current_user.id
+      report.save
+    end
+    render json: { success: true }
+  end
+
   private
   def check_profile
   	if user_signed_in? && current_user.complete_profile == false

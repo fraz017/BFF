@@ -2,13 +2,19 @@ Rails.application.routes.draw do
 	mount ActionCable.server => '/cable'
 
 	namespace "admin" do
-		get "/dashboard" => "dashboards#dashboard"
+    get "/dashboard" => "dashboards#dashboard"
+    get "/logs" => "dashboards#logs"
+    get "/reported_messages" => "dashboards#reported_messages"
+    get "/send_message" => "dashboards#send_message"
+    get "/delete_message/:id" => "dashboards#delete_message"
+		get "/broadcast_message" => "dashboards#broadcast_message"
     get '/profile/:id' => "dashboards#profile"
 	end
   get '/profile' => 'users#profile'
   patch "/users/:id" => 'users#update', as: :update
   get 'messages/index'
- 	post '/messages' => "messages#post_message"
+  post '/messages' => "messages#post_message"
+ 	post '/messages/report' => "messages#report"
  	post '/reply' => "messages#post_reply"
   post '/save_category' => 'messages#save_category'
 

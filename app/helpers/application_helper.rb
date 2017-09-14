@@ -7,4 +7,12 @@ module ApplicationHelper
 		end
 		html.html_safe
 	end
+	def message_reported(message_id)
+		message = ReportedMessage.where(:message_id => message_id, user_id: current_user.id).last
+		if message.present?
+			true
+		else
+			false
+		end
+	end
 end

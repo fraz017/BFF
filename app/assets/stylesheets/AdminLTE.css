@@ -69,6 +69,13 @@ body {
 .layout-top-nav .main-footer {
   margin-left: 0;
 }
+.navbar-custom-menu,
+.navbar-custom-menu ul{
+  width: 100%;
+}
+.navbar-custom-menu .notifications-menu{
+  float: right;
+}
 @media (max-width: 767px) {
   .content-wrapper,
   .right-side,
