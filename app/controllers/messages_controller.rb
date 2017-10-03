@@ -4,7 +4,7 @@ class MessagesController < ApplicationController
 	before_action :check_profile, :if => proc {|c| !request.xhr?}
 
   def index
-    @messages = Message.where("content ilike ?", "%#{params[:term]}%")
+    @messages = Message.where("content ilike ? and visible = ?", "%#{params[:term]}%", true)
     @messages = @messages.where("content ilike '%?%'")
     respond_to do |format|
       format.html
@@ -56,10 +56,16 @@ class MessagesController < ApplicationController
 
   def report
     if params[:message_id].present?
+      message = Message.find_by_id params[:message_id] if params[:type].nil?
+      message = Reply.find_by_id params[:message_id] if params[:type].present?
       report = ReportedMessage.new
-      report.message_id = params[:message_id]
-      report.user_id = current_user.id
+      report.message_id = params[:message_id] if params[:type].nil?
+      report.reply_id = params[:message_id] if params[:type].present?
+      report.reported_by = current_user.id
+      report.user_id = message.sender.id
       report.save
+      message.sender.add_flag_point
+      message.add_flag_point
     end
     render json: { success: true }
   end

@@ -37,6 +37,15 @@ class User < ApplicationRecord
 		ChatRoom.create(user_id: self.id)
 	end
 
+  def add_flag_point
+    if self.flagged.nil?
+      self.flagged = 1
+    else  
+      self.flagged += 1
+    end
+    self.save 
+  end
+
   def self.from_omniauth(auth)
 	  where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
 	    user.email = auth.info.email

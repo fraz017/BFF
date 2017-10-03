@@ -13,7 +13,12 @@ class Admin::DashboardsController < Admin::AppController
 	end
 
 	def send_message
-		BroadcastAllJob.perform_now(params[:message])
+		@message = Message.create(content: params[:message], sender_id: current_user.id)
+		User.all.each do |user|
+  		user.chat_room.messages << @message
+      BroadcastAllJob.perform_now(user, user.chat_room.id)
+  	end
+  	redirect_to request.referer
 	end
 
 	def reported_messages

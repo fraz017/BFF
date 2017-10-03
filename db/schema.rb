@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170913103223) do
+ActiveRecord::Schema.define(version: 20171002155742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,25 +49,31 @@ ActiveRecord::Schema.define(version: 20170913103223) do
   create_table "messages", force: :cascade do |t|
     t.text     "content"
     t.integer  "sender_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "flagged"
+    t.boolean  "visible",    default: true
   end
 
   create_table "replies", force: :cascade do |t|
     t.integer  "message_id"
     t.text     "content"
     t.integer  "sender_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.integer  "score",      default: 0
+    t.boolean  "visible",    default: true
+    t.integer  "flagged"
     t.index ["message_id"], name: "index_replies_on_message_id", using: :btree
   end
 
   create_table "reported_messages", force: :cascade do |t|
     t.integer  "message_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "reported_by"
+    t.integer  "reply_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -101,6 +107,8 @@ ActiveRecord::Schema.define(version: 20170913103223) do
     t.integer  "role_cd",                default: 1
     t.boolean  "is_online",              default: false
     t.integer  "score",                  default: 0
+    t.integer  "flagged"
+    t.integer  "loyalty_score"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end

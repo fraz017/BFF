@@ -13,5 +13,6 @@
  *= require bootstrap.min
  *= require font-awesome
  *= require AdminLTE
+ *= require qtip
  *= require _all-skins.min
  */

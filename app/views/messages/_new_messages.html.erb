@@ -1,104 +1,188 @@
-<% user.chat_room.messages.last(10).each do |message| %>
-<!-- Message. Default to the left -->
+<% user.chat_room.messages.where(:visible => true).last(10).each do |message| %>
   <%if message.sender_id != user.id %>
-    <div class="direct-chat-msg">
-      <div class="direct-chat-info clearfix">
-        <span class="direct-chat-name pull-left">BFF</span>
-        <span class="direct-chat-timestamp pull-right"><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
-      </div><!-- /.direct-chat-info -->
-      <div class="direct-chat-text reciever-message">
-        <%= message.content %>
-        <% if message.category.present? %>
-          <span class="label label-warning"><%= message.category.name %></span>
-        <% end %>
-      </div><!-- /.direct-chat-text -->
-      <div class="clearfix"></div>
-      <%
-        reply = message.replies.where(sender_id: user.id)
-        if reply.present?
-      %>
-        <div class="direct-chat-info clearfix">
-          <span class="direct-chat-name pull-left">Replied By You</span>
-          <span class="direct-chat-timestamp pull-right"><%= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
-        </div><!-- /.direct-chat-info -->
-        <div class="direct-chat-text reciever-message reply-sender">
-          <%= reply.first.content %>
+    <% if message.sender.role_cd == 0 %>
+      <div class="row message-body">
+        <div class="col-sm-12 message-main-receiver">
+          <div class="receiver">
+            <div class="message-text">
+              <strong>Admin:</strong>
+              <br/>
+              <span>Hello, <%= user.email %></span>  
+              <br>
+              <%= message.content %>
+              <br/>
+              <span>Thank you!</span>
+            </div>
+            <span class="message-time pull-right">
+              <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+            </span>
+          </div>
         </div>
-      <%else%>
-        <div class="direct-chat-text reciever-message">
-          <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply to this message</a>
-          <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
-          <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= user.id %>">
-            <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
-              <div class="col-xs-8">
-                <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control">
-                <input type="hidden" name="message_id" value="<%= message.id %>">
+      </div>
+    <% else %>
+      <div class="row message-body">
+        <div class="col-sm-12 message-main-receiver">
+          <div class="receiver">
+            <div class="message-text">
+              <span class="direct-chat-name pull-left">BFF</span>
+              <%= message.content %>
+              <% if message.category.present? %>
+                <span class="label label-warning"><%= message.category.name.titleize %></span>
+              <% end %>
+            </div>
+            <span class="message-time pull-right">
+              <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+            </span>
+            <div class="clearfix"></div>
+            <% reply = message.replies.where(sender_id: user.id) %>
+            <% if reply.present? %>
+              <div class="row message-body">
+                <div class="col-sm-12">
+                  <div class="sender">
+                    <div class="message-text">
+
+                      <span class="direct-chat-name pull-left">Replied By You</span>
+                      <span class="direct-chat-timestamp pull-right"><%= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
+                      </div>
+                      <div class="direct-chat-text reciever-message">
+                        <%= reply.first.content %>
+                      </div>
+                  </div>  
+                </div>
+              </div>    
+            <%else%>
+              <div class="direct-chat-text reciever-message">
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply to this message</a>
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
+                <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= user.id %>">
+                  <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
+                    <div class="col-xs-8">
+                      <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control">
+                      <input type="hidden" name="message_id" value="<%= message.id %>">
+                    </div>
+                    <div class="col-xs-2">
+                      <button type="submit" class="btn btn-primary btn-flat">Send</button>
+                    </div>
+                  <% end %>
+                </div> 
               </div>
-              <div class="col-xs-2">
-                <button type="submit" class="btn btn-primary btn-flat">Send</button>
-              </div>
-            <% end %>
-          </div> 
-        </div><!-- /.direct-chat-text -->
-      <%end%>
-    </div><!-- /.direct-chat-msg -->
+            <%end%>
+          </div>
+          <% if message_reported(message.id, user.id) %>
+            <button type="button" class="report-message transparent" disabled id="<%= message.id %>">
+              <i class="fa fa-flag" title="Reported Message!"></i>
+            </button>
+          <% else %>
+            <button type="button" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
+              <i class="fa fa-flag"></i>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   <%else%>
     <!-- Message to the right -->
-    <div class="direct-chat-msg right">
-      <div class="direct-chat-info clearfix">
-        <span class="direct-chat-name pull-right">Me</span>
-        <span class="direct-chat-timestamp pull-left"><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
-      </div><!-- /.direct-chat-info -->
-      <div class="direct-chat-text sender-message">
-        <%= message.content %>
-        <% if message.content.include?("?") %>
-          <div class="cat-question" id="<%= message.id %>">
-            <% if message.category.present? %>
-              <span class="label label-warning"><%= message.category.name %></span>
-            <% else %>
-              <label>Select Category:</label>
-              <select name="category" class="cat-select" id="<%= message.id %>">
-                <option value="music">Music</option>
-                <option value="sports">Sports</option>
-                <option value="entertainment">Entertainment</option>
-                <option value="romance">Romance</option>
-                <option value="fashion">Fashion</option>
-                <option value="health_and_fitness">Health & Fitness</option>
-                <option value="other">Other</option>
-              </select>
-            <% end %>  
+    <div class="row message-body">
+      <div class="col-sm-12 message-main-sender">
+        <div class="sender">
+          <div class="message-text">
+            <span class="direct-chat-name pull-right">Me
+              <span class="filter-cat">
+                <% if message.content.include?("?") %>
+                  <div class="cat-question" id="<%= message.id %>">
+                    <% if message.category.present? %>
+                      <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
+                    <% else %>
+                      <a href="javascript:void(0)" class="show_hide" id="<%= message.id %>"><i class="fa fa-filter" aria-hidden="true" title="Select Category"></i></a>
+                    <% end %>  
+                  </div>
+                <% end %>
+              </span>
+            </span>
+            <%= message.content %>
+            <% if message.replies.where(:visible => true).present? %>
+              <div class="msg-replies">
+                <ul>
+                  <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
+                    <li>
+                      <span><%= msg.content %></span>
+                      <span>
+                        <% if message_reported(msg.id, user.id, "reply") %>
+                          <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
+                            <i class="fa fa-flag" title="Reported Message!"></i>
+                          </button>
+                        <% else %>
+                          <button type="button" class="report-reply transparent" title="Report Message ?" id="<%= msg.id %>">
+                            <i class="fa fa-flag"></i>
+                          </button>
+                        <% end %>
+                      </span>
+                    </li>
+                  <% end %>  
+                </ul>
+              </div>
+            <% end %>
           </div>
-        <% end %>
-        <% if message.replies.present? %>
-          <div class="msg-replies">
-            <label>Top 3 replies:</label>
-            <ul>
-              <% message.replies.order("score desc").first(3).each do |msg| %>
-                <li>
-                  <span><%= msg.content %></span>
-                </li>
-              <% end %>  
-            </ul>
-          </div>
-        <% end %>
-      </div><!-- /.direct-chat-text -->
-      <%
-        #reply = message.replies.order("score desc")
-        #if reply.present?
-      %>
-        <!-- <div class="clearfix"></div>
-        <div class="direct-chat-info clearfix">
-          <span class="direct-chat-name pull-left">Replied By BFF</span>
-          <span class="direct-chat-timestamp pull-right"><%#= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
+          <span class="message-time pull-right">
+            <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+          </span>
         </div>
-        <div class="direct-chat-text sender-message reply-reciever">
-          <%#= reply.first.content %>
-        </div> -->
-      <%#end%>
+        <div id="slidingDiv<%= message.id %>" class="slidingDiv">
+          <div class="maxl"  id="<%= message.id %>">
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="entertainment" checked>
+              <span> Entertainment </span> 
+             </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="shopping">
+              <span>Shopping </span> 
+            </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="food" checked>
+              <span>Food </span> 
+             </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="fashion_and_beauty">
+              <span>Fashion & Beauty </span> 
+            </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="fitness_and_health" checked>
+              <span>Fitness & Health </span> 
+             </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="travel">
+              <span>Travel </span> 
+            </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="sports" checked>
+              <span>Sports </span> 
+             </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="electronics">
+              <span>Electronics </span> 
+            </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="education">
+              <span>Education </span> 
+            </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="romance">
+              <span>Romance </span> 
+            </label>
+            <label class="radio inline"> 
+              <input type="radio" name="category" class="cat-select" value="others">
+              <span>Others </span> 
+            </label>
+          </div>            
+        </div>
+      </div>
+    </div>
     </div>
   <%end%>
 <%end%>
 <script type="text/javascript">
+$(".slidingDiv").hide();
+$(".show_hide").show();
   $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
   $(".reply-btn").click(function(){
     var id = $(this).attr("id");
@@ -114,26 +198,69 @@
   });
   $(".cat-select").change(function(){
     var value = $(this).val();
-    var message_id = $(this).attr("id");
+    var message_id = $(this).parent().parent().attr("id");
     $.ajax({
       method: "POST",
       url: "/save_category",
       data: { category: value, message_id: message_id }
     })
     .done(function( msg ) {
-      $(".cat-question#"+message_id).html('<span class="label label-warning">'+ value +'</span>');
+      $(".cat-question#"+message_id).html('<span class="label label-warning">'+ value.titleize() +'</span>');
+      $(".slidingDiv").hide();
     });
+  });
+  $(".report-message").click(function(){
+    var message_id = $(this).attr("id");
+    $.ajax({
+      method: "POST",
+      url: "/messages/report",
+      data: { message_id: message_id }
+    })
+    .done(function( msg ) {
+      $(".report-message#"+message_id).attr("disabled", "disabled");
+      alert("Message Reported!");
+    });
+  });
+  $(".report-reply").click(function(){
+    var message_id = $(this).attr("id");
+    $.ajax({
+      method: "POST",
+      url: "/messages/report",
+      data: { message_id: message_id, type: "reply" }
+    })
+    .done(function( msg ) {
+      $(".report-message#"+message_id).attr("disabled", "disabled");
+      alert("Message Reported!");
+    });
+  });
+  $('.show_hide').click(function () {
+    $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
+    var getId = $(this).attr("id");
+    $("#slidingDiv"+getId).toggle("slide");
   });
 </script>
 <style type="text/css">
-.msg-replies{
-  background-color: darkgray;
-  color: #fff;
-  padding: 5px;
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-  display: inline-block;
-  margin-top: 5px;
-}
+  .msg-replies{
+    background-color: darkgray;
+    color: #fff;
+    padding: 5px;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 5px;
+  }
+  .slidingDiv {
+    min-height: 65px !important;
+    background-color: #dcf8c6;
+    padding: 20px !important;
+    margin-top: 10px !important;
+    border: 1px solid #3399FF;
+  }
+  .filter-cat{
+    display: inline-block;
+    min-width: 20px !important;
+    width: auto !important;
+    vertical-align: bottom;
+  }
 </style>
