@@ -18,14 +18,8 @@
 //= require jquery.slimscroll.min
 //= require fastclick.min
 //= require app
-//= require qtip
 //= require jquery.geocomplete.min
 //= require cable
-
-
-$( function() {
-  $( '[title]' ).qtip();
-}) ;
 
 'use strict';
 String.prototype.capitalize = function() {

@@ -1,0 +1,2 @@
+class AvailableCategory < ApplicationRecord
+end

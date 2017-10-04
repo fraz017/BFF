@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get "/delete_message/:id" => "dashboards#delete_message"
 		get "/broadcast_message" => "dashboards#broadcast_message"
     get '/profile/:id' => "dashboards#profile"
+    resources :available_categories
 	end
   get '/profile' => 'users#profile'
   patch "/users/:id" => 'users#update', as: :update

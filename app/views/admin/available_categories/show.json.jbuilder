@@ -1,0 +1,1 @@
+json.partial! "available_categories/available_category", available_category: @available_category

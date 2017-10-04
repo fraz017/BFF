@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @available_category.name %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @available_category.color %>
+</p>
+
+<p>
+  <strong>Icon:</strong>
+  <%= @available_category.icon %>
+</p>
+
+<%= link_to 'Edit', edit_available_category_path(@available_category) %> |
+<%= link_to 'Back', available_categories_path %>

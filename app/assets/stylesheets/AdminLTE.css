@@ -27,16 +27,12 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.app div,
-.app span {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+.field{
+  padding: 15px;
 }
-
+.field input{
+  border-radius: 4px;
+}
 /* Layout */
 .wrapper {
   min-height: 100%;
@@ -1530,6 +1526,48 @@ a:focus {
     font-size: 12px;
   }
 }
+
+.misc{
+  width: 100%;
+  float: left;
+  height: auto;
+  margin-bottom: 5px;
+}
+.msg-content{
+  min-width: 100px;
+  width: auto;
+  height: auto;
+}
+.msg-replies{
+  background-color: #f7f7f7;
+  color: #333;
+  padding: 5px;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 5px;
+}
+.msg-replies ul{
+  padding: 0px 10px;
+  margin-bottom: 0px;
+}
+.msg-replies ul li{
+  list-style: none;
+}
+.slidingDiv {
+  min-height: 65px !important;
+  background-color: #dcf8c6;
+  padding: 20px !important;
+  margin-top: 10px !important;
+  border: 1px solid #3399FF;
+}
+.filter-cat{
+  display: inline-block;
+  min-width: 20px !important;
+  width: auto !important;
+  vertical-align: bottom;
+}
 /*
  * Component: Box
  * --------------
@@ -2746,25 +2784,9 @@ table.text-center th {
   background: transparent;
   border: transparent;
 }
-.direct-chat-text:after,
-.direct-chat-text:before {
-  position: absolute;
-  right: 100%;
-  top: 15px;
-  border: solid transparent;
-  border-right-color: #d2d6de;
-  content: ' ';
-  height: 0;
-  width: 0;
-  pointer-events: none;
-}
 .direct-chat-text:after {
   border-width: 5px;
   margin-top: -5px;
-}
-.direct-chat-text:before {
-  border-width: 6px;
-  margin-top: -6px;
 }
 .right .direct-chat-text {
   margin-right: 50px;
@@ -5149,7 +5171,7 @@ table.text-center th {
 
 .message-time {
   margin: 0 !important;
-  margin-left: 50px !important;
+  margin-left: 30px !important;
   font-size: 12px;
   text-align: right;
   color: #9a9a9a;
@@ -5169,9 +5191,22 @@ table.text-center th {
   margin: 3px !important;
 }
 
-.sender {
+.message-main-sender .sender {
   float: right;
   width: auto !important;
+  background: #dcf8c6;
+  border-radius: 10px 10px 0 10px;
+  padding: 4px 10px 7px !important;
+  font-size: 12px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+  display: inline-block;
+  word-wrap: break-word;
+  height: auto !important;
+}
+
+.message-main-receiver .sender {
+  float: right;
+  width: 100%;
   background: #dcf8c6;
   border-radius: 10px 10px 0 10px;
   padding: 4px 10px 7px !important;
@@ -5186,8 +5221,8 @@ table.text-center th {
 /*Reply*/
 
 .reply {
-  height: 60px !important;;
-  width: 100% !important;;
+  height: auto;
+  width: 100% !important;
   background-color: #f5f1ee;
   padding: 10px 5px 10px 5px !important;
   margin: 0 !important;
@@ -5217,8 +5252,6 @@ table.text-center th {
 }
 
 .reply-send {
-  padding: 5px !important;
-  width: 8% !important;
   text-align: center;
 }
 
@@ -5227,11 +5260,6 @@ table.text-center th {
   padding: 5px !important;
   color: #93918f;
   cursor: pointer;
-}
-
-.reply-main {
-  padding: 2px 5px !important;
-  width: 91% !important;
 }
 
 .reply-main textarea {
@@ -5369,8 +5397,6 @@ table.text-center th {
     padding: 5px 2px 5px 0 !important;
     font-size: 1.8em !important;
   }
-}.maxl{
-  margin:25px ;
 }
 .inline{
   display: inline-block;
@@ -5380,7 +5406,7 @@ table.text-center th {
 }
 .radio{
   color:#999;
-  font-size:15px;
+  font-size:12px;
   position:relative;
 }
 .radio span{

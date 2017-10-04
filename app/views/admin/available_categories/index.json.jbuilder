@@ -1,0 +1,1 @@
+json.array! @available_categories, partial: 'available_categories/available_category', as: :available_category

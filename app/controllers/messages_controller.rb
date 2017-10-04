@@ -15,6 +15,7 @@ class MessagesController < ApplicationController
   def post_message
     params.permit!
   	@message = Message.create(content: params[:message], sender_id: current_user.id)
+    category = Category.create(message_id: @message.id, name: params[:category])
     log = Log.create(content: params[:message], sender_id: current_user.id, log_type: "message", message_id: @message.id)
     current_user.chat_room.messages << @message  
   	MessageBroadcastJob.perform_now(current_user, current_user.chat_room.id)

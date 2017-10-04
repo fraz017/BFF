@@ -23,15 +23,27 @@
       <div class="row message-body">
         <div class="col-sm-12 message-main-receiver">
           <div class="receiver">
-            <div class="message-text">
-              <span class="direct-chat-name pull-left">BFF</span>
-              <%= message.content %>
+            <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning"><%= message.category.name.titleize %></span>
+                <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
               <% end %>
             </div>
-            <span class="message-time pull-right">
-              <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+            <span class="msg-content">
+              <%= message.content %>
+              <span class="pull-right">
+                <% if message_reported(message.id, user.id) %>
+                  <button type="button" style="color:red" class="report-message transparent" disabled id="<%= message.id %>">
+                    <i class="fa fa-flag" title="Reported Message!"></i>
+                  </button>
+                <% else %>
+                  <button type="button" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
+                    <i class="fa fa-flag"></i>
+                  </button>
+                <% end %>
+              </span>  
+              <span class="message-time pull-right">
+                <%= message.created_at.strftime(" %l:%M %P ") %>
+              </span>
             </span>
             <div class="clearfix"></div>
             <% reply = message.replies.where(sender_id: user.id) %>
@@ -40,19 +52,18 @@
                 <div class="col-sm-12">
                   <div class="sender">
                     <div class="message-text">
-
-                      <span class="direct-chat-name pull-left">Replied By You</span>
-                      <span class="direct-chat-timestamp pull-right"><%= reply.first.created_at.strftime("%d %b %l:%M %P ") %></span>
-                      </div>
                       <div class="direct-chat-text reciever-message">
                         <%= reply.first.content %>
                       </div>
+                      <span class="message-time pull-right"><%= reply.first.created_at.strftime("%l:%M %P ") %>
+                      </span>
+                    </div>
                   </div>  
                 </div>
-              </div>    
+              </div>
             <%else%>
               <div class="direct-chat-text reciever-message">
-                <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply to this message</a>
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply</a>
                 <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
                 <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= user.id %>">
                   <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
@@ -68,45 +79,32 @@
               </div>
             <%end%>
           </div>
-          <% if message_reported(message.id, user.id) %>
-            <button type="button" class="report-message transparent" disabled id="<%= message.id %>">
-              <i class="fa fa-flag" title="Reported Message!"></i>
-            </button>
-          <% else %>
-            <button type="button" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
-              <i class="fa fa-flag"></i>
-            </button>
-          <% end %>
         </div>
       </div>
     <% end %>
   <%else%>
-    <!-- Message to the right -->
     <div class="row message-body">
       <div class="col-sm-12 message-main-sender">
         <div class="sender">
           <div class="message-text">
-            <span class="direct-chat-name pull-right">Me
-              <span class="filter-cat">
-                <% if message.content.include?("?") %>
-                  <div class="cat-question" id="<%= message.id %>">
-                    <% if message.category.present? %>
-                      <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
-                    <% else %>
-                      <a href="javascript:void(0)" class="show_hide" id="<%= message.id %>"><i class="fa fa-filter" aria-hidden="true" title="Select Category"></i></a>
-                    <% end %>  
-                  </div>
-                <% end %>
+            <div class="misc">
+              <% if message.category.present? %>
+                <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
+              <% end %>
+            </div>
+            <span class="msg-content">
+              <%= message.content %>
+              <span class="message-time pull-right">
+                <%= message.created_at.strftime(" %l:%M %P ") %>
               </span>
             </span>
-            <%= message.content %>
             <% if message.replies.where(:visible => true).present? %>
               <div class="msg-replies">
                 <ul>
                   <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
                     <li>
-                      <span><%= msg.content %></span>
-                      <span>
+                      <span class="msg-content"><%= msg.content %></span>
+                      <span class="pull-right">
                         <% if message_reported(msg.id, user.id, "reply") %>
                           <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
                             <i class="fa fa-flag" title="Reported Message!"></i>
@@ -123,57 +121,6 @@
               </div>
             <% end %>
           </div>
-          <span class="message-time pull-right">
-            <%= message.created_at.strftime("%d %b %l:%M %P ") %>
-          </span>
-        </div>
-        <div id="slidingDiv<%= message.id %>" class="slidingDiv">
-          <div class="maxl"  id="<%= message.id %>">
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="entertainment" checked>
-              <span> Entertainment </span> 
-             </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="shopping">
-              <span>Shopping </span> 
-            </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="food" checked>
-              <span>Food </span> 
-             </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="fashion_and_beauty">
-              <span>Fashion & Beauty </span> 
-            </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="fitness_and_health" checked>
-              <span>Fitness & Health </span> 
-             </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="travel">
-              <span>Travel </span> 
-            </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="sports" checked>
-              <span>Sports </span> 
-             </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="electronics">
-              <span>Electronics </span> 
-            </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="education">
-              <span>Education </span> 
-            </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="romance">
-              <span>Romance </span> 
-            </label>
-            <label class="radio inline"> 
-              <input type="radio" name="category" class="cat-select" value="others">
-              <span>Others </span> 
-            </label>
-          </div>            
         </div>
       </div>
     </div>
