@@ -63,7 +63,9 @@
               </div>
             <%else%>
               <div class="direct-chat-text reciever-message">
-                <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>" class="reply-btn">Reply</a>
+                <% if !current_user.blocked %>
+                  <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>" class="reply-btn">Reply</a>
+                <% end %>  
                 <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
                 <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= current_user.id %>">
                   <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
@@ -103,10 +105,18 @@
                 <ul>
                   <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
                     <li>
-                      <span class="msg-content"><%= msg.content %></span>
+                      <span class="msg-content"><%= msg.content %>
+                        <div id="liked-msg<%= msg.id %>">
+                          <% if liked?("reply", msg.id, current_user.id) %>
+                            <span class="pull-right"><a href="javascript:void(0)"><i class="fa fa-thumbs-up"></i></a></span>
+                          <% else %>
+                            <span class="pull-right"><a href="javascript:void(0)" class="like-msg" id="<%= msg.id %>"><i class="fa fa-thumbs-up"></i></a></span>
+                          <% end %>
+                        </div>
+                      </span>
                       <span class="pull-right">
                         <% if message_reported(msg.id, current_user.id, "reply") %>
-                          <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
+                          <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
                             <i class="fa fa-flag" title="Reported Message!"></i>
                           </button>
                         <% else %>
@@ -176,8 +186,20 @@
       data: { message_id: message_id, type: "reply" }
     })
     .done(function( msg ) {
-      $(".report-message#"+message_id).attr("disabled", "disabled");
+      $(".report-reply#"+message_id).attr("disabled", "disabled");
       alert("Message Reported!");
+    });
+  });
+  $(".like-msg").click(function(){
+    var message_id = $(this).attr("id");
+    $.ajax({
+      method: "POST",
+      url: "/messages/like",
+      data: { message_id: message_id, type: "reply" }
+    })
+    .done(function( msg ) {
+      $("#liked-msg"+message_id).attr("disabled", "disabled");
+      alert("Liked!");
     });
   });
   $('.show_hide').click(function () {

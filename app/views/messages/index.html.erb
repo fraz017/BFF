@@ -11,66 +11,32 @@
     </h1>
   </section>
   <section class="content">
-    <div class="container app">
+    <div class="container">
       <div class="row app-one">
         <div class="col-sm-12 conversation">
           <div class="row message direct-chat-messages" id="room-<%= current_user.chat_room.id %>">
             <%= render "messages" %>
           </div>
           <div class="row reply">
-            <%= form_tag("/messages", method: 'post', :remote => true) do %>
-              <div class="col-sm-11 col-xs-11 reply-main">
-                <div class="maxl">
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="entertainment" checked>
-                    <span> Entertainment </span> 
-                   </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="shopping">
-                    <span>Shopping </span> 
-                  </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="food">
-                    <span>Food </span> 
-                   </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="fashion_and_beauty">
-                    <span>Fashion & Beauty </span> 
-                  </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="fitness_and_health">
-                    <span>Fitness & Health </span> 
-                   </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="travel">
-                    <span>Travel </span> 
-                  </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="sports">
-                    <span>Sports </span> 
-                   </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="electronics">
-                    <span>Electronics </span> 
-                  </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="education">
-                    <span>Education </span> 
-                  </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="romance">
-                    <span>Romance </span> 
-                  </label>
-                  <label class="radio inline"> 
-                    <input type="radio" name="category" value="others">
-                    <span>Others </span> 
-                  </label>
+            <% if !current_user.blocked %>
+              <%= form_tag("/messages", method: 'post', :remote => true) do %>
+                <div class="col-sm-11 col-xs-11 reply-main">
+                  <div class="maxl">
+                    <% AvailableCategory.all.each do |ac| %>
+                      <label class="radio inline"> 
+                        <input type="radio" name="category" value="<%= ac.name %>" checked>
+                        <span style="color:<%= ac.color %>;"> <i class="<%= ac.icon %>"></i> <%= ac.name.titleize %></span> 
+                      </label>
+                    <% end %>
+                  </div>
+                  <textarea class="form-control" rows="1" name="message" id="messages" placeholder="Type Message ..." required></textarea>
                 </div>
-                <textarea class="form-control" rows="1" name="message" id="messages" placeholder="Type Message ..." required></textarea>
-              </div>
-              <div class="col-sm-1 col-xs-1 reply-send">
-                <button type="submit" class="btn btn-default" title="Send Message">Send</button>
-              </div>
+                <div class="col-sm-1 col-xs-1 reply-send">
+                  <button type="submit" class="btn btn-default" title="Send Message">Send</button>
+                </div>
+              <%end%>
+            <%else%>  
+              <strong>You are temporarily blocked for messaging!</strong>
             <%end%>
           </div>
         </div>

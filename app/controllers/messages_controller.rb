@@ -15,6 +15,7 @@ class MessagesController < ApplicationController
   def post_message
     params.permit!
   	@message = Message.create(content: params[:message], sender_id: current_user.id)
+    @message.sender.add_loyalty_score(10) if !@message.content.include?("*")
     category = Category.create(message_id: @message.id, name: params[:category])
     log = Log.create(content: params[:message], sender_id: current_user.id, log_type: "message", message_id: @message.id)
     current_user.chat_room.messages << @message  
@@ -36,6 +37,7 @@ class MessagesController < ApplicationController
       match.save
     end
     @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
+    @reply.sender.add_loyalty_score(10) if !@reply.content.include?("*")
     log = Log.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id], log_type: "reply")
     MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
     LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
@@ -65,8 +67,22 @@ class MessagesController < ApplicationController
       report.reported_by = current_user.id
       report.user_id = message.sender.id
       report.save
+      message.sender.minus_loyalty_score(20)
       message.sender.add_flag_point
       message.add_flag_point
+    end
+    render json: { success: true }
+  end
+
+  def like
+    if params[:message_id].present?
+      message = Message.find_by_id params[:message_id] if params[:type].nil?
+      message = Reply.find_by_id params[:message_id] if params[:type].present?
+      like = Like.new
+      like.user_id = current_user.id
+      like.message_id = params[:message_id] if params[:type].nil?
+      like.reply_id = params[:message_id] if params[:type].present?
+      like.save
     end
     render json: { success: true }
   end

@@ -10,6 +10,7 @@ module SuggestMe
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
+    config.active_job.queue_adapter = :delayed_job
     # -- all .rb files in that directory are automatically loaded.
     config_keys = File.join(Rails.root, 'config', 'config.yml')
     CONFIG = HashWithIndifferentAccess.new(YAML::load(IO.read(config_keys)))[Rails.env]

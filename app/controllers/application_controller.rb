@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
     if resource.admin?
       admin_dashboard_path
     else
+      Delayed::Job.enqueue MatchUsersJob.new(current_user.id)
       root_url
     end    
   end

@@ -3,6 +3,8 @@ class User < ApplicationRecord
 	has_many :messages, foreign_key: "sender_id", class_name: "Message"
 	has_many :replies, foreign_key: "sender_id", class_name: "Reply"
 	has_many :logs, foreign_key: "sender_id", class_name: "Log"
+  has_many :likes
+  has_many :matchers
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -31,6 +33,24 @@ class User < ApplicationRecord
   		points+= 5
   	end
   	self.score = points
+  end
+
+  def add_loyalty_score(points)
+    if self.loyalty_score.nil?
+      score = 0
+    else
+      score = self.loyalty_score + points
+    end
+    self.update_attributes(loyalty_score: score)
+  end
+
+  def minus_loyalty_score(points)
+    if self.loyalty_score.nil? or self.loyalty_score == 0 or self.loyalty_score <= 20
+      score = 0
+    else
+      score = self.loyalty_score - points
+    end
+    self.update_attributes(loyalty_score: score)
   end
 
   def create_room

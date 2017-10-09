@@ -5,7 +5,8 @@ class Message < ApplicationRecord
   has_one :category
   belongs_to :sender, foreign_key: "sender_id", class_name: "User"
   validates :content,  obscenity: { sanitize: true }
-
+  has_many :likes
+  
   def add_flag_point
     if self.flagged.nil?
       self.flagged = 1

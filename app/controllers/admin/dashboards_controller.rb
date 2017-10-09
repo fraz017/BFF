@@ -9,6 +9,17 @@ class Admin::DashboardsController < Admin::AppController
 		@logs = Log.where(log_type: "message").order("created_at desc").last(100)
 	end
 
+	def block_unblock
+		user = User.find_by(:id => params[:user_id])
+		if user.blocked
+			block = false
+		else
+			block = true
+		end	
+		user.update_attributes(:blocked => block)
+		redirect_to admin_dashboard_path, notice: block ? "Successfully Blocked" : "Successfully Unblocked!"
+	end
+
 	def broadcast_message
 	end
 

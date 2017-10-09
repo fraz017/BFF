@@ -63,7 +63,9 @@
               </div>
             <%else%>
               <div class="direct-chat-text reciever-message">
-                <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply</a>
+                <% if !user.blocked %>
+                  <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply</a>
+                <% end %>  
                 <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
                 <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= user.id %>">
                   <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
@@ -103,7 +105,16 @@
                 <ul>
                   <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
                     <li>
-                      <span class="msg-content"><%= msg.content %></span>
+                      <span class="msg-content">
+                        <%= msg.content %>
+                        <div id="liked-msg<%= msg.id %>">
+                          <% if liked?("reply", msg.id, user.id) %>
+                            <span class="pull-right"><a href="javascript:void(0)"><i class="fa fa-thumbs-up"></i></a></span>
+                          <% else %>
+                            <span class="pull-right"><a href="javascript:void(0)" class="like-msg" id="<%= msg.id %>"><i class="fa fa-thumbs-up"></i></a></span>
+                          <% end %>
+                        </div>
+                      </span>
                       <span class="pull-right">
                         <% if message_reported(msg.id, user.id, "reply") %>
                           <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
@@ -176,8 +187,20 @@ $(".show_hide").show();
       data: { message_id: message_id, type: "reply" }
     })
     .done(function( msg ) {
-      $(".report-message#"+message_id).attr("disabled", "disabled");
+      $(".report-reply#"+message_id).attr("disabled", "disabled");
       alert("Message Reported!");
+    });
+  });
+  $(".like-msg").click(function(){
+    var message_id = $(this).attr("id");
+    $.ajax({
+      method: "POST",
+      url: "/messages/like",
+      data: { message_id: message_id, type: "reply" }
+    })
+    .done(function( msg ) {
+      $("#liked-msg"+message_id).attr("disabled", "disabled");
+      alert("Liked!");
     });
   });
   $('.show_hide').click(function () {
@@ -186,28 +209,3 @@ $(".show_hide").show();
     $("#slidingDiv"+getId).toggle("slide");
   });
 </script>
-<style type="text/css">
-  .msg-replies{
-    background-color: darkgray;
-    color: #fff;
-    padding: 5px;
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 5px;
-  }
-  .slidingDiv {
-    min-height: 65px !important;
-    background-color: #dcf8c6;
-    padding: 20px !important;
-    margin-top: 10px !important;
-    border: 1px solid #3399FF;
-  }
-  .filter-cat{
-    display: inline-block;
-    min-width: 20px !important;
-    width: auto !important;
-    vertical-align: bottom;
-  }
-</style>

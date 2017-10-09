@@ -19,4 +19,12 @@ module ApplicationHelper
 			false
 		end
 	end
+	def liked?(type = '', message_id, user_id)
+		if type.present?
+			like = Like.where(:reply_id => message_id, user_id: user_id).last
+		else
+			like = Like.where(:message_id => message_id, user_id: user_id).last	
+		end
+		like
+	end
 end

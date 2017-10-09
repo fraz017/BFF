@@ -199,6 +199,7 @@
                 <th>Age Range</th>
                 <th>Status</th>
                 <th>View Profile</th>
+                <th>Block/Unblock</th>
               </tr>
               <% @users.each do |user| %>
                 <tr>
@@ -215,6 +216,17 @@
                   </td>
                   <td>
                     <%= link_to "View Profile", admin_path(user), {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary"} %>
+                  </td>
+                  <td>
+                    <%= form_tag(admin_block_unblock_path, method: "post") do %>
+                      <% if user.blocked %>
+                        <input type="hidden" value="<%= user.id %>" name="user_id"  />
+                        <button type="submit" class="btn btn-default" >Unblock</button>
+                      <% else %>
+                        <input type="hidden" value="<%= user.id %>" name="user_id"  />
+                        <button type="submit" class="btn btn-danger" >Block</button>
+                      <% end %>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>

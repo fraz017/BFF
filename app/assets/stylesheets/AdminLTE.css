@@ -1537,6 +1537,7 @@ a:focus {
   min-width: 100px;
   width: auto;
   height: auto;
+  font-weight: 400;
 }
 .msg-replies{
   background-color: #f7f7f7;
@@ -5167,6 +5168,7 @@ table.text-center th {
   font-size: 14px;
   padding-bottom: 0 !important;
   height: auto !important;
+  font-weight: 400;
 }
 
 .message-time {

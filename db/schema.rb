@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171004163041) do
+ActiveRecord::Schema.define(version: 20171008121301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,32 @@ ActiveRecord::Schema.define(version: 20171004163041) do
     t.index ["message_id", "chat_room_id"], name: "index_chat_rooms_messages_on_message_id_and_chat_room_id", using: :btree
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "message_id"
+    t.integer  "reply_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_likes_on_message_id", using: :btree
+    t.index ["reply_id"], name: "index_likes_on_reply_id", using: :btree
+    t.index ["user_id"], name: "index_likes_on_user_id", using: :btree
+  end
+
   create_table "logs", force: :cascade do |t|
     t.string   "log_type"
     t.integer  "sender_id"
@@ -52,6 +78,15 @@ ActiveRecord::Schema.define(version: 20171004163041) do
     t.text     "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "matchers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "matched_with"
+    t.float    "profile_score"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["user_id"], name: "index_matchers_on_user_id", using: :btree
   end
 
   create_table "messages", force: :cascade do |t|
@@ -116,7 +151,10 @@ ActiveRecord::Schema.define(version: 20171004163041) do
     t.boolean  "is_online",              default: false
     t.integer  "score",                  default: 0
     t.integer  "flagged"
-    t.integer  "loyalty_score"
+    t.integer  "loyalty_score",          default: 0
+    t.integer  "messaging_score",        default: 0
+    t.boolean  "blocked",                default: false
+    t.float    "average_score"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
