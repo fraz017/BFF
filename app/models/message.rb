@@ -7,6 +7,8 @@ class Message < ApplicationRecord
   validates :content,  obscenity: { sanitize: true }
   has_many :likes
   
+  after_save :check_message_time  
+
   def add_flag_point
     if self.flagged.nil?
       self.flagged = 1
@@ -17,6 +19,21 @@ class Message < ApplicationRecord
     if self.flagged >= 3
     	self.visible = false
     	self.save
+      self.sender.blocked = true
+      self.sender.save
+      Delayed::Job.enqueue BlockUnblockUsersJob.new(self.sender.id, "unblock"), 0, 1.week.from_now.getutc
+    end
+  end
+
+  def check_message_time
+    begin
+      messages = self.sender.messages.where("created_at > ?", 60.seconds.ago)
+      if messages.count >= 3
+        messages.first.sender.blocked = true
+        messages.first.sender.save
+        Delayed::Job.enqueue BlockUnblockUsersJob.new(self.sender.id, "unblock"), 0, 5.minutes.from_now.getutc
+      end
+    rescue
     end
   end
 end

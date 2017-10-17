@@ -1,0 +1,7 @@
+<% messages.each do |message| %>
+	<% if message.user != user %>
+		<div class="msg-send"><strong><%= message.user.name %>:</strong> <%=message.content%> </div>
+	<% else %>
+		<div class="msg-receive"><strong><%= message.user.name %>:</strong> <%=message.content%> </div>
+	<% end %>
+<% end %>

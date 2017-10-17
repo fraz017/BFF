@@ -43,6 +43,19 @@
       </div>
     </div>
   </section><!-- /.content -->
+  <div class="user-chat-container">
+    <% if @rooms.present? %>
+      <% @rooms.each do |room| %>
+        <%= render partial: "user_chat", locals: { room: room, user: current_user } %>
+      <% end %>  
+    <% end %>
+    <% if @joined_rooms.present? %>
+      <% @joined_rooms.each do |room| %>
+        <%= render partial: "user_chat", locals: { room: room, user: current_user } %>
+      <% end %>  
+    <% end %>
+  </div>
+
 </div><!-- /.content-wrapper -->
 <script type="text/javascript">
   jQuery(function() {

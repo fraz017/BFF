@@ -15,6 +15,9 @@ class Reply < ApplicationRecord
     if self.flagged >= 3
     	self.visible = false
     	self.save
+      self.sender.blocked = true
+      self.sender.save
+      Delayed::Job.enqueue BlockUnblockUsersJob.new(self.sender.id, "unblock"), 0, 1.week.from_now.getutc
     end
   end
 end

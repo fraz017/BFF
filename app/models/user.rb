@@ -5,6 +5,8 @@ class User < ApplicationRecord
 	has_many :logs, foreign_key: "sender_id", class_name: "Log"
   has_many :likes
   has_many :matchers
+  has_many :single_messages
+  has_many :rooms, through: :single_messages
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -63,7 +65,7 @@ class User < ApplicationRecord
     else  
       self.flagged += 1
     end
-    self.save 
+    self.save
   end
 
   def self.from_omniauth(auth)

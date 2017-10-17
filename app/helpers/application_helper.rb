@@ -27,4 +27,7 @@ module ApplicationHelper
 		end
 		like
 	end
+	def category(name)
+		cat = AvailableCategory.find_by(name: name)
+	end
 end

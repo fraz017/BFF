@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+
+  resources :rooms, param: :name
+  resources :single_messages
+
 	mount ActionCable.server => '/cable'
 
 	namespace "admin" do

@@ -25,7 +25,7 @@
           <div class="receiver">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
+                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
             </div>
             <span class="msg-content">
@@ -91,7 +91,7 @@
           <div class="message-text">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
+                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
             </div>
             <span class="msg-content">

@@ -1,0 +1,49 @@
+<div class="user-chat">
+  <div class="chat-box">
+    <div class="chat-head">
+      <h4><%= room.title %> - <%= user.try(:email) %></h4>
+      <img src="https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png" title="Expand Arrow" width="16">
+    </div>
+    <div class="chat-body">
+      <div class="msg-insert">
+        <div class="panel panel-default">
+          <% if room.single_messages.any? %>
+            <div class="panel-body" id="messages<%=room.id%>">
+              <%= render partial: 'single_messages/single_message', locals: { messages: room.single_messages, user: user } %>
+            </div>
+          <%else%>
+            <div class="panel-body hidden" id="messages<%=room.id%>">
+            </div>
+          <%end%>
+        </div>
+      </div>
+      <div class="chat-text">
+        <%= render partial: 'single_messages/single_message_form', locals: {message: SingleMessage.new, room: room}%>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function(){
+    var arrow = $('.chat-head img');
+    var textarea = $('.chat-text textarea');
+    arrow.on('click', function(){
+      var src = $(this).attr('src');
+      $(this).parent().parent().find('.chat-body').slideToggle('fast');
+      if(src == 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png'){
+        arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png');
+      }
+      else{
+        arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png');
+      }
+    });
+    textarea.keypress(function(event) {
+      var $this = $(this);
+      if(event.keyCode == 13){
+        $(this).parent().submit();
+        var msg = $this.val();
+        $this.val('');
+      }
+    });
+  });
+</script>

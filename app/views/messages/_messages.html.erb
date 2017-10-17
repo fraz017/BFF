@@ -25,7 +25,7 @@
           <div class="receiver">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
+                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
             </div>
             <span class="msg-content">
@@ -91,7 +91,7 @@
           <div class="message-text">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" title="Category"><%= message.category.name.titleize %></span>
+                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
             </div>
             <span class="msg-content">
@@ -114,6 +114,7 @@
                           <% end %>
                         </div>
                       </span>
+                      <a href="javascipt:void(0)" class="start-chat" id="<%= msg.id %>"><i title="Start Conversation?" class="fa fa-commenting"></i></a>
                       <span class="pull-right">
                         <% if message_reported(msg.id, current_user.id, "reply") %>
                           <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
@@ -166,6 +167,7 @@
       $(".slidingDiv").hide();
     });
   });
+
   $(".report-message").click(function(){
     var message_id = $(this).attr("id");
     $.ajax({
@@ -176,6 +178,19 @@
     .done(function( msg ) {
       $(".report-message#"+message_id).attr("disabled", "disabled");
       alert("Message Reported!");
+    });
+  });
+  $(".start-chat").click(function(){
+    var message_id = $(this).attr("id");
+    title = message_id
+    $.ajax({
+      method: "POST",
+      url: "/rooms",
+      data: { room:{ title: title}, message_id: message_id},
+      dataType: "script"
+    })
+    .done(function( msg ) {
+      
     });
   });
   $(".report-reply").click(function(){
