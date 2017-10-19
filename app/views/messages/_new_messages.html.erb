@@ -32,7 +32,7 @@
               <%= message.content %>
               <span class="pull-right">
                 <% if message_reported(message.id, user.id) %>
-                  <button type="button" style="color:red" class="report-message transparent" disabled id="<%= message.id %>">
+                  <button type="button" style="color:red" class="transparent" disabled id="<%= message.id %>">
                     <i class="fa fa-flag" title="Reported Message!"></i>
                   </button>
                 <% else %>
@@ -109,9 +109,9 @@
                         <%= msg.content %>
                         <div id="liked-msg<%= msg.id %>">
                           <% if liked?("reply", msg.id, user.id) %>
-                            <span class="pull-right"><a href="javascript:void(0)"><i class="fa fa-thumbs-up"></i></a></span>
+                            <button class="pull-right transparent"><i style="color: green;" class="fa fa-thumbs-up"></i></button>
                           <% else %>
-                            <span class="pull-right"><a href="javascript:void(0)" class="like-msg" id="<%= msg.id %>"><i class="fa fa-thumbs-up"></i></a></span>
+                            <button class="pull-right like-msg" id="<%= msg.id %>"><i class="fa fa-thumbs-up"></i></button>
                           <% end %>
                         </div>
                       </span>
@@ -154,33 +154,22 @@ $(".show_hide").show();
     $("#"+id+"-cancel").addClass("hidden");
     $(".reply-btn#"+id).removeClass("hidden");
   });
-  $(".cat-select").change(function(){
-    var value = $(this).val();
-    var message_id = $(this).parent().parent().attr("id");
-    $.ajax({
-      method: "POST",
-      url: "/save_category",
-      data: { category: value, message_id: message_id }
-    })
-    .done(function( msg ) {
-      $(".cat-question#"+message_id).html('<span class="label label-warning">'+ value.titleize() +'</span>');
-      $(".slidingDiv").hide();
-    });
-  });
   $(".report-message").click(function(){
     var message_id = $(this).attr("id");
+    $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
       url: "/messages/report",
       data: { message_id: message_id }
     })
     .done(function( msg ) {
-      $(".report-message#"+message_id).attr("disabled", "disabled");
+      $(".report-message#"+message_id).attr("disabled", true);
       alert("Message Reported!");
     });
   });
   $(".report-reply").click(function(){
     var message_id = $(this).attr("id");
+    $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
       url: "/messages/report",
@@ -193,6 +182,7 @@ $(".show_hide").show();
   });
   $(".like-msg").click(function(){
     var message_id = $(this).attr("id");
+    $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
       url: "/messages/like",

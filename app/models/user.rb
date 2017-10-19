@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :rooms, through: :single_messages
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :omniauthable, :omniauth_providers => [:facebook]
 
@@ -44,6 +44,24 @@ class User < ApplicationRecord
       score = self.loyalty_score + points
     end
     self.update_attributes(loyalty_score: score)
+  end
+
+  def add_messaging_score(points)
+    if self.messaging_score.nil?
+      score = 0
+    else
+      score = self.messaging_score + points
+    end
+    self.update_attributes(messaging_score: score)
+  end
+
+  def minus_messaging_score(points)
+    if self.messaging_score.nil? or self.messaging_score == 0 or self.messaging_score <= 20
+      score = 0
+    else
+      score = self.messaging_score - points
+    end
+    self.update_attributes(messaging_score: score)
   end
 
   def minus_loyalty_score(points)

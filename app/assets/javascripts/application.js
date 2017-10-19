@@ -18,6 +18,7 @@
 //= require jquery.slimscroll.min
 //= require fastclick.min
 //= require app
+//= require toastr
 //= require jquery.geocomplete.min
 //= require cable
 

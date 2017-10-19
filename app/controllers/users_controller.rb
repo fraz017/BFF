@@ -17,8 +17,20 @@ class UsersController < ApplicationController
 	  end
   end
 
+  def feedback
+    if params[:rating].present? && params[:message].present?
+      feed = Feedback.new
+      feed.user = current_user
+      feed.rating = params[:rating]
+      feed.message = params[:message]
+      feed.save
+      ApplicationMailer.send_feedback(feed).deliver_now
+    end
+    redirect_to request.referer, notice: "Feedback saved!"
+  end
+
   private
   def user_params
-    params.require(:user).permit(:name, :location, :education, :gender, :coordinates, :city, :area, :state, :country, :country_code)
+    params.require(:user).permit(:name, :location, :education, :gender, :coordinates, :city, :area, :state, :country, :country_code, :date_of_birth)
   end
 end

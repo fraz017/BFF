@@ -63,6 +63,9 @@ class MessagesController < ApplicationController
     if params[:message_id].present?
       message = Message.find_by_id params[:message_id] if params[:type].nil?
       message = Reply.find_by_id params[:message_id] if params[:type].present?
+      if params[:type].present?
+        message.sender.minus_messaging_score(20)
+      end
       report = ReportedMessage.new
       report.message_id = params[:message_id] if params[:type].nil?
       report.reply_id = params[:message_id] if params[:type].present?
@@ -80,6 +83,9 @@ class MessagesController < ApplicationController
     if params[:message_id].present?
       message = Message.find_by_id params[:message_id] if params[:type].nil?
       message = Reply.find_by_id params[:message_id] if params[:type].present?
+      if params[:type].present?
+        message.sender.add_messaging_score(50)
+      end
       like = Like.new
       like.user_id = current_user.id
       like.message_id = params[:message_id] if params[:type].nil?

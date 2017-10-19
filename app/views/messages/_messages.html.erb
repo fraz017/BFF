@@ -25,18 +25,18 @@
           <div class="receiver">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+                <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
             </div>
             <span class="msg-content">
               <%= message.content %>
               <span class="pull-right">
                 <% if message_reported(message.id, current_user.id) %>
-                  <button type="button" style="color:red" class="report-message transparent" disabled id="<%= message.id %>">
-                    <i class="fa fa-flag" title="Reported Message!"></i>
+                  <button type="button" style="color:red" class="transparent" disabled id="<%= message.id %>">
+                    <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
                   </button>
                 <% else %>
-                  <button type="button" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
+                  <button type="button" data-toggle="tooltip" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
                     <i class="fa fa-flag"></i>
                   </button>
                 <% end %>
@@ -91,7 +91,7 @@
           <div class="message-text">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+                <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
             </div>
             <span class="msg-content">
@@ -108,20 +108,20 @@
                       <span class="msg-content"><%= msg.content %>
                         <div id="liked-msg<%= msg.id %>">
                           <% if liked?("reply", msg.id, current_user.id) %>
-                            <span class="pull-right"><a href="javascript:void(0)"><i class="fa fa-thumbs-up"></i></a></span>
+                            <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
                           <% else %>
-                            <span class="pull-right"><a href="javascript:void(0)" class="like-msg" id="<%= msg.id %>"><i class="fa fa-thumbs-up"></i></a></span>
+                            <button class="pull-right like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
                           <% end %>
                         </div>
                       </span>
-                      <a href="javascipt:void(0)" class="start-chat" id="<%= msg.id %>"><i title="Start Conversation?" class="fa fa-commenting"></i></a>
+                      <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><i class="fa fa-commenting"></i></a>
                       <span class="pull-right">
                         <% if message_reported(msg.id, current_user.id, "reply") %>
                           <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
-                            <i class="fa fa-flag" title="Reported Message!"></i>
+                            <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
                           </button>
                         <% else %>
-                          <button type="button" class="report-reply transparent" title="Report Message ?" id="<%= msg.id %>">
+                          <button type="button" class="report-reply transparent" data-toggle="tooltip" title="Report Message ?" id="<%= msg.id %>">
                             <i class="fa fa-flag"></i>
                           </button>
                         <% end %>
@@ -154,22 +154,10 @@
     $("#"+id+"-cancel").addClass("hidden");
     $(".reply-btn#"+id).removeClass("hidden");
   });
-  $(".cat-select").change(function(){
-    var value = $(this).val();
-    var message_id = $(this).parent().parent().attr("id");
-    $.ajax({
-      method: "POST",
-      url: "/save_category",
-      data: { category: value, message_id: message_id }
-    })
-    .done(function( msg ) {
-      $(".cat-question#"+message_id).html('<span class="label label-warning">'+ value.titleize() +'</span>');
-      $(".slidingDiv").hide();
-    });
-  });
 
   $(".report-message").click(function(){
     var message_id = $(this).attr("id");
+    $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
       url: "/messages/report",
@@ -195,6 +183,7 @@
   });
   $(".report-reply").click(function(){
     var message_id = $(this).attr("id");
+    $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
       url: "/messages/report",
@@ -207,13 +196,15 @@
   });
   $(".like-msg").click(function(){
     var message_id = $(this).attr("id");
+    $(this).removeClass('like-msg');
+    $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
       url: "/messages/like",
       data: { message_id: message_id, type: "reply" }
     })
     .done(function( msg ) {
-      $("#liked-msg"+message_id).attr("disabled", "disabled");
+      $("#liked-msg"+message_id).removeClass("like-msg");
       alert("Liked!");
     });
   });

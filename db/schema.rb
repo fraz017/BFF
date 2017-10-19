@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171016123338) do
+ActiveRecord::Schema.define(version: 20171018065641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,15 @@ ActiveRecord::Schema.define(version: 20171016123338) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "rating"
+    t.text     "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id", using: :btree
   end
 
   create_table "likes", force: :cascade do |t|
@@ -175,11 +184,17 @@ ActiveRecord::Schema.define(version: 20171016123338) do
     t.integer  "messaging_score",        default: 0
     t.boolean  "blocked",                default: false
     t.float    "average_score"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "date_of_birth"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
   add_foreign_key "chat_rooms", "users"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "replies", "messages"
   add_foreign_key "rooms", "users"
   add_foreign_key "single_messages", "rooms"

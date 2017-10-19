@@ -17,6 +17,7 @@ class Reply < ApplicationRecord
     	self.save
       self.sender.blocked = true
       self.sender.save
+      self.sender.minus_messaging_score(50)
       Delayed::Job.enqueue BlockUnblockUsersJob.new(self.sender.id, "unblock"), 0, 1.week.from_now.getutc
     end
   end

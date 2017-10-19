@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 	end
   get '/profile' => 'users#profile'
   patch "/users/:id" => 'users#update', as: :update
+  post '/users/feedback' => 'users#feedback'
   get 'messages/index'
   post '/messages' => "messages#post_message"
   post '/messages/report' => "messages#report"
@@ -25,7 +26,7 @@ Rails.application.routes.draw do
  	post '/reply' => "messages#post_reply"
   post '/save_category' => 'messages#save_category'
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", confirmations: 'confirmations' }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
  
   root to: "messages#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

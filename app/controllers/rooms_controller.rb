@@ -11,6 +11,7 @@ class RoomsController < ApplicationController
     @room.user = current_user
     msg = Reply.find_by(id: params[:message_id])
     @room.chat_with = msg.sender.id
+    msg.sender.add_messaging_score(30)
     @user = msg.sender
     if @room.save
       respond_to do |format|

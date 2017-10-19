@@ -9,6 +9,7 @@
     <%= csrf_meta_tags %>
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&key=AIzaSyB5ngnBJFz1SBjnhwmEbdR6egLpFTvbcrA"></script>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.21/themes/base/jquery-ui.css" />
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
   <body class="hold-transition skin-blue sidebar-mini">
@@ -51,6 +52,14 @@
           </div>
         </nav>
       </header>
+      <% unless flash.empty? %>
+        <script type="text/javascript">
+          <% flash.each do |f| %>
+            <% type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info') %>
+            toastr['<%= type %>']('<%= f[1] %>');
+          <% end %>
+        </script>
+      <% end %>
       <%= yield %>
       <footer class="main-footer">
         <div class="pull-right hidden-xs">

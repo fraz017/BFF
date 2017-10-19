@@ -9,15 +9,11 @@ module ApplicationHelper
 	end
 	def message_reported(message_id, user_id, type = '')
 		if type.present?
-			message = ReportedMessage.where(:reply_id => message_id, user_id: user_id).last
+			message = ReportedMessage.where(:reply_id => message_id, reported_by: user_id).last
 		else
-			message = ReportedMessage.where(:message_id => message_id, user_id: user_id).last
-		end	
-		if message.present?
-			true
-		else
-			false
+			message = ReportedMessage.where(:message_id => message_id, reported_by: user_id).last
 		end
+		message
 	end
 	def liked?(type = '', message_id, user_id)
 		if type.present?

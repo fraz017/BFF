@@ -13,5 +13,6 @@
  *= require bootstrap.min
  *= require font-awesome
  *= require AdminLTE
+ *= require toastr
  *= require _all-skins.min
  */
