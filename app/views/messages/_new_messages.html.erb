@@ -1,141 +1,149 @@
-<% user.chat_room.messages.where(:visible => true).last(10).each do |message| %>
-  <%if message.sender_id != user.id %>
-    <% if message.sender.role_cd == 0 %>
-      <div class="row message-body">
-        <div class="col-sm-12 message-main-receiver">
-          <div class="receiver">
-            <div class="message-text">
-              <strong>Admin:</strong>
-              <br/>
-              <span>Hello, <%= user.email %></span>  
-              <br>
-              <%= message.content %>
-              <br/>
-              <span>Thank you!</span>
-            </div>
-            <span class="message-time pull-right">
-              <%= message.created_at.strftime("%d %b %l:%M %P ") %>
-            </span>
-          </div>
-        </div>
-      </div>
-    <% else %>
-      <div class="row message-body">
-        <div class="col-sm-12 message-main-receiver">
-          <div class="receiver">
-            <div class="misc">
-              <% if message.category.present? %>
-                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
-              <% end %>
-            </div>
-            <span class="msg-content">
-              <%= message.content %>
-              <span class="pull-right">
-                <% if message_reported(message.id, user.id) %>
-                  <button type="button" style="color:red" class="transparent" disabled id="<%= message.id %>">
-                    <i class="fa fa-flag" title="Reported Message!"></i>
-                  </button>
-                <% else %>
-                  <button type="button" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
-                    <i class="fa fa-flag"></i>
-                  </button>
-                <% end %>
-              </span>  
-              <span class="message-time pull-right">
-                <%= message.created_at.strftime(" %l:%M %P ") %>
-              </span>
-            </span>
-            <div class="clearfix"></div>
-            <% reply = message.replies.where(sender_id: user.id) %>
-            <% if reply.present? %>
-              <div class="row message-body">
-                <div class="col-sm-12">
-                  <div class="sender">
-                    <div class="message-text">
-                      <div class="direct-chat-text reciever-message">
-                        <%= reply.first.content %>
-                      </div>
-                      <span class="message-time pull-right"><%= reply.first.created_at.strftime("%l:%M %P ") %>
-                      </span>
-                    </div>
-                  </div>  
+<% get_messages = user.chat_room.messages.where(:visible => true).last(10) %>
+<% if get_messages.present? %>
+  <% get_messages.group_by{|x| x.created_at.strftime("%A %d %B, %Y")}.each do |key, messages| %>
+      <hr>
+      <%= key %>
+      <hr>
+      <% messages.each do |message| %>
+        <%if message.sender_id != user.id %>
+          <% if message.sender.role_cd == 0 %>
+            <div class="row message-body">
+              <div class="col-sm-12 message-main-receiver">
+                <div class="receiver">
+                  <div class="message-text">
+                    <strong>Admin:</strong>
+                    <br/>
+                    <span>Hello, <%= user.email %></span>  
+                    <br>
+                    <%= message.content %>
+                    <br/>
+                    <span>Thank you!</span>
+                  </div>
+                  <span class="message-time pull-right">
+                    <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+                  </span>
                 </div>
               </div>
-            <%else%>
-              <div class="direct-chat-text reciever-message">
-                <% if !user.blocked %>
-                  <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply</a>
-                <% end %>  
-                <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
-                <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= user.id %>">
-                  <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
-                    <div class="col-xs-8">
-                      <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control">
-                      <input type="hidden" name="message_id" value="<%= message.id %>">
+            </div>
+          <% else %>
+            <div class="row message-body">
+              <div class="col-sm-12 message-main-receiver">
+                <div class="receiver">
+                  <div class="misc">
+                    <% if message.category.present? %>
+                      <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+                    <% end %>
+                  </div>
+                  <span class="msg-content">
+                    <%= message.content %>
+                    <span class="pull-right">
+                      <% if message_reported(message.id, user.id) %>
+                        <button type="button" style="color:red" class="transparent" disabled id="<%= message.id %>">
+                          <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
+                        </button>
+                      <% else %>
+                        <button type="button" class="report-message transparent" data-toggle="tooltip" title="Report Message ?" id="<%= message.id %>">
+                          <i class="fa fa-flag"></i>
+                        </button>
+                      <% end %>
+                    </span>  
+                    <span class="message-time pull-right">
+                      <%= message.created_at.strftime(" %l:%M %P ") %>
+                    </span>
+                  </span>
+                  <div class="clearfix"></div>
+                  <% reply = message.replies.where(sender_id: user.id) %>
+                  <% if reply.present? %>
+                    <div class="row message-body">
+                      <div class="col-sm-12">
+                        <div class="sender">
+                          <div class="message-text">
+                            <div class="direct-chat-text reciever-message">
+                              <%= reply.first.content %>
+                            </div>
+                            <span class="message-time pull-right"><%= reply.first.created_at.strftime("%l:%M %P ") %>
+                            </span>
+                          </div>
+                        </div>  
+                      </div>
                     </div>
-                    <div class="col-xs-2">
-                      <button type="submit" class="btn btn-primary btn-flat">Send</button>
+                  <%else%>
+                    <div class="direct-chat-text reciever-message">
+                      <% if !user.blocked %>
+                        <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>" class="reply-btn">Reply</a>
+                      <% end %>  
+                      <a href="javascript:void(0)" id="<%= message.id %>-<%= user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
+                      <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= user.id %>">
+                        <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
+                          <div class="col-xs-8">
+                            <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control">
+                            <input type="hidden" name="message_id" value="<%= message.id %>">
+                          </div>
+                          <div class="col-xs-2">
+                            <button type="submit" class="btn btn-primary btn-flat">Send</button>
+                          </div>
+                        <% end %>
+                      </div> 
+                    </div>
+                  <%end%>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <%else%>
+          <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  <div class="misc">
+                    <% if message.category.present? %>
+                      <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+                    <% end %>
+                  </div>
+                  <span class="msg-content">
+                    <%= message.content %>
+                    <span class="message-time pull-right">
+                      <%= message.created_at.strftime(" %l:%M %P ") %>
+                    </span>
+                  </span>
+                  <% if message.replies.where(:visible => true).present? %>
+                    <div class="msg-replies">
+                      <ul>
+                        <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
+                          <li>
+                            <span class="msg-content">
+                              <%= msg.content %>
+                              <div id="liked-msg<%= msg.id %>">
+                                <% if liked?("reply", msg.id, user.id) %>
+                                  <button class="pull-right transparent"><i data-toggle="tooltip" title="Liked" style="color: green;" class="fa fa-thumbs-up"></i></button>
+                                <% else %>
+                                  <button class="pull-right transparent like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
+                                <% end %>
+                              </div>
+                            </span>
+                            <span class="pull-right">
+                              <% if message_reported(msg.id, user.id, "reply") %>
+                                <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
+                                  <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
+                                </button>
+                              <% else %>
+                                <button type="button" class="report-reply transparent" data-toggle="tooltip" title="Report Message ?" id="<%= msg.id %>">
+                                  <i class="fa fa-flag"></i>
+                                </button>
+                              <% end %>
+                            </span>
+                          </li>
+                        <% end %>  
+                      </ul>
                     </div>
                   <% end %>
-                </div> 
+                </div>
               </div>
-            <%end%>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <%else%>
-    <div class="row message-body">
-      <div class="col-sm-12 message-main-sender">
-        <div class="sender">
-          <div class="message-text">
-            <div class="misc">
-              <% if message.category.present? %>
-                <span class="label label-warning" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
-              <% end %>
             </div>
-            <span class="msg-content">
-              <%= message.content %>
-              <span class="message-time pull-right">
-                <%= message.created_at.strftime(" %l:%M %P ") %>
-              </span>
-            </span>
-            <% if message.replies.where(:visible => true).present? %>
-              <div class="msg-replies">
-                <ul>
-                  <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
-                    <li>
-                      <span class="msg-content">
-                        <%= msg.content %>
-                        <div id="liked-msg<%= msg.id %>">
-                          <% if liked?("reply", msg.id, user.id) %>
-                            <button class="pull-right transparent"><i style="color: green;" class="fa fa-thumbs-up"></i></button>
-                          <% else %>
-                            <button class="pull-right like-msg" id="<%= msg.id %>"><i class="fa fa-thumbs-up"></i></button>
-                          <% end %>
-                        </div>
-                      </span>
-                      <span class="pull-right">
-                        <% if message_reported(msg.id, user.id, "reply") %>
-                          <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
-                            <i class="fa fa-flag" title="Reported Message!"></i>
-                          </button>
-                        <% else %>
-                          <button type="button" class="report-reply transparent" title="Report Message ?" id="<%= msg.id %>">
-                            <i class="fa fa-flag"></i>
-                          </button>
-                        <% end %>
-                      </span>
-                    </li>
-                  <% end %>  
-                </ul>
-              </div>
-            <% end %>
           </div>
-        </div>
-      </div>
-    </div>
-    </div>
+          </div>
+        <%end%>
+      <% end %>  
   <%end%>
 <%end%>
 <script type="text/javascript">
