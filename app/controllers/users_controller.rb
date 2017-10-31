@@ -17,6 +17,12 @@ class UsersController < ApplicationController
 	  end
   end
 
+  def refresh_header
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def feedback
     if params[:rating].present? && params[:message].present?
       feed = Feedback.new

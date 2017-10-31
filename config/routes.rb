@@ -14,12 +14,15 @@ Rails.application.routes.draw do
 		get "/broadcast_message" => "dashboards#broadcast_message"
     get '/profile/:id' => "dashboards#profile"
     post '/block_unblock' => 'dashboards#block_unblock'
+    get '/messages' => 'dashboards#messages'
+    get '/refresh_messages' => 'dashboards#refresh_messages'
     resources :available_categories
 	end
   get '/profile' => 'users#profile'
   patch "/users/:id" => 'users#update', as: :update
   post '/users/feedback' => 'users#feedback'
   get 'messages/index'
+  get '/refresh_header' => 'users#refresh_header'
   post '/messages' => "messages#post_message"
   post '/messages/report' => "messages#report"
  	post '/messages/like' => "messages#like"

@@ -9,6 +9,17 @@ class Admin::DashboardsController < Admin::AppController
 		@logs = Log.where(log_type: "message").order("created_at desc").last(100)
 	end
 
+	def messages
+		@messages = Message.last(20)
+	end
+
+	def refresh_messages
+		@messages = Message.last(20)
+		respond_to do |format|
+      format.js
+    end
+	end
+
 	def block_unblock
 		user = User.find_by(:id => params[:user_id])
 		if user.blocked

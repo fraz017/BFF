@@ -110,29 +110,39 @@
                     <div class="msg-replies">
                       <ul>
                         <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
-                          <li>
-                            <span class="msg-content"><%= msg.content %>
-                              <div id="liked-msg<%= msg.id %>">
-                                <% if liked?("reply", msg.id, current_user.id) %>
-                                  <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
+                          <% if msg.sender.role_cd == 0 %>
+                            <li>
+                              <strong>Admin:</strong>
+                              <%= msg.content %>
+                              <span class="message-time pull-right">
+                                <%= msg.created_at.strftime("%d %b %l:%M %P ") %>
+                              </span>
+                            </li>
+                          <% else %>
+                            <li>
+                              <span class="msg-content">
+                                <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><%= msg.content %></a>
+                                <div id="liked-msg<%= msg.id %>">
+                                  <% if liked?("reply", msg.id, current_user.id) %>
+                                    <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
+                                  <% else %>
+                                    <button class="pull-right transparent like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
+                                  <% end %>
+                                </div>
+                              </span>
+                              <span class="pull-right">
+                                <% if message_reported(msg.id, current_user.id, "reply") %>
+                                  <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
+                                    <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
+                                  </button>
                                 <% else %>
-                                  <button class="pull-right transparent like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
+                                  <button type="button" class="report-reply transparent" data-toggle="tooltip" title="Report Message ?" id="<%= msg.id %>">
+                                    <i class="fa fa-flag"></i>
+                                  </button>
                                 <% end %>
-                              </div>
-                            </span>
-                            <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><i class="fa fa-commenting"></i></a>
-                            <span class="pull-right">
-                              <% if message_reported(msg.id, current_user.id, "reply") %>
-                                <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
-                                  <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
-                                </button>
-                              <% else %>
-                                <button type="button" class="report-reply transparent" data-toggle="tooltip" title="Report Message ?" id="<%= msg.id %>">
-                                  <i class="fa fa-flag"></i>
-                                </button>
-                              <% end %>
-                            </span>
-                          </li>
+                              </span>
+                            </li>
+                          <% end %>  
                         <% end %>  
                       </ul>
                     </div>
@@ -185,7 +195,9 @@
       dataType: "script"
     })
     .done(function( msg ) {
-      
+      setTimeout(function(){
+        refreshPartial();
+      }, 1000);
     });
   });
   $(".report-reply").click(function(){

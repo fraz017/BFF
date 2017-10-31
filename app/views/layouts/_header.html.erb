@@ -1,0 +1,48 @@
+<header class="main-header">
+  <!-- Logo -->
+  <a href="/" class="logo">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><b>B</b>FF</span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg"><b>B</b>FF</span>
+  </a>
+  <!-- Header Navbar: style can be found in header.less -->
+  <nav class="navbar navbar-static-top" role="navigation">
+    <!-- Sidebar toggle button-->
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <li class="dropdown notifications-menu pull-right">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-gears"></i>
+          </a>
+          <ul class="dropdown-menu settings-menu">
+            <li>
+              <!-- inner menu: contains the actual data -->
+              <ul class="menu">
+                <li class="text-center">
+                  <a href="/profile">
+                    <i class="fa text-blue fa-gear"></i> Profile
+                  </a>
+                </li>
+                <li class="text-center">
+                  <%= link_to('<i class="fa fa-sign-out text-yellow"></i> Logout'.html_safe , destroy_user_session_path, :method => :delete) %> 
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="pull-right">
+          <a href="#" data-toggle="modal" data-target="#messagingScore">
+            Messaging Score (<%= current_user.messaging_score %>)
+          </a>
+        </li>
+        <li class="pull-right">
+          <a href="#" data-toggle="modal" data-target="#loyaltyScore">
+            Loyalty Score (<%= current_user.loyalty_score %>)
+          </a>
+        </li>
+        <!-- Control Sidebar Toggle Button -->
+      </ul>
+    </div>
+  </nav>
+</header>

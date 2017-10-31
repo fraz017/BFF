@@ -20,7 +20,7 @@
           </div>
           <div class="row reply">
             <% if !current_user.blocked %>
-              <%= form_tag("/messages", method: 'post', :remote => true) do %>
+              <%= form_tag("/messages", method: 'post', :remote => true, id: "send-message") do %>
                 <div class="col-sm-11 col-xs-11 reply-main">
                   <div class="maxl">
                     <% AvailableCategory.all.each do |ac| %>
@@ -94,6 +94,58 @@
 
   </div>
 </div>
+<div id="messagingScore" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Messaging Score Criteria</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          <ul>
+            <li>Rule 1</li>
+            <li>Rule 2</li>
+            <li>Rule 3</li>
+            <li>Rule 4</li>
+          </ul>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="loyaltyScore" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Loyalty Score Criteria</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          <ul>
+            <li>Rule 1</li>
+            <li>Rule 2</li>
+            <li>Rule 3</li>
+            <li>Rule 4</li>
+          </ul>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 <script type="text/javascript">
   jQuery(function() {
     return $('#messages').autocomplete({
@@ -103,6 +155,19 @@
 </script>
 <script type="text/javascript">
   $(function(){
+
+    $("#send-message").on("submit", function(){
+     setTimeout(function(){
+      refreshPartial()
+      }, 1000);
+    });
+
+    function refreshPartial() {
+      $.ajax({
+        url: "/refresh_header"
+      })
+    }
+
     $('[data-toggle="tooltip"]').tooltip();
     var arrow = $('.arrow-btn');
     var textarea = $('.chat-text textarea');
@@ -122,6 +187,9 @@
         $(this).parent().submit();
         var msg = $this.val();
         $this.val('');
+        setTimeout(function(){
+          refreshPartial();
+        }, 1000);
       }
     });
   });

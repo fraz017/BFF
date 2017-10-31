@@ -1,0 +1,91 @@
+<% @messages.group_by{|x| x.created_at.strftime("%A %d %B, %Y")}.each do |key, messages| %>
+  <hr>
+  <%= key %>
+  <hr>
+  <% messages.each do |message| %>
+    <% if message.sender.role_cd == 0 %>
+      <div class="row message-body">
+        <div class="col-sm-12 message-main-receiver">
+          <div class="receiver">
+            <div class="message-text">
+              <strong>Admin:</strong>
+              <br/>
+              <span>Hello, <%= current_user.email %></span>  
+              <br>
+              <%= message.content %>
+              <br/>
+              <span>Thank you!</span>
+            </div>
+            <span class="message-time pull-right">
+              <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+            </span>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="row message-body">
+        <div class="col-sm-12 message-main-receiver">
+          <div class="receiver">
+            <div class="misc">
+              <% if message.category.present? %>
+                <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+              <% end %>
+            </div>
+            <span class="msg-content">
+              <%= message.content %>
+              <span class="pull-right">
+              </span>  
+              <span class="message-time pull-right">
+                <%= message.created_at.strftime(" %l:%M %P ") %>
+              </span>
+            </span>
+            <div class="clearfix"></div>
+            <% reply = message.replies.where(sender_id: current_user.id) %>
+            <% if reply.present? %>
+              <div class="row message-body">
+                <div class="col-sm-12">
+                  <div class="sender">
+                    <div class="message-text">
+                      <div class="direct-chat-text reciever-message">
+                        <%= reply.first.content %>
+                      </div>
+                      <span class="message-time pull-right"><%= reply.first.created_at.strftime("%l:%M %P ") %>
+                      </span>
+                    </div>
+                  </div>  
+                </div>
+              </div>
+            <%else%>
+              <div class="direct-chat-text reciever-message">
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>" class="reply-btn">Reply</a>
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
+                <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= current_user.id %>">
+                  <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
+                    <div class="col-xs-8">
+                      <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control">
+                      <input type="hidden" name="message_id" value="<%= message.id %>">
+                    </div>
+                    <div class="col-xs-2">
+                      <button type="submit" class="btn btn-primary btn-flat">Send</button>
+                    </div>
+                  <% end %>
+                </div> 
+              </div>
+            <%end%>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<%end%>
+<script type="text/javascript">
+  
+  function refreshPartial() {
+    $.ajax({
+      url: "/admin/refresh_messages"
+    })
+  }
+  $(".form-horizontal").on("submit", function(){
+    refreshPartial()
+  });
+</script>

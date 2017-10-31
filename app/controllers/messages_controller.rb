@@ -51,7 +51,7 @@ class MessagesController < ApplicationController
       match.save
     end
     @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
-    @reply.sender.add_loyalty_score(10) if !@reply.content.include?("*")
+    @reply.sender.add_loyalty_score(20) if !@reply.content.include?("*")
     log = Log.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id], log_type: "reply")
     MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
     LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
