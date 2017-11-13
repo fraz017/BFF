@@ -70,7 +70,7 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-
+  config.action_mailer.default_url_options = { host: 'production.atrumsnrin.us-west-2.elasticbeanstalk.com' }
   config.web_socket_server_url = "wss://mpoc.herokuapp.com/cable"
   config.action_cable.allowed_request_origins = ['https://mpoc.herokuapp.com', 'http://mpoc.herokuapp.com']
   # Use a different logger for distributed setups.
