@@ -73,6 +73,7 @@ Rails.application.configure do
 
   config.web_socket_server_url = "wss://production.atrumsnrin.us-west-2.elasticbeanstalk.com/cable"
   config.action_cable.allowed_request_origins = ['https://production.atrumsnrin.us-west-2.elasticbeanstalk.com', 'http://production.atrumsnrin.us-west-2.elasticbeanstalk.com']
+  config.action_mailer.default_url_options = { host: 'production.atrumsnrin.us-west-2.elasticbeanstalk.com' }
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
@@ -85,5 +86,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  config.action_mailer.default_url_options = { :host => "production.atrumsnrin.us-west-2.elasticbeanstalk.com" }
 end

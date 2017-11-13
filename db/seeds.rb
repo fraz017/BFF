@@ -6,7 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# User.create(email: "admin@bff.com", password: "bffadmin", password_confirmation: "bffadmin", role: :admin, complete_profile: true)
+User.create(email: "admin@bff.com", password: "bffadmin", password_confirmation: "bffadmin", role: :admin, complete_profile: true, confirmed_at: Time.now )
+
 AvailableCategory.create(name: "entertainment", color: "#CD5C5C", icon: "fa fa-music")
 AvailableCategory.create(name: "food", color: "#8B0000", icon: "fa fa-coffee")
 AvailableCategory.create(name: "shopping", color: "#32CD32", icon: "fa fa-shopping-basket")
