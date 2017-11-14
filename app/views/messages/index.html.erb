@@ -157,9 +157,9 @@
   $(function(){
 
     $("#send-message").on("submit", function(){
-     setTimeout(function(){
-      refreshPartial()
-      }, 1000);
+     // setTimeout(function(){
+     //  refreshPartial()
+     //  }, 1000);
     });
 
     function refreshPartial() {
@@ -187,9 +187,9 @@
         $(this).parent().submit();
         var msg = $this.val();
         $this.val('');
-        setTimeout(function(){
-          refreshPartial();
-        }, 1000);
+        // setTimeout(function(){
+        //   refreshPartial();
+        // }, 1000);
       }
     });
   });
