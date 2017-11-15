@@ -1,4 +1,3 @@
-<%= user.inspect %>
 <% get_messages = user.chat_room.messages.where(:visible => true).last(10) %>
 <% if get_messages.present? %>
   <% get_messages.group_by{|x| x.created_at.strftime("%A %d %B, %Y")}.each do |key, messages| %>
