@@ -21,6 +21,7 @@
 //= require toastr
 //= require jquery.geocomplete.min
 //= require cable
+//= require_tree ./channels
 
 'use strict';
 String.prototype.capitalize = function() {
