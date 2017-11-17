@@ -71,9 +71,9 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.web_socket_server_url = "wss://production.atrumsnrin.us-west-2.elasticbeanstalk.com/cable"
-  config.action_cable.allowed_request_origins = ['https://production.atrumsnrin.us-west-2.elasticbeanstalk.com', 'http://production.atrumsnrin.us-west-2.elasticbeanstalk.com']
-  config.action_mailer.default_url_options = { host: 'production.atrumsnrin.us-west-2.elasticbeanstalk.com' }
+  config.web_socket_server_url = "wss://ec2-35-163-146-62.us-west-2.compute.amazonaws.com/cable"
+  config.action_cable.allowed_request_origins = ['https://ec2-35-163-146-62.us-west-2.compute.amazonaws.com', 'http://ec2-35-163-146-62.us-west-2.compute.amazonaws.com']
+  config.action_mailer.default_url_options = { host: 'ec2-35-163-146-62.us-west-2.compute.amazonaws.com' }
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
