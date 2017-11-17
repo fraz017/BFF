@@ -39,6 +39,8 @@ gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
 
+gem 'therubyracer', git: 'https://github.com/cowboyd/therubyracer.git'
+
 gem 'fuzzy_match', '~> 2.1'
 
 gem 'simple_enum'
