@@ -33,12 +33,7 @@
         </li>
         <li class="pull-right">
           <a href="#" data-toggle="modal" data-target="#messagingScore">
-            Messaging Score (<%= current_user.messaging_score %>)
-          </a>
-        </li>
-        <li class="pull-right">
-          <a href="#" data-toggle="modal" data-target="#loyaltyScore">
-            Loyalty Score (<%= current_user.loyalty_score %>)
+            Messaging Score (<%= current_user.messaging_score+current_user.loyalty_score %>)
           </a>
         </li>
         <!-- Control Sidebar Toggle Button -->

@@ -21,7 +21,7 @@
           <div class="row reply">
             <% if !current_user.blocked %>
               <%= form_tag("/messages", method: 'post', :remote => true, id: "send-message") do %>
-                <div class="col-sm-11 col-xs-11 reply-main">
+                <div class="col-sm-12 col-xs-12 reply-main">
                   <div class="maxl">
                     <% AvailableCategory.all.each do |ac| %>
                       <label class="radio inline"> 
@@ -31,9 +31,7 @@
                     <% end %>
                   </div>
                   <textarea class="form-control" rows="1" name="message" id="messages" placeholder="Type Message ..." required></textarea>
-                </div>
-                <div class="col-sm-1 col-xs-1 reply-send">
-                  <button type="submit" class="btn btn-default" data-toggle="tooltip" title="Send Message">Send</button>
+                  <button type="submit" class="btn btn-default" data-toggle="tooltip" title="Send Message" style="float: left; width: 15%;">Send</button>
                 </div>
               <%end%>
             <%else%>  
