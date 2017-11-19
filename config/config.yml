@@ -6,4 +6,4 @@ development:
 production:
   app_id: '402242343464282'
   app_secret: '069cd90c3288670c99104d2e18df39c6'
-  callback_url: 'http://production.atrumsnrin.us-west-2.elasticbeanstalk.com/auth/facebook/callback'  
+  callback_url: 'http://ec2-35-163-146-62.us-west-2.compute.amazonaws.com/auth/facebook/callback'  
