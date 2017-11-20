@@ -37,6 +37,10 @@ class User < ApplicationRecord
   	self.score = points
   end
 
+  def admin?
+    role == :admin
+  end
+
   def add_loyalty_score(points)
     if self.loyalty_score.nil?
       score = 0
