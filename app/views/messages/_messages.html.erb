@@ -18,7 +18,7 @@
                     <span>Thank you!</span>
                   </div>
                   <span class="message-time pull-right">
-                    <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+                    <%= message.created_at.strftime(" %l:%M %P ") %>
                   </span>
                 </div>
               </div>
@@ -27,11 +27,8 @@
             <div class="row message-body">
               <div class="col-sm-12 message-main-receiver">
                 <div class="receiver">
-                  <div class="misc">
-                    <% if message.category.present? %>
-                      <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
-                    <% end %>
-                  </div>
+                  <!-- 
+                   -->
                   <span class="msg-content">
                     <%= message.content %>
                     <span class="pull-right">
@@ -93,11 +90,6 @@
             <div class="col-sm-12 message-main-sender">
               <div class="sender">
                 <div class="message-text">
-                  <div class="misc">
-                    <% if message.category.present? %>
-                      <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;" title="Category"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
-                    <% end %>
-                  </div>
                   <span class="msg-content">
                     <%= message.content %>
                     <span class="message-time pull-right">
