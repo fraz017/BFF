@@ -11,8 +11,6 @@
               <div class="col-sm-12 message-main-receiver">
                 <div class="receiver">
                   <div class="message-text">
-                    <strong></strong>
-                    <br/>
                     <span>Hello, <%= user.email %></span>  
                     <br>
                     <%= message.content %>
@@ -29,7 +27,8 @@
             <div class="row message-body">
               <div class="col-sm-12 message-main-receiver">
                 <div class="receiver">
-                  <!--  -->
+                  <!-- 
+                   -->
                   <span class="msg-content">
                     <%= message.content %>
                     <span class="pull-right">
@@ -38,7 +37,7 @@
                           <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
                         </button>
                       <% else %>
-                        <button type="button" class="report-message transparent" data-toggle="tooltip" title="Report Message ?" id="<%= message.id %>">
+                        <button type="button" data-toggle="tooltip" class="report-message transparent" title="Report Message ?" id="<%= message.id %>">
                           <i class="fa fa-flag"></i>
                         </button>
                       <% end %>
@@ -85,7 +84,7 @@
                 </div>
               </div>
             </div>
-          <% end %>
+          <% end %>  
         <%else%>
           <div class="row message-body">
             <div class="col-sm-12 message-main-sender">
@@ -100,22 +99,29 @@
                   <% if message.replies.where(:visible => true).present? %>
                     <div class="msg-replies">
                       <ul>
-                        <% message.replies.where(:visible => true).order("score desc").first(3).each do |msg| %>
-                          <% if msg.sender.role_cd == 0 %>
-                            <li>
-                              <strong></strong>
-                              <%= msg.content %>
-                              <span class="message-time pull-right">
-                                <%= msg.created_at.strftime(" %l:%M %P ") %>
-                              </span>
-                            </li>
-                          <% else %>
+                        <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
+                        <% if admin_reply.present? %>
+                          <li>
+                            <span class="msg-content">
+                              <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= admin_reply.id %>"><%= admin_reply.content %></a>
+                              <div id="liked-msg<%= admin_reply.id %>">
+                                <% if liked?("reply", admin_reply.id, user.id) %>
+                                  <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
+                                <% else %>
+                                  <button class="pull-right transparent like-msg" id="<%= admin_reply.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
+                                <% end %>
+                              </div>
+                            </span>
+                          </li>
+                        <% end %>
+                        <% message.replies.where(:visible => true).order("score desc").first(admin_reply.present? ? 2 : 3).each do |msg| %>
+                          <% if !msg.sender.admin? %>
                             <li>
                               <span class="msg-content">
                                 <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><%= msg.content %></a>
                                 <div id="liked-msg<%= msg.id %>">
                                   <% if liked?("reply", msg.id, user.id) %>
-                                    <button class="pull-right transparent"><i data-toggle="tooltip" title="Liked" style="color: green;" class="fa fa-thumbs-up"></i></button>
+                                    <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
                                   <% else %>
                                     <button class="pull-right transparent like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
                                   <% end %>
@@ -123,7 +129,7 @@
                               </span>
                               <span class="pull-right">
                                 <% if message_reported(msg.id, user.id, "reply") %>
-                                  <button type="button" style="color:red" class="report-reply transparent" disabled id="<%= msg.id %>">
+                                  <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
                                     <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
                                   </button>
                                 <% else %>
@@ -133,7 +139,7 @@
                                 <% end %>
                               </span>
                             </li>
-                          <% end %>
+                          <% end %>  
                         <% end %>  
                       </ul>
                     </div>
@@ -142,14 +148,13 @@
               </div>
             </div>
           </div>
-          </div>
         <%end%>
-      <% end %>  
+      <% end %>
   <%end%>
-<%end%>
+<% end %>
 <script type="text/javascript">
-$(".slidingDiv").hide();
-$(".show_hide").show();
+  $(".slidingDiv").hide();
+  $(".show_hide").show();
   $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
   $(".reply-btn").click(function(){
     var id = $(this).attr("id");
@@ -163,6 +168,7 @@ $(".show_hide").show();
     $("#"+id+"-cancel").addClass("hidden");
     $(".reply-btn#"+id).removeClass("hidden");
   });
+
   $(".report-message").click(function(){
     var message_id = $(this).attr("id");
     $(this).prop('disabled', true);
@@ -172,8 +178,23 @@ $(".show_hide").show();
       data: { message_id: message_id }
     })
     .done(function( msg ) {
-      $(".report-message#"+message_id).attr("disabled", true);
+      $(".report-message#"+message_id).attr("disabled", "disabled");
       alert("Message Reported!");
+    });
+  });
+  $(".start-chat").click(function(){
+    var message_id = $(this).attr("id");
+    title = message_id
+    $.ajax({
+      method: "POST",
+      url: "/rooms",
+      data: { room:{ title: title}, message_id: message_id},
+      dataType: "script"
+    })
+    .done(function( msg ) {
+      setTimeout(function(){
+        refreshPartial();
+      }, 1000);
     });
   });
   $(".report-reply").click(function(){
@@ -191,6 +212,7 @@ $(".show_hide").show();
   });
   $(".like-msg").click(function(){
     var message_id = $(this).attr("id");
+    $(this).removeClass('like-msg');
     $(this).prop('disabled', true);
     $.ajax({
       method: "POST",
@@ -198,7 +220,7 @@ $(".show_hide").show();
       data: { message_id: message_id, type: "reply" }
     })
     .done(function( msg ) {
-      $("#liked-msg"+message_id).attr("disabled", "disabled");
+      $("#liked-msg"+message_id).removeClass("like-msg");
       alert("Liked!");
     });
   });
