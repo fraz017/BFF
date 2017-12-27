@@ -26,9 +26,7 @@
           <% else %>
             <div class="row message-body">
               <div class="col-sm-12 message-main-receiver">
-                <div class="receiver">
-                  <!-- 
-                   -->
+                <div class="receiver">  
                   <span class="msg-content">
                     <%= message.content %>
                     <span class="pull-right">
@@ -97,10 +95,10 @@
                     </span>
                   </span>
                   <% if message.replies.where(:visible => true).present? %>
-                    <div class="msg-replies">
-                      <ul>
-                        <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
-                        <% if admin_reply.present? %>
+                    <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
+                    <% if admin_reply.present? %>
+                      <div class="msg-replies">
+                        <ul>
                           <li>
                             <span class="msg-content">
                               <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= admin_reply.id %>"><%= admin_reply.content %></a>
@@ -113,36 +111,40 @@
                               </div>
                             </span>
                           </li>
-                        <% end %>
-                        <% message.replies.where(:visible => true).order("score desc").first(admin_reply.present? ? 2 : 3).each do |msg| %>
-                          <% if !msg.sender.admin? %>
-                            <li>
-                              <span class="msg-content">
-                                <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><%= msg.content %></a>
-                                <div id="liked-msg<%= msg.id %>">
-                                  <% if liked?("reply", msg.id, current_user.id) %>
-                                    <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
-                                  <% else %>
-                                    <button class="pull-right transparent like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
-                                  <% end %>
-                                </div>
-                              </span>
-                              <span class="pull-right">
-                                <% if message_reported(msg.id, current_user.id, "reply") %>
-                                  <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
-                                    <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
-                                  </button>
-                                <% else %>
-                                  <button type="button" class="report-reply transparent" data-toggle="tooltip" title="Report Message ?" id="<%= msg.id %>">
-                                    <i class="fa fa-flag"></i>
-                                  </button>
-                                <% end %>
-                              </span>
-                            </li>
-                          <% end %>  
-                        <% end %>  
-                      </ul>
-                    </div>
+                        </ul>
+                      </div>    
+                    <% end %>
+                    <% message.replies.where(:visible => true).order("score desc").first(admin_reply.present? ? 2 : 3).each do |msg| %>
+                      <% if !msg.sender.admin? %>
+                      <div class="msg-replies">
+                        <ul>
+                        <li>
+                          <span class="msg-content">
+                            <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><%= msg.content %></a>
+                            <div id="liked-msg<%= msg.id %>">
+                              <% if liked?("reply", msg.id, current_user.id) %>
+                                <button class="pull-right transparent" disabled><i data-toggle="tooltip" title="Liked!" style="color: green;" class="fa fa-thumbs-up"></i></button>
+                              <% else %>
+                                <button class="pull-right transparent like-msg" id="<%= msg.id %>"><i data-toggle="tooltip" title="Like ?" class="fa fa-thumbs-up"></i></button>
+                              <% end %>
+                            </div>
+                          </span>
+                          <span class="pull-right">
+                            <% if message_reported(msg.id, current_user.id, "reply") %>
+                              <button type="button" style="color:red" class="transparent" disabled id="<%= msg.id %>">
+                                <i class="fa fa-flag" data-toggle="tooltip" title="Reported Message!"></i>
+                              </button>
+                            <% else %>
+                              <button type="button" class="report-reply transparent" data-toggle="tooltip" title="Report Message ?" id="<%= msg.id %>">
+                                <i class="fa fa-flag"></i>
+                              </button>
+                            <% end %>
+                          </span>
+                        </li>
+                        </ul>
+                        </div>
+                      <% end %>  
+                    <% end %>  
                   <% end %>
                 </div>
               </div>

@@ -97,10 +97,10 @@
                     </span>
                   </span>
                   <% if message.replies.where(:visible => true).present? %>
-                    <div class="msg-replies">
-                      <ul>
-                        <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
-                        <% if admin_reply.present? %>
+                    <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
+                    <% if admin_reply.present? %>
+                      <div class="msg-replies">
+                        <ul>
                           <li>
                             <span class="msg-content">
                               <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= admin_reply.id %>"><%= admin_reply.content %></a>
@@ -113,9 +113,13 @@
                               </div>
                             </span>
                           </li>
-                        <% end %>
-                        <% message.replies.where(:visible => true).order("score desc").first(admin_reply.present? ? 2 : 3).each do |msg| %>
-                          <% if !msg.sender.admin? %>
+                        </ul>
+                      </div>
+                    <% end %>
+                    <% message.replies.where(:visible => true).order("score desc").first(admin_reply.present? ? 2 : 3).each do |msg| %>
+                      <% if !msg.sender.admin? %>
+                        <div class="msg-replies">
+                          <ul>
                             <li>
                               <span class="msg-content">
                                 <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><%= msg.content %></a>
@@ -139,10 +143,10 @@
                                 <% end %>
                               </span>
                             </li>
-                          <% end %>  
-                        <% end %>  
-                      </ul>
-                    </div>
+                          </ul>
+                        </div>
+                      <% end %>  
+                    <% end %>  
                   <% end %>
                 </div>
               </div>

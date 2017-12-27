@@ -8,26 +8,4 @@
       </div>  
     </div>  
   </div>  
-</section>  
-<script type="text/javascript">
-  $(".slidingDiv").hide();
-  $(".show_hide").show();
-  $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
-  $(".reply-btn").click(function(){
-    var id = $(this).attr("id");
-    $("#reply-"+id).removeClass("hidden");
-    $("#"+id+"-cancel").removeClass("hidden");
-    $("#"+id).addClass("hidden");
-  })
-  $(".cancel-btn").click(function(){
-    var id = $(this).attr("id").split("-cancel")[0];
-    $("#reply-"+id).addClass("hidden");
-    $("#"+id+"-cancel").addClass("hidden");
-    $(".reply-btn#"+id).removeClass("hidden");
-  });
-  $('.show_hide').click(function () {
-    $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
-    var getId = $(this).attr("id");
-    $("#slidingDiv"+getId).toggle("slide");
-  });
-</script>
+</section>
