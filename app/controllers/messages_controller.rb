@@ -6,8 +6,6 @@ class MessagesController < ApplicationController
   def index
     @messages = Message.where("content ilike ? and visible = ?", "%#{params[:term]}%", true)
     @messages = @messages.where("content ilike '%?%'")
-    @rooms = Room.where(:user_id => current_user.id)
-    @joined_rooms = Room.where(:chat_with => current_user.id)
     respond_to do |format|
       format.html
       format.js { render json: @messages.map(&:content).uniq.first(5) }

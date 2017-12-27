@@ -7,6 +7,11 @@ class SingleMessagesController < ApplicationController
       head :ok
     end
   end
+
+  def personal_chats
+    @rooms = Room.where(:user_id => current_user.id).order("id desc")
+    @joined_rooms = Room.where(:chat_with => current_user.id).order("id desc")
+  end
   private
  
     def message_params

@@ -36,6 +36,10 @@ body {
   border-radius: 4px;
 }
 /* Layout */
+.user-chat-container {
+height: 85vh;
+  background-color: #fff;
+}
 .wrapper {
   min-height: 100%;
   position: static;
@@ -4880,10 +4884,15 @@ table.text-center th {
   margin: 10px;
 }
 .chat-body{
-  height: 220px;
+  /*height: 250px;*/
   width: inherit;
-  overflow: auto;
+  /*overflow: auto;*/
   margin-bottom: 45px;
+}
+.chat-body .panel-default {
+  border-color: #ddd;
+  height: 200px;
+  overflow: auto;
 }
 .chat-text{
   position: fixed;
@@ -5592,20 +5601,15 @@ table.text-center th {
 .user-chat-container {
   float: left;
   width: 100%;
-  position: fixed;
-  z-index: 5;
-  bottom: 0;
-  right: 0;
-  max-height: 400px;
+  padding: 10px;
+  background-color: #fff;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.45);
-  padding-top: 10px;
 }
 .user-chat {
-  float: right;
-  width: 300px;
+  float: left;
+  width: 24%;
   position: relative;
-  right: 36px;
+  right: 0px;
   margin-left: 10px;
   margin-bottom: 10px;
   min-height: 20px;
@@ -5615,7 +5619,7 @@ table.text-center th {
   position: inherit;
 }
 .user-chat .chat-text {
-  position: absolute;
+  position: static;
 }
 .radio span:after {
   display: none;

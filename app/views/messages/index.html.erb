@@ -42,19 +42,6 @@
       </div>
     </div>
   </section><!-- /.content -->
-  <div class="user-chat-container">
-    <% if @rooms.present? %>
-      <% @rooms.each do |room| %>
-        <%= render partial: "user_chat", locals: { room: room, user: current_user } %>
-      <% end %>  
-    <% end %>
-    <% if @joined_rooms.present? %>
-      <% @joined_rooms.each do |room| %>
-        <%= render partial: "user_chat", locals: { room: room, user: current_user } %>
-      <% end %>  
-    <% end %>
-  </div>
-</div>
 <div id="feedbackModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -168,29 +155,29 @@
     }
 
     $('[data-toggle="tooltip"]').tooltip();
-    var arrow = $('.arrow-btn');
-    var textarea = $('.chat-text textarea');
-    arrow.on('click', function(){
-      var src = $(this).attr('src');
-      $(this).parent().parent().find('.chat-body').slideToggle('fast');
-      if(src == 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png'){
-        arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png');
-      }
-      else{
-        arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png');
-      }
-    });
-    textarea.keypress(function(event) {
-      var $this = $(this);
-      if(event.keyCode == 13){
-        $(this).parent().submit();
-        var msg = $this.val();
-        $this.val('');
-        setTimeout(function(){
-          refreshPartial();
-        }, 1000);
-      }
-    });
+    // var arrow = $('.arrow-btn');
+    // var textarea = $('.chat-text textarea');
+    // arrow.on('click', function(){
+    //   var src = $(this).attr('src');
+    //   $(this).parent().parent().find('.chat-body').slideToggle('fast');
+    //   if(src == 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png'){
+    //     arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png');
+    //   }
+    //   else{
+    //     arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png');
+    //   }
+    // });
+    // textarea.keypress(function(event) {
+    //   var $this = $(this);
+    //   if(event.keyCode == 13){
+    //     $(this).parent().submit();
+    //     var msg = $this.val();
+    //     $this.val('');
+    //     setTimeout(function(){
+    //       refreshPartial();
+    //     }, 1000);
+    //   }
+    // });
   });
 </script>
 <style type="text/css">
