@@ -106,7 +106,7 @@
     })
   }
   $(".form-horizontal").on("submit", function(){
-    refreshPartial()
+    setTimeout(function(){ refreshPartial(); }, 2000);
   });
 </script>
 <script type="text/javascript">
