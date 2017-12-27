@@ -11,10 +11,12 @@ class Admin::DashboardsController < Admin::AppController
 
 	def messages
 		@messages = Message.last(20)
+		@user = current_user
 	end
 
 	def refresh_messages
 		@messages = Message.last(20)
+		@user = current_user
 		respond_to do |format|
       format.js
     end

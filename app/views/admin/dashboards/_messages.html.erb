@@ -10,7 +10,7 @@
             <div class="message-text">
               <strong>Admin:</strong>
               <br/>
-              <span>Hello, <%= current_user.email %></span>  
+              <span>Hello, <%= @user.email %></span>  
               <br>
               <%= message.content %>
               <br/>
@@ -41,7 +41,7 @@
               </span>
             </span>
             <div class="clearfix"></div>
-            <% reply = message.replies.where(sender_id: current_user.id) %>
+            <% reply = message.replies.where(sender_id: @user.id) %>
             <% if reply.present? %>
               <div class="row message-body">
                 <div class="col-sm-12">
@@ -58,9 +58,9 @@
               </div>
             <%else%>
               <div class="direct-chat-text reciever-message">
-                <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>" class="reply-btn">Reply</a>
-                <a href="javascript:void(0)" id="<%= message.id %>-<%= current_user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
-                <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= current_user.id %>">
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= @user.id %>" class="reply-btn">Reply</a>
+                <a href="javascript:void(0)" id="<%= message.id %>-<%= @user.id %>-cancel" class="cancel-btn hidden">Cancel</a>
+                <div class="row reply-box hidden" id="reply-<%= message.id %>-<%= @user.id %>">
                   <%= form_tag("/reply", method: 'post', :remote => true, class: "form-horizontal") do %>
                     <div class="col-xs-8">
                       <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control">
@@ -100,7 +100,6 @@
   </div>
 </div>
 <script type="text/javascript">
-  
   function refreshPartial() {
     $.ajax({
       url: "/admin/refresh_messages"
