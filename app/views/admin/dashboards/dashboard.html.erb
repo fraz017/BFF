@@ -215,7 +215,7 @@
                     <span class="users-<%= user.id %>-offline <%= user.is_online? == false ? '' : 'hidden' %> label label-danger">Offline</span>
                   </td>
                   <td>
-                    <%= link_to "View Profile", admin_path(user), {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary"} %>
+                    <%= link_to "View Profile", "/admin/profile/#{user.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary"} %>
                   </td>
                   <td>
                     <%= form_tag(admin_block_unblock_path, method: "post") do %>

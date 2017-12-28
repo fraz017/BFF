@@ -17,7 +17,7 @@
               <span>Thank you!</span>
             </div>
             <span class="message-time pull-right">
-              <%= message.created_at.strftime("%d %b %l:%M %P ") %>
+              <%= message.created_at.strftime(" %l:%M %P ") %>
             </span>
           </div>
         </div>
@@ -30,6 +30,7 @@
               <% if message.category.present? %>
                 <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
               <% end %>
+              <%= link_to "<span class='fa fa-user'></span>".html_safe, "/admin/profile/#{message.sender.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary pull-right"} %>
             </div>
             <span class="msg-content">
               <%= message.content %>
@@ -49,7 +50,7 @@
                       <div class="direct-chat-text reciever-message">
                         <%= reply.first.content %>
                       </div>
-                      <span class="message-time pull-right"><%= reply.first.created_at.strftime("%l:%M %P ") %>
+                      <span class="message-time pull-right"><%= reply.first.created_at.strftime(" %l:%M %P ") %>
                       </span>
                     </div>
                   </div>  
@@ -78,6 +79,26 @@
     <% end %>
   <% end %>
 <%end%>
+<div id="profileModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa fa-user margin-r-5"></i>User Profile</h4>
+      </div>
+      <div class="modal-body">
+        <div class="user-profile">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 <script type="text/javascript">
   
   function refreshPartial() {

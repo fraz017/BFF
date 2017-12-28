@@ -5,7 +5,7 @@
         <a data-toggle="collapse" href="#log_<%= message.id %>">
           <div>
             <span><%= message.sender.email %></span>
-            <span class='text-muted pull-right'><%= message.created_at.strftime("%d %b %l:%M %P") %></span>
+            <span class='text-muted pull-right'><%= message.created_at.strftime(" %l:%M %P") %></span>
           </div>
           <span><%= message.content %></span>  
         </a>

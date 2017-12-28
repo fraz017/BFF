@@ -2,8 +2,8 @@
   <%if message.sender_id != user.id %>
     <div class="direct-chat-msg">
       <div class="direct-chat-info clearfix">
-        <span class="direct-chat-name pull-left">Admin</span>
-        <span class="direct-chat-timestamp pull-right"><%= message.created_at.strftime("%d %b %l:%M %P ") %></span>
+        <span class="direct-chat-name pull-left"></span>
+        <span class="direct-chat-timestamp pull-right"><%= message.created_at.strftime("%l:%M %P ") %></span>
       </div><!-- /.direct-chat-info -->
       <div class="direct-chat-text reciever-message">
         <span>Hello, <%= user.email %></span>

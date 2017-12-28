@@ -8,6 +8,6 @@ class BroadcastAllJob < ApplicationJob
   private
 
   def render_message(user)
-  	ApplicationController.render(partial: 'messages/admin_message', locals: { user: user })
+  	ApplicationController.render(partial: 'messages/new_messages', locals: { user: user })
   end
 end
