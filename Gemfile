@@ -38,7 +38,8 @@ gem 'delayed_job_active_record'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
-
+gem 'roo'
+gem "iconv", "~> 1.0.3"
 gem 'therubyracer', git: 'https://github.com/cowboyd/therubyracer.git'
 
 gem 'fuzzy_match', '~> 2.1'

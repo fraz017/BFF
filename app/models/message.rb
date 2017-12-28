@@ -4,10 +4,19 @@ class Message < ApplicationRecord
   has_many :replies, dependent: :destroy
   has_one :category
   belongs_to :sender, foreign_key: "sender_id", class_name: "User"
-  validates :content,  obscenity: { sanitize: true }
   has_many :likes
-  
+  before_save :validates_content
   after_save :check_message_time  
+
+  def validates_content
+    mystring = content.split(" ")
+    mystring.each do |s|
+      match = AbuseFilter.where("abuse like ?","%#{s}%")
+      if match.present?
+        content[s] = "*****"
+      end
+    end
+  end
 
   def add_flag_point
     if self.flagged.nil?

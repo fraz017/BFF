@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 	namespace "admin" do
     get "/dashboard" => "dashboards#dashboard"
     get "/logs" => "dashboards#logs"
+    get '/import_file' => 'dashboards#import_file'
+    post '/import' => 'dashboards#import'
     get "/reported_messages" => "dashboards#reported_messages"
     get "/send_message" => "dashboards#send_message"
     get "/delete_message/:id" => "dashboards#delete_message"

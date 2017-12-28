@@ -22,6 +22,14 @@ class Admin::DashboardsController < Admin::AppController
     end
 	end
 
+	def import
+    AbuseFilter.import(params[:file])
+    redirect_to request.referer, notice: "File imported."
+  end
+
+  def import_file
+  end
+
 	def block_unblock
 		user = User.find_by(:id => params[:user_id])
 		if user.blocked
