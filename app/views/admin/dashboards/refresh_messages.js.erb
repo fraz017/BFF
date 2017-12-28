@@ -1,1 +1,1 @@
-$('#direct-chat-messages').html("<%= j render(:partial => 'messages', locals: { :@messages => @messages }) %>");
+$('#direct-chat-messages').html("<%= j render(:partial => 'messages', locals: { :@messages => @messages, :@user => @user }) %>");

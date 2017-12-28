@@ -1,0 +1,28 @@
+<div class="user-chat-container">
+    <% if @rooms.present? %>
+      <% @rooms.each do |room| %>
+        <%= render partial: "user_chat", locals: { room: room, user: Reply.find(room.title).sender } %>
+      <% end %>  
+    <% end %>
+    <% if @joined_rooms.present? %>
+      <% @joined_rooms.each do |room| %>
+        <%= render partial: "user_chat", locals: { room: room, user: Reply.find(room.title).sender } %>
+      <% end %>  
+    <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function(){
+    $(".chat-body .panel-default").animate({ scrollTop: $(".chat-body .panel-default")[0].scrollHeight}, 1000);
+    $('[data-toggle="tooltip"]').tooltip();
+    var textarea = $('.chat-text textarea');
+    textarea.keypress(function(event) {
+      if(event.keyCode == 13){
+        var form = $(this).parents('form:first');
+        form.submit();
+        $(".chat-body .panel-default").animate({ scrollTop: $(".chat-body .panel-default")[0].scrollHeight}, 1000);
+        $(this).val('');
+      }
+    });
+  });
+</script>

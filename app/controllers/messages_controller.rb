@@ -6,8 +6,6 @@ class MessagesController < ApplicationController
   def index
     @messages = Message.where("content ilike ? and visible = ?", "%#{params[:term]}%", true)
     @messages = @messages.where("content ilike '%?%'")
-    @rooms = Room.where(:user_id => current_user.id)
-    @joined_rooms = Room.where(:chat_with => current_user.id)
     respond_to do |format|
       format.html
       format.js { render json: @messages.map(&:content).uniq.first(5) }
@@ -26,7 +24,7 @@ class MessagesController < ApplicationController
     if current_user.matchers.present?
       current_user.matchers.order(:profile_score).first(10).each do |u|
         user = User.find_by(:id => u.matched_with)
-        if user.chat_room.messages.where("created_at >= ?", DateTime.now - 5.minutes).blank? && (user.gender == current_user.gender)
+        if user != current_user && user.chat_room.messages.where("created_at >= ?", DateTime.now - 5.minutes).blank? && (user.gender == current_user.gender)
           user.chat_room.messages << @message
           MessageBroadcastJob.perform_now(user, user.chat_room.id)
         end
@@ -34,7 +32,7 @@ class MessagesController < ApplicationController
     else
       @users = User.where(country_code: current_user.country_code).where.not(id: current_user.id).order("score DESC").limit(20)
       @users.each do |user|
-        if user.chat_room.messages.where("created_at >= ?", DateTime.now - 5.minutes).blank? && (user.gender == current_user.gender)
+        if user != current_user && user.chat_room.messages.where("created_at >= ?", DateTime.now - 5.minutes).blank? && (user.gender == current_user.gender)
           user.chat_room.messages << @message
           MessageBroadcastJob.perform_now(user, user.chat_room.id)
         end
@@ -55,7 +53,7 @@ class MessagesController < ApplicationController
     log = Log.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id], log_type: "reply")
     MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
     LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
-    MessageBroadcastJob.set(wait: 2.minutes).perform_later(@message.sender, @message.sender.chat_room.id)
+    MessageBroadcastJob.perform_now(@message.sender, @message.sender.chat_room.id)
   end
 
   def save_category

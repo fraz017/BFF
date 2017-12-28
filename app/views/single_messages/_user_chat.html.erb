@@ -1,0 +1,24 @@
+<div class="user-chat">
+  <div class="chat-box">
+    <div class="chat-head">
+      <h4><%= room.title %> - <%= user.try(:email) %></h4>
+    </div>
+    <div class="chat-body">
+      <div class="msg-insert">
+        <div class="panel panel-default">
+          <% if room.single_messages.any? %>
+            <div class="panel-body" id="messages<%=room.id%>">
+              <%= render partial: 'single_message', locals: { messages: room.single_messages, user: user } %>
+            </div>
+          <%else%>
+            <div class="panel-body hidden" id="messages<%=room.id%>">
+            </div>
+          <%end%>
+        </div>
+      </div>
+      <div class="chat-text">
+        <%= render partial: 'single_message_form', locals: {message: SingleMessage.new, room: room}%>
+      </div>
+    </div>
+  </div>
+</div>

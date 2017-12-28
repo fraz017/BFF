@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 	namespace "admin" do
     get "/dashboard" => "dashboards#dashboard"
     get "/logs" => "dashboards#logs"
+    get '/import_file' => 'dashboards#import_file'
+    post '/import' => 'dashboards#import'
     get "/reported_messages" => "dashboards#reported_messages"
     get "/send_message" => "dashboards#send_message"
     get "/delete_message/:id" => "dashboards#delete_message"
@@ -28,6 +30,7 @@ Rails.application.routes.draw do
  	post '/messages/like' => "messages#like"
  	post '/reply' => "messages#post_reply"
   post '/save_category' => 'messages#save_category'
+  get '/personal_chats' => 'single_messages#personal_chats'
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", confirmations: 'confirmations' }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
  

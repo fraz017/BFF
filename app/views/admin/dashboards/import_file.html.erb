@@ -1,0 +1,35 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>
+      Import/Update Excel File
+    </h1>
+  </section>
+  <section class="content">
+    <div class="container">
+			<%= form_tag admin_import_path, multipart: true do %>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="field">
+						<%= file_field_tag :file, class: "form-control" %>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="field">
+					  <%= submit_tag "Import", class: "btn btn-default" %>
+					</div>
+				</div>
+			</div>		
+			<% end %>
+		</div>
+	</section>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="container">
+				<h1>Availble Words:</h1>
+				<p><%= AbuseFilter.all.map(&:abuse).join(", ") %></p>
+			</div>
+		</div>
+	</div>
+</div>			

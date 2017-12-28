@@ -11,14 +11,24 @@ class Admin::DashboardsController < Admin::AppController
 
 	def messages
 		@messages = Message.last(20)
+		@user = current_user
 	end
 
 	def refresh_messages
 		@messages = Message.last(20)
+		@user = current_user
 		respond_to do |format|
       format.js
     end
 	end
+
+	def import
+    AbuseFilter.import(params[:file])
+    redirect_to request.referer, notice: "File imported."
+  end
+
+  def import_file
+  end
 
 	def block_unblock
 		user = User.find_by(:id => params[:user_id])
