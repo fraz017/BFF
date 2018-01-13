@@ -15,13 +15,13 @@
   $(function(){
     $(".chat-body .panel-default").animate({ scrollTop: $(".chat-body .panel-default")[0].scrollHeight}, 1000);
     $('[data-toggle="tooltip"]').tooltip();
-    var textarea = $('.chat-text textarea');
+    var textarea = $('.chat-text .send-msg');
     textarea.keypress(function(event) {
       if(event.keyCode == 13){
         var form = $(this).parents('form:first');
         form.submit();
         $(".chat-body .panel-default").animate({ scrollTop: $(".chat-body .panel-default")[0].scrollHeight}, 1000);
-        $(this).val('');
+        $("textarea").val('');
       }
     });
   });
