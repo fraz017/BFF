@@ -2,7 +2,7 @@
 <% if get_messages.present? %>
   <% get_messages.group_by{|x| x.created_at.strftime("%A %d %B, %Y")}.each do |key, messages| %>
       <hr>
-      <%= key %>
+        <p class="text-center"><%= key %></p>
       <hr>
       <% messages.each do |message| %>
         <%if message.sender_id != current_user.id %>

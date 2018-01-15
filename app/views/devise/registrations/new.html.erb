@@ -1,6 +1,6 @@
 <div class="register-box">
   <div class="register-logo">
-    <a href="/"><b>B</b>FF</a>
+    <a href="/"><b>Zineya</b></a>
   </div>
 
   <div class="register-box-body">
@@ -17,23 +17,24 @@
       </div>
       <div class="form-group has-feedback">
         <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Retype password", required: true %>
-        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
         <%= f.text_field :date_of_birth, class: "form-control", placeholder: "Date of birth", "data-date-format"=>"mm/dd/yyyy", id: "thedate", required: true %>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
         <%= f.text_field :city, class: "form-control", placeholder: "City", required: true %>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        <span class="glyphicon glyphicon-globe form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <label>Gender</label>
-        <%= f.select :gender, options_for_select([['Male', 'male'], ['Female', 'female']]), class: "form-control", placeholder: "Date of birth", style: "width:100%;" %>
+        <%= f.select :gender, options_for_select([['Male', 'male'], ['Female', 'female']]), {include_blank: "Please select your Gender"}, {class: "form-control"} %>
       </div>
-      <div class="form-group has-feedback">
-        <%= f.text_field :college, class: "form-control", placeholder: "College", required: true %>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      <div class="form-group">
+        <%= f.select :college, options_for_select(["GIFT", "COMSATS", "FAST", "NUST", "LUMS","BNU","LSE","GIKI", "UMT", "Other"], @user.college), {include_blank: "Please select your University"}, {class: "form-control"} %>
+      </div>
+      <div class="form-group">
+        <%= f.select :education, options_for_select(["School", "High School", "College", "University", "Other"], @user.education), {include_blank: "Please select an education level"}, {class: "form-control"} %>
       </div>
       <div class="row">
         <div class="col-xs-12">

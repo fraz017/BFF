@@ -5641,6 +5641,18 @@ table.text-center th {
   padding: 10px;
   background-color: #dcf8c6;
 }
+.message{
+  margin:0 !important;
+}
 
-
-
+@media screen and (max-width:530px){
+  .message-main-sender .sender{
+    max-width: 270px;
+  }
+  .message-main-sender{
+    padding: 5px 5px !important;
+  }
+  .reply{
+    margin: 10px 0 0 0 !important;
+  }
+}

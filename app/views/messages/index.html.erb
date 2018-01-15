@@ -8,15 +8,18 @@
     <h1>
       Messages
       <small>Preview page</small>
-      <a class="btn btn-primary pull-right" href="/personal_chats">Personal Chats</a>
-      &nbsp; 
-      <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#feedbackModal">Feedback</button>
     </h1>
-  </section>
+    <br>
+    <div class="links padding-box">
+      <a class="btn btn-primary pull-left mr-5" href="/personal_chats" style="float:left; marging-right 10px;">Personal Chats</a>
+      <button class="btn btn-primary pull-left " data-toggle="modal" data-target="#feedbackModal" style="float:left; marging-right 10px;">Feedback</button>
+    </div>
+    </section>
+  <br>
   <section class="content">
-    <div class="container">
+    <div class="">
       <div class="row app-one">
-        <div class="col-sm-12 conversation">
+        <div class="col-sm-12 col-xs-12 conversation">
           <div class="row message direct-chat-messages" id="room-<%= current_user.chat_room.id %>">
             <%= render "messages" %>
           </div>
@@ -24,16 +27,9 @@
             <% if !current_user.blocked %>
               <%= form_tag("/messages", method: 'post', :remote => true, id: "send-message") do %>
                 <div class="col-sm-12 col-xs-12 reply-main">
-                  <div class="maxl">
-                    <% AvailableCategory.all.each do |ac| %>
-                      <label class="radio inline"> 
-                        <input type="radio" name="category" value="<%= ac.name %>" checked>
-                        <span style="color:<%= ac.color %>;"> <i class="<%= ac.icon %>"></i> <%= ac.name.titleize %></span> 
-                      </label>
-                    <% end %>
-                  </div>
                   <textarea class="form-control" rows="1" name="message" id="messages" placeholder="Type Message ..." required></textarea>
-                  <button type="submit" class="btn btn-default" data-toggle="tooltip" title="Send Message" style="float: left; width: 15%;">Send</button>
+                  <button type="submit" class="btn btn-default hidden-xs" data-toggle="tooltip" title="Send Message" style="float: left; width: 15%;">Send</button>
+                  <button type="submit" class="btn btn-default hidden-sm hidden-lg hidden-md" data-toggle="tooltip" style="float: left; width: 15%; height: 40px;"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
               <%end%>
             <%else%>  
@@ -220,5 +216,11 @@
     margin: 5px;
     font-weight: 400;
     color: #333;
+  }
+  .padding-box{
+    padding:10px 0;
+  }
+  .mr-5{
+    margin-right:5px;
   }
 </style>

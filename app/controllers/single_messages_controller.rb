@@ -1,4 +1,6 @@
 class SingleMessagesController < ApplicationController
+  # before_action :authenticate_user!
+  # before_action :authenticate_admin!
   def create
   	message = SingleMessage.new(message_params)
     message.user = current_user
