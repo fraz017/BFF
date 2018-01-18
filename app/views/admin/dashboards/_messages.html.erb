@@ -28,7 +28,11 @@
           <div class="receiver">
             <div class="misc">
               <% if message.category.present? %>
-                <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+                <div class="category-<%= message.id %>">
+                  <a href="#" class="category-ch" id="<%= message.id %>" data-toggle="modal" data-target="#changeCat">
+                    <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
+                  </a>
+                </div>
               <% end %>
               <%= link_to "<span class='fa fa-user'></span>".html_safe, "/admin/profile/#{message.sender.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary pull-right"} %>
             </div>
@@ -36,6 +40,8 @@
               <%= message.content %>
               <span class="pull-right">
               </span>  
+              <br>
+              <%= message.sender.email %>
               <span class="message-time pull-right">
                 <%= message.created_at.strftime(" %l:%M %P ") %>
               </span>
@@ -99,6 +105,39 @@
 
   </div>
 </div>
+<div id="changeCat" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa fa-user margin-r-5"></i>Categories</h4>
+      </div>
+      <div class="modal-body">
+        <div class="user-profile">
+          <div class="maxl">
+            <%= form_tag("/admin/change_category", method: 'post', :remote => true) do %>
+              <% AvailableCategory.all.each do |ac| %>
+                <label class="radio inline"> 
+                  <input type="radio" name="category" value="<%= ac.name %>" checked>
+                  <span style="color:<%= ac.color %>;"> <i class="<%= ac.icon %>"></i> <%= ac.name.titleize %></span> 
+                </label>
+              <% end %>
+              <input type="hidden" name="message_id" class="chCat" >
+              <p>
+                <input type="submit" value="Change" class="btn btn-default">
+              </p>
+            <% end %>  
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 <script type="text/javascript">
   function refreshPartial() {
     $.ajax({
@@ -110,8 +149,12 @@
   });
 </script>
 <script type="text/javascript">
+  $('#changeCat').appendTo("body");
   $(".slidingDiv").hide();
   $(".show_hide").show();
+  $(".category-ch").click(function(){
+    $(".chCat").val($(this).attr("id"));
+  });
   $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
   $(".reply-btn").click(function(){
     var id = $(this).attr("id");

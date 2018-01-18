@@ -6,7 +6,7 @@ class Admin::AppController < ApplicationController
 	private
 	
 	def admin_restricted
-		if user_signed_in? && current_user.role == :admin
+		if user_signed_in? && (current_user.role == :admin || current_user.role == :manager)
 			return true
 		else
 			redirect_to root_url

@@ -2,7 +2,7 @@ class Admin::DashboardsController < Admin::AppController
 	skip_before_action :admin_restricted, only: :profile
 	def dashboard
 		@search = UserSearch.new(params)
-    @users = @search.result.where(:role_cd => 1).paginate(page: params[:page], per_page: 5)
+    @users = @search.result.where.not(:role_cd => 0).paginate(page: params[:page], per_page: 5)
 	end
 
 	def logs
@@ -14,12 +14,35 @@ class Admin::DashboardsController < Admin::AppController
 		@user = current_user
 	end
 
+	def change_category
+		@message = Message.find(params[:message_id])
+		category = Category.find_by(name: params[:category])
+		@message.category = category
+		@message.save
+		respond_to do |format|
+      format.js
+    end
+	end
+
 	def refresh_messages
 		@messages = Message.last(20)
 		@user = current_user
 		respond_to do |format|
       format.js
     end
+	end
+
+	def change_role
+		@user = User.find(params[:id])
+		if @user.role == :user
+			role = :manager
+		else
+			role = :user	
+		end
+		@user.update_attributes(:role => role)
+		respond_to do |format|
+			format.js 
+		end
 	end
 
 	def import

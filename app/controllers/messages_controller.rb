@@ -1,6 +1,7 @@
 require 'fuzzy_match'
 class MessagesController < ApplicationController
-	before_action :authenticate_user!
+	before_action :check_admin
+  before_action :authenticate_user!
 	before_action :check_profile, :if => proc {|c| !request.xhr?}
 
   def index
@@ -112,5 +113,12 @@ class MessagesController < ApplicationController
   	else
   		return true
   	end 
+  end
+  def check_admin
+    if user_signed_in? && (current_user.role == :admin || current_user.role == :manager)
+      redirect_to admin_dashboard_path
+    else
+      return true
+    end
   end
 end

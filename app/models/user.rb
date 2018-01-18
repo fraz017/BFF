@@ -13,7 +13,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable, 
          :omniauthable, :omniauth_providers => [:facebook]
 
-  as_enum :role, admin: 0, user: 1, manager: 2       
+  as_enum :role, admin: 0, user: 1, manager: 2     
 
   validates_presence_of :name, :location, :education, :gender, :on => :update       
   after_create :create_room
@@ -39,6 +39,10 @@ class User < ApplicationRecord
 
   def admin?
     role == :admin
+  end
+
+  def manager?
+    role == :manager
   end
 
   def add_loyalty_score(points)

@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     get "/delete_message/:id" => "dashboards#delete_message"
 		get "/broadcast_message" => "dashboards#broadcast_message"
     get '/profile/:id' => "dashboards#profile"
+    get '/change_role/:id' => "dashboards#change_role"
     post '/block_unblock' => 'dashboards#block_unblock'
+    post '/change_category' => 'dashboards#change_category'
     get '/messages' => 'dashboards#messages'
     get '/refresh_messages' => 'dashboards#refresh_messages'
     resources :available_categories
