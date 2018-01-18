@@ -85,7 +85,7 @@
     <% end %>
   <% end %>
 <%end%>
-<div id="profileModal" class="modal fade" role="dialog">
+<div id="profileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -150,6 +150,7 @@
 </script>
 <script type="text/javascript">
   $('#changeCat').appendTo("body");
+  $('#profileModal').appendTo("body");
   $(".slidingDiv").hide();
   $(".show_hide").show();
   $(".category-ch").click(function(){
