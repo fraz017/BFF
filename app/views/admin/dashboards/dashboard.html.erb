@@ -217,8 +217,8 @@
                   </td>
                   <td class="role-<%= user.id %>"><%= user.role.to_s.titleize %></td>
                   <td>
-                    <%= link_to "View Profile", "/admin/profile/#{user.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary"} %>
-                    <%= link_to "Change Role", "/admin/change_role/#{user.id}", {:remote => true, :class => "btn btn-sm btn-primary"} %>
+                    <%= link_to "View Profile", "/admin/profile/#{user.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary custom-primary"} %>
+                    <%= link_to "Change Role", "/admin/change_role/#{user.id}", {:remote => true, :class => "btn btn-sm btn-primary custom-primary"} %>
                   </td>
                   <td>
                     <%= form_tag(admin_block_unblock_path, method: "post") do %>

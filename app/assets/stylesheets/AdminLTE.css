@@ -76,6 +76,7 @@ height: 85vh;
   transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   margin-left: 230px;
   z-index: 820;
+
 }
 .layout-top-nav .content-wrapper,
 .layout-top-nav .right-side,
@@ -163,6 +164,7 @@ body.hold-transition .main-header .logo {
 }
 /* Content */
 .content {
+  width: 100%;
   min-height: 250px;
   padding: 15px;
   margin-right: auto;
@@ -322,6 +324,9 @@ a:focus {
 }
 .main-header .logo .logo-lg {
   display: block;
+}
+.main-header .logo .logo-lg  img{
+  width: 150px;
 }
 .main-header .logo .logo-mini {
   display: none;
@@ -1618,10 +1623,10 @@ a:focus {
  */
 .box {
   position: relative;
-  border-radius: 3px;
+  /* border-radius: 3px; */
   background: #ffffff;
   border-top: 3px solid #d2d6de;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   width: 100%;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -3269,7 +3274,8 @@ table.text-center th {
 .register-logo {
   font-size: 35px;
   text-align: center;
-  margin-bottom: 25px;
+  padding: 25px 25px 0 25px;
+  background: #fff;
   font-weight: 300;
 }
 .login-logo a,
@@ -5291,8 +5297,8 @@ table.text-center th {
 
 .message-main-sender {
   padding: 3px 20px !important;
-  margin-left: 40% !important;
   max-width: 60% !important;
+  float: right;
   height: auto !important;
 }
 
@@ -5644,15 +5650,66 @@ table.text-center th {
 .message{
   margin:0 !important;
 }
+.custom-position{
+  position: absolute !important;
+  right: 0;
+  bottom: 0;
+}
+.custom-primary{
+  margin-top:3px;
+}
+.panel-title{
+  word-wrap: break-word;
+  line-height: 1.5;
+}
 
+.custom-float{
+  float:  right;
+  margin-top:  5px;
+}
+@media screen and (max-width:1120px){
+  .message-main-sender .sender,
+  .message-main-receiver .receiver{
+    max-width: 600px;
+  }
+}
+@media screen and (max-width:1062px){
+  .main-header .logo{
+    height:100px;
+  }
+  .main-header .logo .logo-lg{
+    padding: 23px 0;
+  }
+  .message-main-sender .sender,
+  .message-main-receiver .receiver{
+    max-width: 500px;
+  }
+}
 @media screen and (max-width:530px){
-  .message-main-sender .sender{
+  .main-header .logo{
+    height:55px;
+  }
+  .main-header .logo .logo-lg{
+    padding: 1px 0;
+  }
+  .message-main-sender .sender,
+  .message-main-receiver .receiver{
     max-width: 270px;
   }
   .message-main-sender{
     padding: 5px 5px !important;
   }
+  .message-main-receiver{
+    padding: 5px 5px !important;
+  }
   .reply{
     margin: 10px 0 0 0 !important;
   }
+  .receiver{
+    max-width: 270px;
+  }
+  /* .content{
+    padding: 0;
+  } */
+
 }

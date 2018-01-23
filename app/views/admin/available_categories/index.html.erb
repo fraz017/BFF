@@ -6,28 +6,30 @@
     <%= link_to 'Add new Category', new_admin_available_category_path, class: "btn btn-primary" %>
     <div class="row">
       <div class="col-xs-12">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Color</th>
-              <th>Icon</th>
-              <th colspan="2">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @available_categories.each do |available_category| %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
               <tr>
-                <td><%= available_category.name %></td>
-                <td><%= available_category.color %></td>
-                <td><%= available_category.icon %></td>
-                <td><%= link_to 'Edit', edit_admin_available_category_path(available_category) %></td>
-                <td><%= link_to 'Destroy', admin_available_category_path(available_category), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Icon</th>
+                <th colspan="2">Action</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              <% @available_categories.each do |available_category| %>
+                <tr>
+                  <td><%= available_category.name %></td>
+                  <td><%= available_category.color %></td>
+                  <td><%= available_category.icon %></td>
+                  <td><%= link_to 'Edit', edit_admin_available_category_path(available_category) %></td>
+                  <td><%= link_to 'Destroy', admin_available_category_path(available_category), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>  

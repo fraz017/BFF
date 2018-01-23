@@ -1,12 +1,12 @@
 class User < ApplicationRecord
-	has_one :chat_room
-	has_many :messages, foreign_key: "sender_id", class_name: "Message"
-	has_many :replies, foreign_key: "sender_id", class_name: "Reply"
-	has_many :logs, foreign_key: "sender_id", class_name: "Log"
-  has_many :likes
-  has_many :matchers
-  has_many :single_messages
-  has_many :rooms, through: :single_messages
+	has_one :chat_room, dependent: :destroy
+	has_many :messages, foreign_key: "sender_id", class_name: "Message", dependent: :destroy
+	has_many :replies, foreign_key: "sender_id", class_name: "Reply", dependent: :destroy
+	has_many :logs, foreign_key: "sender_id", class_name: "Log", dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :matchers, dependent: :destroy
+  has_many :single_messages, dependent: :destroy
+  has_many :rooms, through: :single_messages, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,

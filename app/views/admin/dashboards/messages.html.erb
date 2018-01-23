@@ -1,11 +1,18 @@
 <section class="content">
-  <div class="container">
+  <div class="">
     <div class="row app-one">
       <div class="col-sm-12 conversation">
-        <div class="row message direct-chat-messages" id="direct-chat-messages" style="min-height: 500px !important">
+        <div class="row message direct-chat-messages" id="direct-chat-messages" style="height: 100vh !important">
           <%= render partial: "messages" %>
         </div>  
       </div>  
     </div>  
   </div>  
 </section>
+
+<style>
+.content{
+  float:left;
+}
+
+</style>
