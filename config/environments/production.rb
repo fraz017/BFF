@@ -85,5 +85,14 @@ Rails.application.configure do
   end
 
   # Do not dump schema after migrations.
-  config.active_record.dump_schema_after_migration = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :authentication => :login,
+    :address => "host36.registrar-servers.com",
+    :port => 465,
+    :domain => "zineya.com",
+    :user_name => "app@zineya.com",
+    :password => "imgreat123",
+    :ssl => true
+  }
 end
