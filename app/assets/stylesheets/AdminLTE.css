@@ -3282,6 +3282,10 @@ table.text-center th {
 .register-logo a {
   color: #444;
 }
+
+.login-page{
+  margin-top: 100px;
+}
 .login-page,
 .register-page {
   background: #d2d6de;
