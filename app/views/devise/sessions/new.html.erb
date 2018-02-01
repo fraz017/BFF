@@ -5,7 +5,12 @@
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <%= devise_error_messages! %>
+      <% flash.each do |key, value| %>
+        <div class="alert alert-danger alert-dismissable">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+          <%= value %>
+        </div>
+      <% end %>
       <div class="form-group has-feedback">
         <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email" %>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -34,3 +39,10 @@
     <% end -%>
   </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
+
+<style>
+.alert a {
+  color: #fff;
+  text-decoration: none;
+}
+</style>

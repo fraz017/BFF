@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   post '/save_category' => 'messages#save_category'
   get '/personal_chats' => 'single_messages#personal_chats'
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", confirmations: 'confirmations' }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
+  devise_for :users, :controllers => {:registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks", confirmations: 'confirmations' }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
  
   root to: "messages#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

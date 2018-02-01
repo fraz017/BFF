@@ -19,8 +19,8 @@
         <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Retype password", required: true %>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback">
-        <%= f.text_field :date_of_birth, class: "form-control", placeholder: "Date of birth", "data-date-format"=>"mm/dd/yyyy", id: "thedate", required: true %>
+      <div class="form-group has-feedback" id="test">
+        <%= f.text_field :date_of_birth, class: "form-control", placeholder: "Date of birth", required: true %>
         <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -59,8 +59,12 @@
 </div><!-- /.register-box -->
 <script type="text/javascript">
   $(function(){
-    $('#thedate').datepicker({
-      dateFormat: 'yy-mm-dd',
+    $('#user_date_of_birth').datepicker({
+      format: 'yyyy-mm-dd',
+      container:'#test',
+      autoclose: true,
+      orientation: "auto",
+      startView: 'decades'
     });
   });
 </script>

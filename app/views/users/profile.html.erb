@@ -40,7 +40,7 @@
                 <label>Location* </label>
                 <%= f.text_field :location, class: "form-control", placeholder: "Enter a location" %>
               </div>
-              <div class="form-group">
+              <div class="form-group" id="test">
                 <label>Date of Birth* </label>
                 <%= f.text_field :date_of_birth, class: "form-control", placeholder: "Date of birth", "data-date-format"=>"mm/dd/yyyy", id: "thedate", required: true %>
               </div>
@@ -83,6 +83,13 @@
     detailsAttribute: "data-geo",
     types: ["geocode", "establishment"],
   });
+  $('#user_date_of_birth').datepicker({
+      format: 'yyyy-mm-dd',
+      container:'#test',
+      autoclose: true,
+      orientation: "auto",
+      startView: 'decades'
+    });
 </script>
 
 <style>
