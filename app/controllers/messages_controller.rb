@@ -1,6 +1,6 @@
 require 'fuzzy_match'
 class MessagesController < ApplicationController
-	before_action :check_admin
+	before_action :check_admin, except: [:post_reply]
   before_action :authenticate_user!
 	before_action :check_profile, :if => proc {|c| !request.xhr?}
 
