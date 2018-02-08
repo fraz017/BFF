@@ -156,7 +156,6 @@
   $(".category-ch").click(function(){
     $(".chCat").val($(this).attr("id"));
   });
-  $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
   $(".reply-btn").click(function(){
     var id = $(this).attr("id");
     $("#reply-"+id).removeClass("hidden");
@@ -170,7 +169,6 @@
     $(".reply-btn#"+id).removeClass("hidden");
   });
   $('.show_hide').click(function () {
-    $(".direct-chat-messages").animate({ scrollTop: $(".direct-chat-messages")[0].scrollHeight}, 1000);
     var getId = $(this).attr("id");
     $("#slidingDiv"+getId).toggle("slide");
   });
