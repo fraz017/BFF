@@ -25,7 +25,7 @@ class Admin::DashboardsController < Admin::AppController
 	end
 
 	def refresh_messages
-		@messages = Message.last(20)
+		@messages = Message.order("id desc").first(20)
 		@user = current_user
 		respond_to do |format|
       format.js
