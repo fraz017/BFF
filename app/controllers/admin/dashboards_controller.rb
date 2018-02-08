@@ -10,7 +10,7 @@ class Admin::DashboardsController < Admin::AppController
 	end
 
 	def messages
-		@messages = Message.order("id desc").last(20)
+		@messages = Message.order("id desc").first(20)
 		@user = current_user
 	end
 
