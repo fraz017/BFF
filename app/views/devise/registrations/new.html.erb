@@ -1,45 +1,46 @@
-<div class="register-box">
-  <div class="register-logo">
-  <a href="/"><%= image_tag "zineya-logo.png" %></a>
+<div class="user-bar">
+  <div class="avatar">
+    <img src="/assets/zineya-logo-84dd3eefec9290400defba8c287ceb0693eb7855a8a8c65f84df2328e885020a.png" alt="Avatar">
   </div>
-
-  <div class="register-box-body">
-    <p class="login-box-msg">Register a new membership</p>
+</div>
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">Login</h3>
+  </div><!-- /.box-header -->
+  <!-- form start -->
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <%= devise_error_messages! %>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email", required: true %>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Password", required: true %>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Retype password", required: true %>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback" id="test">
+      <div class="form-group form-group-register" id="test">
         <%= f.text_field :date_of_birth, class: "form-control", placeholder: "Date of birth", required: true %>
         <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.text_field :city, class: "form-control", placeholder: "City", required: true %>
         <span class="glyphicon glyphicon-globe form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.select :gender, options_for_select([['Male', 'male'], ['Female', 'female']]), {include_blank: "Please select your Gender"}, {class: "form-control"} %>
       </div>
-      <div class="form-group">
+      <div class="form-group form-group-register">
         <%= f.select :college, options_for_select(["GIFT", "COMSATS", "FAST", "NUST", "LUMS","BNU","LSE","GIKI", "UMT", "Other"], @user.college), {include_blank: "Please select your University"}, {class: "form-control"} %>
       </div>
-      <div class="form-group">
+      <div class="form-group form-group-register">
         <%= f.select :education, options_for_select(["School", "High School", "College", "University", "Other"], @user.education), {include_blank: "Please select an education level"}, {class: "form-control"} %>
       </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
-        </div><!-- /.col -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
       </div>
     <% end %>
 
@@ -56,7 +57,6 @@
       <%= link_to "I already have a membership", new_session_path(resource_name), class: "text-center" %>
     <% end -%>
   </div><!-- /.form-box -->
-</div><!-- /.register-box -->
 <script type="text/javascript">
   $(function(){
     $('#user_date_of_birth').datepicker({

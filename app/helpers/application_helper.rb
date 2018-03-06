@@ -15,7 +15,7 @@ module ApplicationHelper
 		end
 		message
 	end
-	def liked?(type = '', message_id, user_id)
+	def liked?(message_id, user_id, type = '')
 		if type.present?
 			like = Like.where(:reply_id => message_id, user_id: user_id).last
 		else
@@ -26,4 +26,49 @@ module ApplicationHelper
 	def category(name)
 		cat = AvailableCategory.find_by(name: name)
 	end
+
+  def link_to_toggle_report_message(message, user, type = "")
+
+    if message_reported(message.id, user.id, type)
+      link_to('<span class="tick">
+                <i class="fa fa-flag"></i>
+              </span>'.html_safe, messages_report_path({message_id: message.id, type: type}), 
+              method: :post, 
+              id: "unreport_message_link_#{message.id}",
+              class: "unreport_message action transparent",
+              remote: true)
+    else
+      link_to('<span class="tick">
+                <i class="fa fa-flag-o"></i>
+              </span>'.html_safe, messages_report_path({message_id: message.id, type: type}), 
+              method: :post, 
+              id: "report_message_link_#{message.id}", 
+              class: "report_message action transparent", 
+              remote: true)
+    end
+
+  end
+
+  def link_to_toggle_like_message(message, user, type = "")
+
+    if liked?(message.id, user.id, type)
+      link_to('<span class="tick">
+                <i class="fa fa-thumbs-up"></i>
+              </span>'.html_safe, messages_like_path({message_id: message.id, type: type}), 
+              method: :post, 
+              id: "unlike_message_link_#{message.id}",
+              class: "unlike_message action transparent",
+              remote: true)
+    else
+      link_to('<span class="tick">
+                <i class="fa fa-thumbs-o-up"></i>
+              </span>'.html_safe, messages_like_path({message_id: message.id, type: type}), 
+              method: :post, 
+              id: "like_message_link_#{message.id}", 
+              class: "like_message action transparent", 
+              remote: true)
+    end
+
+  end
+
 end

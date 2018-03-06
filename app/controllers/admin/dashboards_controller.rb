@@ -1,5 +1,6 @@
 class Admin::DashboardsController < Admin::AppController
 	skip_before_action :admin_restricted, only: :profile
+  # layout "application", only: [:messages]
 	def dashboard
 		@search = UserSearch.new(params)
     @users = @search.result.where.not(:role_cd => 0).paginate(page: params[:page], per_page: 5)
@@ -12,12 +13,13 @@ class Admin::DashboardsController < Admin::AppController
 	def messages
 		@messages = Message.order("id desc").first(20)
 		@user = current_user
+    render layout: "application"
 	end
 
 	def change_category
 		@message = Message.find(params[:message_id])
-		category = Category.find_by(name: params[:category])
-		@message.category = category
+		category = AvailableCategory.find_by(name: params[:category])
+		@message.available_category = category
 		@message.save
 		respond_to do |format|
       format.js
@@ -71,7 +73,7 @@ class Admin::DashboardsController < Admin::AppController
 		@message = Message.create(content: params[:message], sender_id: current_user.id)
 		User.all.each do |user|
   		user.chat_room.messages << @message
-      BroadcastAllJob.perform_now(user, user.chat_room.id)
+      BroadcastAllJob.perform_now(user, @message, user.chat_room.id)
   	end
   	redirect_to request.referer
 	end

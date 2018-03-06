@@ -7,24 +7,13 @@ class RoomsController < ApplicationController
   end
 
   def create
-    @room = Room.new(room_params)
+    @room = Room.find_or_create_by(room_params)
     @room.user = current_user
     msg = Reply.find_by(id: params[:message_id])
     @room.chat_with = msg.sender.id
     msg.sender.add_messaging_score(30)
     @user = msg.sender
-    if @room.save
-      respond_to do |format|
-        format.html { redirect_to @room }
-        format.js
-      end
-    else
-      respond_to do |format|
-        flash[:notice] = {error: ["a room with this title already exists"]}
-        format.html { redirect_to new_room_path }
-        format.js { render template: 'rooms/room_error.js.erb'}
-      end
-    end
+    @room.save
   end
 
   def index

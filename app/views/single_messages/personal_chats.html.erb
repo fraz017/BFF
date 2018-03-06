@@ -1,28 +1,32 @@
-<div class="user-chat-container">
-    <% if @rooms.present? %>
-      <% @rooms.each do |room| %>
-        <%= render partial: "user_chat", locals: { room: room, user: Reply.find(room.title).sender } %>
-      <% end %>  
-    <% end %>
-    <% if @joined_rooms.present? %>
-      <% @joined_rooms.each do |room| %>
-        <%= render partial: "user_chat", locals: { room: room, user: Reply.find(room.title).sender } %>
-      <% end %>  
-    <% end %>
+<div class="conversation">
+  <div class="conversation-container" id="messages-<%=@room.id%>">
+      <% @room.single_messages.order("id asc").each do |message| %>
+        <%= render partial: "new_message", :locals => { message: message , :user => current_user} %>
+      <% end %>
   </div>
+  <%= form_for SingleMessage.new, remote: true, authenticity_token: true, html: { class: "conversation-compose"} do |f| %>
+    <%= f.text_field :content, class: "input-msg", data: {textarea: "message"}, placeholder: "Enter message:", required: true, autocomplete: "off", maxlength: "120" %>
+    <div class="photo">
+    </div>
+    <%= f.hidden_field :room_id, value: @room.id %>
+    <button class="send">
+      <div class="circle">
+        <i class="fa  fa-paper-plane"></i>
+      </div>
+    </button>
+  <% end %>  
 </div>
+
 <script type="text/javascript">
   $(function(){
-    $(".chat-body .panel-default").animate({ scrollTop: $(".chat-body .panel-default")[0].scrollHeight}, 1000);
     $('[data-toggle="tooltip"]').tooltip();
-    var textarea = $('.chat-text .send-msg');
-    textarea.keypress(function(event) {
-      if(event.keyCode == 13){
-        var form = $(this).parents('form:first');
-        form.submit();
-        $(".chat-body .panel-default").animate({ scrollTop: $(".chat-body .panel-default")[0].scrollHeight}, 1000);
-        $("textarea").val('');
-      }
+    $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
+    $('.conversation-compose').on('ajax:success', function(e, data, status, xhr){
+      $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
+      $(".input-msg").val('');
+    }).on('ajax:error',function(e, xhr, status, error){
+      $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
+      $(".input-msg").val('');
     });
   });
 </script>

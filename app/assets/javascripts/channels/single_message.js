@@ -1,9 +1,10 @@
 App.single_messages = App.cable.subscriptions.create('SingleMessagesChannel', {  
   received: function(data) {
-    $("#messages"+data.room_id).removeClass('hidden')
-    return $('#messages'+data.room_id).append(this.renderMessage(data));
-  },
-  renderMessage: function(data) {
-    return "<b><div class='msg-send'>" + data.user + ": </b>" + data.message + "</div>";
+    $(".reply-main textarea").val("")
+    $("#messages-"+data.room_id).append(data.message);
+    if (data.flash != null) {
+      toastr.info(data.flash);
+    }
+    return $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
   }
 });

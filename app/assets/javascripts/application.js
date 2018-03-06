@@ -21,8 +21,8 @@
 //= require toastr
 //= require jquery.geocomplete.min
 //= require cable
-//= require bootstrap-datepicker.min
 //= require_tree ./channels
+//= require bootstrap-datepicker.min
 
 'use strict';
 String.prototype.capitalize = function() {

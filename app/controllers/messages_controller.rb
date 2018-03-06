@@ -17,17 +17,17 @@ class MessagesController < ApplicationController
     params.permit!
   	@message = Message.create(content: params[:message], sender_id: current_user.id)
     @message.sender.add_loyalty_score(10) if !@message.content.include?("*")
-    category = Category.create(message_id: @message.id, name: params[:category])
     log = Log.create(content: params[:message], sender_id: current_user.id, log_type: "message", message_id: @message.id)
     current_user.chat_room.messages << @message  
-  	MessageBroadcastJob.perform_now(current_user, current_user.chat_room.id)
+  	MessageBroadcastJob.perform_now(current_user, @message, current_user.chat_room.id)
     LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
-    if current_user.matchers.present?
+    UpdateRepliesJob.set(wait: 60.minutes).perform_later(current_user, @message, current_user.chat_room.id, true)
+    if current_user.matchers.present? && current_user.matchers.count >= 10
       current_user.matchers.order(:profile_score).first(10).each do |u|
         user = User.find_by(:id => u.matched_with)
         if user != current_user && user.chat_room.messages.where("created_at >= ?", DateTime.now - 5.minutes).blank? && (user.gender == current_user.gender)
           user.chat_room.messages << @message
-          MessageBroadcastJob.perform_now(user, user.chat_room.id)
+          MessageBroadcastJob.perform_now(user, @message, user.chat_room.id)
         end
       end
     else
@@ -35,7 +35,7 @@ class MessagesController < ApplicationController
       @users.each do |user|
         if user != current_user && user.chat_room.messages.where("created_at >= ?", DateTime.now - 5.minutes).blank? && (user.gender == current_user.gender)
           user.chat_room.messages << @message
-          MessageBroadcastJob.perform_now(user, user.chat_room.id)
+          MessageBroadcastJob.perform_now(user, @message, user.chat_room.id)
         end
       end
     end
@@ -52,9 +52,9 @@ class MessagesController < ApplicationController
     @reply = Reply.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id])
     @reply.sender.add_loyalty_score(20) if !@reply.content.include?("*")
     log = Log.create(content: params[:reply], sender_id: current_user.id, message_id: params[:message_id], log_type: "reply")
-    MessageBroadcastJob.perform_now(@reply.sender, @reply.sender.chat_room.id)
+    MessageBroadcastJob.perform_now(@reply.sender, @message, @reply.sender.chat_room.id, true)
     LogBroadcastJob.set(wait: 10.seconds).perform_later(log)
-    MessageBroadcastJob.perform_now(@message.sender, @message.sender.chat_room.id)
+    MessageBroadcastJob.perform_now(@message.sender, @message, @message.sender.chat_room.id, true)
   end
 
   def save_category
@@ -72,38 +72,71 @@ class MessagesController < ApplicationController
 
   def report
     if params[:message_id].present?
-      message = Message.find_by_id params[:message_id] if params[:type].nil?
+      @reported = true
+      message = Message.find_by_id params[:message_id] if params[:type].blank?
       message = Reply.find_by_id params[:message_id] if params[:type].present?
-      if params[:type].present?
-        message.sender.minus_messaging_score(20)
-      end
-      report = ReportedMessage.new
-      report.message_id = params[:message_id] if params[:type].nil?
-      report.reply_id = params[:message_id] if params[:type].present?
-      report.reported_by = current_user.id
-      report.user_id = message.sender.id
-      report.save
-      message.sender.minus_loyalty_score(20)
-      message.sender.add_flag_point
-      message.add_flag_point
+      report = ReportedMessage.where("message_id = ? or reply_id = ?", message.id, message.id).last
+      if report.present?
+        report.destroy
+        @reported = false
+        if params[:type].present?
+          message.sender.add_messaging_score(20)
+        end
+        message.sender.add_loyalty_score(20)
+        message.sender.minus_flag_point
+        message.minus_flag_point
+      else  
+        report = ReportedMessage.new
+        report.message_id = params[:message_id] if params[:type].blank?
+        report.reply_id = params[:message_id] if params[:type].present?
+        report.reported_by = current_user.id
+        report.user_id = message.sender.id
+        report.save
+        if params[:type].present?
+          message.sender.minus_messaging_score(20)
+        end
+        message.sender.minus_loyalty_score(20)
+        message.sender.add_flag_point
+        message.add_flag_point
+      end  
     end
-    render json: { success: true }
+    @type = params[:type]
+    @message = message
+    @user = current_user
+    respond_to do |format|
+      format.js
+    end
   end
 
   def like
     if params[:message_id].present?
-      message = Message.find_by_id params[:message_id] if params[:type].nil?
+      message = Message.find_by_id params[:message_id] if params[:type].blank?
       message = Reply.find_by_id params[:message_id] if params[:type].present?
-      if params[:type].present?
-        message.sender.add_messaging_score(50)
+      like = Like.where("message_id = ? or reply_id = ?", message.id, message.id).last
+      @liked = true
+      if like.present?
+        like.destroy
+        @liked = false
+        if params[:type].present?
+          message.sender.minus_messaging_score(50)
+        end
+      else
+        like = Like.new
+        like.user_id = current_user.id
+        like.message_id = params[:message_id] if params[:type].blank?
+        like.reply_id = params[:message_id] if params[:type].present?
+        like.save
+        if params[:type].present?
+          message.sender.add_messaging_score(50)
+        end
       end
-      like = Like.new
-      like.user_id = current_user.id
-      like.message_id = params[:message_id] if params[:type].nil?
-      like.reply_id = params[:message_id] if params[:type].present?
-      like.save
     end
-    render json: { success: true }
+    @type = params[:type]
+    @message = message
+    @user = current_user
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

@@ -1,0 +1,28 @@
+<div class="message received" id="received<%= message.id %>">
+  <span class="pull-left-width">
+    <%= message.content %>
+  </span>
+  <div id="replied<%= message.id %>">
+    <% reply = message.replies.where(sender_id: user.id).first %>
+    <% if reply.present? %>
+      <div class="reply-message">
+        <span class="pull-left-width"><%= reply.content %></span>
+        <span class="metadata">
+          <span class="time"><%= reply.created_at.strftime("%l:%M %P ") %></span>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <span class="metadata-1">
+    <%= link_to_toggle_like_message(message, user) %>
+    <%= link_to_toggle_report_message(message, user) %>
+    <% if reply.nil? && !user.blocked %>
+      <span class="tick-reply">
+        <a href="#replyModal" data-toggle="modal" class="post-reply" id="<%= message.id %>">Reply</a>
+      </span>
+    <% end %>
+  </span>  
+  <span class="metadata">
+    <span class="time"><%= message.created_at.strftime(" %l:%M %P ") %></span>
+  </span>
+</div>

@@ -15,6 +15,17 @@ class Reply < ApplicationRecord
     end
   end
   
+  def minus_flag_point
+    self.flagged -= 1
+    self.save
+    if self.flagged < 3
+      self.visible = true
+      self.save
+      self.sender.blocked = false
+      self.sender.save
+    end
+  end
+
   def add_flag_point
     if self.flagged.nil?
       self.flagged = 1

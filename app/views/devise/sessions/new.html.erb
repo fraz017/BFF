@@ -1,48 +1,41 @@
-<div class="login-box">
-  <div class="login-logo">
-    <a href="/"><%= image_tag "zineya-logo.png" %></a>
-  </div><!-- /.login-logo -->
-  <div class="login-box-body">
-    <p class="login-box-msg">Sign in to start your session</p>
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<div class="user-bar">
+  <div class="avatar">
+    <img src="/assets/zineya-logo-84dd3eefec9290400defba8c287ceb0693eb7855a8a8c65f84df2328e885020a.png" alt="Avatar">
+  </div>
+</div>
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">Login</h3>
+  </div><!-- /.box-header -->
+  <!-- form start -->
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="box-body">
       <% flash.each do |key, value| %>
         <div class="alert alert-danger alert-dismissable">
           <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
           <%= value %>
         </div>
       <% end %>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email" %>
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span class="fa fa-envelope input-icon"></span>
       </div>
-      <div class="form-group has-feedback">
+      <div class="form-group form-group-register">
         <%= f.password_field :password, autocomplete: "off", placeholder: "Password", class: "form-control" %>
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <span class="fa fa-lock input-icon"></span>
       </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-        </div><!-- /.col -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary btn-size">Register</button>
       </div>
-    <% end %>
-
-    <div class="social-auth-links text-center">
-      <p>- OR -</p>
-      <%- if devise_mapping.omniauthable? %>
-        <%- resource_class.omniauth_providers.each do |provider| %>
-          <%= link_to '<i class="fa fa-facebook"></i> Sign in using ' "#{OmniAuth::Utils.camelize(provider)}".html_safe, omniauth_authorize_path(resource_name, provider), class: "btn btn-block btn-social btn-facebook btn-flat" %>
-        <% end -%>
-      <% end -%>
-    </div><!-- /.social-auth-links -->
-    <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-      <%= link_to "Register a new membership", new_registration_path(resource_name), class: "text-center" %>
-    <% end -%>
-  </div><!-- /.login-box-body -->
-</div><!-- /.login-box -->
-
-<style>
-.alert a {
-  color: #fff;
-  text-decoration: none;
-}
-</style>
+    </div>  
+  <% end %>
+  <div class="box-footer">
+    <p>OR</p>
+  </div>
+  <div class="box-footer">
+    <a href="/auth/facebook" class="btn-facebook"> <span class="fa fa-facebook"></span> Sign in using Facebook</a>
+  </div>
+  <div class="box-footer">
+    <a href="/register">Register a new membership</a>
+  </div>                                                                                
+</div> 

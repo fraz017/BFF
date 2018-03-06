@@ -26,13 +26,15 @@ Rails.application.routes.draw do
   patch "/users/:id" => 'users#update', as: :update
   post '/users/feedback' => 'users#feedback'
   get 'messages/index'
+  get '/accept/:id' => 'single_messages#accept'
+  get '/reject/:id' => 'single_messages#reject'
   get '/refresh_header' => 'users#refresh_header'
   post '/messages' => "messages#post_message"
   post '/messages/report' => "messages#report"
  	post '/messages/like' => "messages#like"
  	post '/reply' => "messages#post_reply"
   post '/save_category' => 'messages#save_category'
-  get '/personal_chats' => 'single_messages#personal_chats'
+  get '/personal_chats/:id' => 'single_messages#personal_chats'
 
   devise_for :users, :controllers => {:registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks", confirmations: 'confirmations' }, path: '', path_names: { sign_in: 'login', sign_up: 'register'}
  

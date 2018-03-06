@@ -15,7 +15,6 @@ class MessagesChannel < ApplicationCable::Channel
   private
 
   def render_message(user)
-    ApplicationController.render(partial: 'messages/new_messages',
-                                 locals: { user: user })
+    ApplicationController.render(partial: 'messages/new_messages',locals: { user: user })
   end
 end

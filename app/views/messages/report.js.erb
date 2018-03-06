@@ -1,0 +1,6 @@
+<% if @reported %>
+  $('#report_message_link_<%=@message.id%>').replaceWith("<%=j link_to_toggle_report_message(@message, @user, @type)%>");
+<% else %>
+  $('#unreport_message_link_<%=@message.id%>').replaceWith("<%=j link_to_toggle_report_message(@message, @user, @type)%>");
+<% end %>
+$(".loading").hide();

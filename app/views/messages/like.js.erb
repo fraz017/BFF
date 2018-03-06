@@ -1,0 +1,6 @@
+<% if @liked %>
+  $('#like_message_link_<%=@message.id%>').replaceWith("<%=j link_to_toggle_like_message(@message, @user, @type)%>");
+<% else %>
+  $('#unlike_message_link_<%=@message.id%>').replaceWith("<%=j link_to_toggle_like_message(@message, @user, @type)%>");
+<% end %>
+$(".loading").hide();

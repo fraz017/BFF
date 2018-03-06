@@ -1,13 +1,13 @@
 class MessageBroadcastJob < ApplicationJob
   queue_as :default
 
-  def perform(user, id)
-    ActionCable.server.broadcast('messages', message: render_message(user), id: id)
+  def perform(user, message, id, type=nil, display=nil)
+    ActionCable.server.broadcast('messages', message: render_message(user, message, display), id: id, reply: type, message_id: message.id)
   end
 
   private
 
-  def render_message(user)
-  	ApplicationController.render(partial: 'messages/new_messages', locals: { user: user })
+  def render_message(user, message, display)
+  	ApplicationController.render(partial: "messages/message", locals: { user: user, :message => message, display: display })
   end
 end

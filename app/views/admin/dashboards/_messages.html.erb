@@ -1,66 +1,35 @@
 <% @messages.group_by{|x| x.created_at.strftime("%A %d %B, %Y")}.each do |key, messages| %>
-  <hr>
-  <div style="padding-left:15px;"><%=  key %></div>
-  <hr>
+  <div class="conservation-time"><%= key %></div>
   <% messages.each do |message| %>
     <% if message.sender.role_cd == 0 %>
-      <div class="row message-body">
-        <div class="col-sm-12 message-main-receiver">
-          <div class="receiver">
-            <div class="message-text">
-              <strong>Admin:</strong>
-              <br/>
-              <span>Hello, <%= @user.email %></span>  
-              <br>
-              <%= message.content %>
-              <br/>
-              <span>Thank you!</span>
-            </div>
-            <span class="message-time pull-right">
-              <%= message.created_at.strftime(" %l:%M %P ") %>
-            </span>
-          </div>
-        </div>
+      <div class="message received">
+        <span class="pull-left-width">
+          <span>Hello, <%= user.email %></span>  
+          <br>
+          <%= message.content %>
+          <br/>
+          <span>Thank you!</span>
+        </span>
+        <span class="metadata">
+          <span class="time"><%= message.created_at.strftime(" %l:%M %P ") %></span>
+        </span>
       </div>
     <% else %>
-      <div class="row message-body">
-        <div class="col-sm-12 message-main-receiver">
-          <div class="receiver">
-            <div class="misc">
-              <% if message.category.present? %>
-                <div class="category-<%= message.id %>">
-                  <a href="#" class="category-ch" id="<%= message.id %>" data-toggle="modal" data-target="#changeCat">
-                    <span class="label label-warning" data-toggle="tooltip" title="<%= message.category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.category.try(:name)).try(:icon) %>"></i></span>
-                  </a>
-                </div>
-              <% end %>
-              <%= link_to "<span class='fa fa-user'></span>".html_safe, "/admin/profile/#{message.sender.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary pull-right"} %>
-            </div>
-            <span class="msg-content">
-              <%= message.content %>
-              <span class="pull-right">
-              </span>  
-              <br>
-              <%= message.sender.email %>
-              <span class="message-time pull-right">
-                <%= message.created_at.strftime(" %l:%M %P ") %>
-              </span>
-            </span>
-            <div class="clearfix"></div>
-            <% reply = message.replies.where(sender_id: @user.id) %>
+      <div class="message received" id="received<%= message.id %>">
+        <span class="pull-left-width">
+          <%= message.content %>
+        </span>
+        <span class="metadata">
+          <span class="time"><%= message.created_at.strftime(" %l:%M %P ") %></span>
+        </span>
+        <div class="metadata-1">
+          <% reply = message.replies.where(sender_id: @user.id).first %>
             <% if reply.present? %>
-              <div class="row message-body">
-                <div class="col-sm-12">
-                  <div class="sender">
-                    <div class="message-text">
-                      <div class="direct-chat-text reciever-message">
-                        <%= reply.first.content %>
-                      </div>
-                      <span class="message-time pull-right"><%= reply.first.created_at.strftime(" %l:%M %P ") %>
-                      </span>
-                    </div>
-                  </div>  
-                </div>
+              <div class="reply-message">
+                <span class="pull-left-width"><%= reply.content %></span>
+                <span class="metadata">
+                  <span class="time"><%= reply.created_at.strftime("%l:%M %P ") %></span>
+                </span>
               </div>
             <%else%>
               <div class="direct-chat-text reciever-message">
@@ -79,12 +48,20 @@
                 </div> 
               </div>
             <%end%>
+          <div class="cat-left category-<%= message.id %>">
+            <a href="#" class="category-ch" id="<%= message.id %>" data-toggle="modal" data-target="#changeCat">
+              <span class="label label-warning" data-toggle="tooltip" title="<%= message.available_category.try(:name).try(:titleize) %>" style="background-color: <%= category(message.available_category.try(:name)).try(:color) %> !important;"><i class="<%= category(message.available_category.try(:name)).try(:icon) %>"></i></span>
+            </a>
+          </div>
+          <div class="cat-right">
+            <%= link_to "<span class='fa fa-user'></span>".html_safe, "/admin/profile/#{message.sender.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary"} %>
           </div>
         </div>
       </div>
     <% end %>
   <% end %>
-<%end%>
+<% end %>
+
 <div id="profileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog">
 
@@ -145,14 +122,12 @@
     })
   }
   $(".form-horizontal").on("submit", function(){
-    setTimeout(function(){ refreshPartial(); }, 2000);
+    setTimeout(function(){ refreshPartial(); }, 1000);
   });
 </script>
 <script type="text/javascript">
   $('#changeCat').appendTo("body");
   $('#profileModal').appendTo("body");
-  $(".slidingDiv").hide();
-  $(".show_hide").show();
   $(".category-ch").click(function(){
     $(".chCat").val($(this).attr("id"));
   });
@@ -167,9 +142,5 @@
     $("#reply-"+id).addClass("hidden");
     $("#"+id+"-cancel").addClass("hidden");
     $(".reply-btn#"+id).removeClass("hidden");
-  });
-  $('.show_hide').click(function () {
-    var getId = $(this).attr("id");
-    $("#slidingDiv"+getId).toggle("slide");
   });
 </script>

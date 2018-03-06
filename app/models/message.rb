@@ -2,11 +2,16 @@ require 'obscenity/active_model'
 class Message < ApplicationRecord
   has_and_belongs_to_many :chat_rooms
   has_many :replies, dependent: :destroy
-  has_one :category
+  has_one :available_category
   belongs_to :sender, foreign_key: "sender_id", class_name: "User"
   has_many :likes
   before_save :validates_content
-  after_save :check_message_time  
+  after_save :check_message_time
+
+  def top_three
+    array = replies.where(:visible => true).order("score desc").first(3)
+    return array
+  end  
 
   def validates_content
     mystring = content.split(" ")
@@ -31,6 +36,17 @@ class Message < ApplicationRecord
       self.sender.blocked = true
       self.sender.save
       Delayed::Job.enqueue BlockUnblockUsersJob.new(self.sender.id, "unblock"), 0, 1.week.from_now.getutc
+    end
+  end
+
+  def minus_flag_point
+    self.flagged -= 1
+    self.save
+    if self.flagged < 3
+      self.visible = true
+      self.save
+      self.sender.blocked = false
+      self.sender.save
     end
   end
 

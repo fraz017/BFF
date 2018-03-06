@@ -13,7 +13,20 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body class="hold-transition login-page">
-    <%= yield %>
+  <body class="hold-transition page login-page">
+    <div class="profile-page">
+      <div class="screen">
+        <div class="screen-container">
+          <div class="status-bar hidden">
+            <div class="time hidden"></div>
+          </div>
+          <div class="chat chat-register">
+            <div class="chat-container">
+              <%= yield %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>          
   </body>
 </html>

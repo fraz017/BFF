@@ -3,140 +3,104 @@
       window.location.href="/admin/dashboard"  
     </script>
   <% end %>
-<div class="content-wrapper">
-  <section class="content-header">
-    <h1>
-      Messages
-      <small>Preview page</small>
-    </h1>
-    <div class="links padding-box">
-      <a class="btn btn-primary pull-left mr-5" href="/personal_chats" style="float:left; marging-right 10px;">Personal Chats</a>
-      <button class="btn btn-primary pull-left " data-toggle="modal" data-target="#feedbackModal" style="float:left; marging-right 10px;">Feedback</button>
-    </div>
-    </section>
-  <br>
-  <section class="content">
-    <div class="">
-      <div class="row app-one">
-        <div class="col-sm-12 col-xs-12 conversation">
-          <div class="row message direct-chat-messages" id="room-<%= current_user.chat_room.id %>">
-            <%= render "messages" %>
-          </div>
-          <div class="row reply">
-            <% if !current_user.blocked %>
-              <%= form_tag("/messages", method: 'post', :remote => true, id: "send-message") do %>
-                <div class="col-sm-12 col-xs-12 reply-main">
-                  <textarea class="form-control" rows="1" name="message" id="messages" placeholder="Type Message ..." required></textarea>
-                  <button type="submit" class="btn btn-default hidden-xs" data-toggle="tooltip" title="Send Message" style="float: left; width: 15%;">Send</button>
-                  <button type="submit" class="btn btn-default hidden-sm hidden-lg hidden-md" data-toggle="tooltip" style="float: left; width: 15%; height: 40px;"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                </div>
-              <%end%>
-            <%else%>  
-              <strong>You are temporarily blocked for messaging!</strong>
-            <%end%>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section><!-- /.content -->
-  <div id="feedbackModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Feedback</h4>
-        </div>
-        <div class="modal-body">
-          <p>
-            <%= form_tag("/users/feedback", method: 'post') do %>
-              <div class="col-sm-12 col-xs-12">
-                <fieldset class="rating">
-                  <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                  <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                  <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                  <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                  <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                  <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                  <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                  <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                  <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                  <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
-                </fieldset>
-                <textarea class="form-control" style="margin-bottom: 10px;" rows="1" name="message" placeholder="Type Message ..." required></textarea>
-              </div>
-              <div class="col-sm-2 col-xs-2">
-                <button type="submit" class="btn btn-default">Send Feedback</button>
-              </div>
-            <%end%>
-          </p>
-        </div>
-        <div class="modal-footer">
-        </div>
-      </div>
 
-    </div>
+<div class="conversation">
+  <div class="conversation-container" id="room-<%= current_user.chat_room.id %>">
+    <%= render "messages" %>
   </div>
-  <div id="messagingScore" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Messaging Score Criteria</h4>
-        </div>
-        <div class="modal-body">
-          <p>
-            <ul>
-              <li>Rule 1</li>
-              <li>Rule 2</li>
-              <li>Rule 3</li>
-              <li>Rule 4</li>
-            </ul>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+  <% if !current_user.blocked %>
+    <%= form_tag("/messages", method: 'post', :remote => true, id: "send-message", class: "conversation-compose") do %>
+      <input class="input-msg" id="text-<%= current_user.chat_room.id %>" rows="1" name="message" placeholder="Type Message ..." required maxlength="200">
+      <div class="photo">
       </div>
-
-    </div>
-  </div>
-  <div id="loyaltyScore" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Loyalty Score Criteria</h4>
+      <button class="send">
+        <div class="circle">
+          <i class="fa  fa-paper-plane"></i>
         </div>
-        <div class="modal-body">
-          <p>
-            <ul>
-              <li>Rule 1</li>
-              <li>Rule 2</li>
-              <li>Rule 3</li>
-              <li>Rule 4</li>
-            </ul>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+      </button>
+    <% end %>
+  <%else%>  
+    <strong>You are temporarily blocked for messaging!</strong>
+  <%end%>
+</div>
+<div class="modal fade" id="replyModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Reply</h4>
       </div>
-
+      <div class="modal-body">
+        <div  class="reply-message reply-message-modal">
+          <span class="pull-left-width"></span>
+        </div>
+        <%= form_tag("/reply", method: 'post', :remote => true, class: "reply-form") do %>
+          <div class="form-group">
+            <input type="text" name="reply" id="reply" placeholder="Type Message ..." class="form-control" maxlength="200">
+            <input type="hidden" name="message_id" id="message_id" value="" >
+          </div>
+          <input type="submit" class="btn btn-info" value="Send">
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+      </div>
     </div>
+
   </div>
 </div>
+
+<div id="feedbackModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Feedback</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          <%= form_tag("/users/feedback", method: 'post') do %>
+            <div class="col-sm-12 col-xs-12">
+              <fieldset class="rating">
+                <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+              </fieldset>
+              <textarea class="form-control" style="margin-bottom: 10px;" rows="1" name="message" placeholder="Type Message ..." required></textarea>
+            </div>
+            <div class="col-sm-2 col-xs-2">
+              <button type="submit" class="btn btn-default">Send Feedback</button>
+            </div>
+          <%end%>
+        </p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="loading">Loading&#8230;</div>
   <script type="text/javascript">
     jQuery(function() {
-      return $('#messages').autocomplete({
-        source: "/messages/index"
+      return $('.input-msg').autocomplete({
+        source: "/messages/index",
+        open: function(event, ui) {
+            var autocomplete = $(".ui-autocomplete");
+            var oldTop = autocomplete.offset().top;
+            var newTop = oldTop - autocomplete.height() - $("#message_id").height() - 50;
+
+            autocomplete.css("top", newTop);
+        }
       });
     });
-  </script>
-  <script type="text/javascript">
     $(function(){
 
       $("#send-message").on("submit", function(){
@@ -153,75 +117,14 @@
       }
 
       $('[data-toggle="tooltip"]').tooltip();
-      // var arrow = $('.arrow-btn');
-      // var textarea = $('.chat-text textarea');
-      // arrow.on('click', function(){
-      //   var src = $(this).attr('src');
-      //   $(this).parent().parent().find('.chat-body').slideToggle('fast');
-      //   if(src == 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png'){
-      //     arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png');
-      //   }
-      //   else{
-      //     arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png');
-      //   }
-      // });
-      // textarea.keypress(function(event) {
-      //   var $this = $(this);
-      //   if(event.keyCode == 13){
-      //     $(this).parent().submit();
-      //     var msg = $this.val();
-      //     $this.val('');
-      //     setTimeout(function(){
-      //       refreshPartial();
-      //     }, 1000);
-      //   }
-      // });
+      $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
+      $('.conversation-compose').on('ajax:success', function(e, data, status, xhr){
+        $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
+        $(".input-msg").val('');
+      }).on('ajax:error',function(e, xhr, status, error){
+        $(".conversation-container").animate({ scrollTop: $(".conversation-container")[0].scrollHeight}, 1000);
+        $(".input-msg").val('');
+      });
     });
   </script>
-  <style type="text/css">
-    ul.ui-autocomplete {
-      position: absolute;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      border: solid 1px #999;
-      cursor: default;
-    }
-    ul.ui-autocomplete li {
-      background-color: #FFF;
-      border-top: solid 1px #DDD;
-      margin: 0;
-      padding: 5px;
-    }
-    ul.ui-autocomplete li div {
-      color: #000;
-      display: block;
-      padding: 3px;
-    }
-    ul.ui-autocomplete li div.ui-state-hover,
-    ul.ui-autocomplete li div.ui-state-active {
-      background-color: #FFFCB2;
-    }
-    .category-box{
-      height: auto;
-    }
-    .maxl{
-      float: left;
-      height: auto;
-      width: auto;
-      margin-bottom: 15px !important;
-      border-radius: 5px;
-    }
-    .maxl .inline {
-      margin: 5px;
-      font-weight: 400;
-      color: #333;
-    }
-    .padding-box{
-      padding:10px 0;
-    }
-    .mr-5{
-      margin-right:5px;
-    }
-  </style>
   

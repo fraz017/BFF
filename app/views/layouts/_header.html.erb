@@ -1,43 +1,51 @@
-<header class="main-header">
-  <!-- Logo -->
-  <a href="/" class="logo">
-    <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><%= image_tag "zineya-logo.png" %></span>
-    <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><%= image_tag "zineya-logo.png" %></span>
-  </a>
-  <!-- Header Navbar: style can be found in header.less -->
-  <nav class="navbar navbar-static-top" role="navigation">
-    <!-- Sidebar toggle button-->
-    <div class="navbar-custom-menu">
-      <ul class="nav navbar-nav">
-        <li class="dropdown notifications-menu pull-right">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-gears"></i>
-          </a>
-          <ul class="dropdown-menu settings-menu">
-            <li>
-              <!-- inner menu: contains the actual data -->
-              <ul class="menu">
-                <li class="text-center">
-                  <a href="/profile">
-                    <i class="fa text-blue fa-gear"></i> Profile
-                  </a>
-                </li>
-                <li class="text-center">
-                  <%= link_to('<i class="fa fa-sign-out text-yellow"></i> Logout'.html_safe , destroy_user_session_path, :method => :delete) %> 
-                </li>
-              </ul>
-            </li>
-          </ul>
+<div class="user-bar">
+  <div class="avatar">
+    <a href="/">
+      <img src="/assets/zineya-logo-84dd3eefec9290400defba8c287ceb0693eb7855a8a8c65f84df2328e885020a.png" alt="Avatar">
+    </a>
+  </div>
+  <div class="actions more">
+    <span class="dropdown">
+      <button class="drop-down-log dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fa fa-ellipsis-v"></i>
+      </button>
+      <ul class="dropdown-menu drop-down-log-menu">
+        <li class="text-center"><a href="/profile"><i class="fa text-blue fa-gear"></i>&nbsp; Profile</a></li>
+        <li class="text-center">
+          <%= link_to('<i class="fa fa-sign-out text-yellow"></i> Logout'.html_safe , destroy_user_session_path, :method => :delete) %>
         </li>
-        <li class="pull-right">
-          <a href="#" data-toggle="modal" data-target="#messagingScore">
-            Messaging Score (<%= current_user.messaging_score.to_i + current_user.loyalty_score.to_i %>)
-          </a>
-        </li>
-        <!-- Control Sidebar Toggle Button -->
       </ul>
+    </span>
+  </div>
+  <div class="actions attachment">
+    <a href="#" data-toggle="modal" data-target="#messagingScore">
+      Messaging Score (<%= current_user.messaging_score.to_i + current_user.loyalty_score.to_i %>)
+    </a>
+  </div>
+</div>
+<div id="messagingScore" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Messaging Score Criteria</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          <ul>
+            <li>Rule 1</li>
+            <li>Rule 2</li>
+            <li>Rule 3</li>
+            <li>Rule 4</li>
+          </ul>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
-  </nav>
-</header>
+
+  </div>
+</div>

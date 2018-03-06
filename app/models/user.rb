@@ -94,6 +94,11 @@ class User < ApplicationRecord
     self.save
   end
 
+  def minus_flag_point
+    self.flagged -= 1
+    self.save
+  end
+
   def self.from_omniauth(auth)
 	  where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
 	    user.email = auth.info.email

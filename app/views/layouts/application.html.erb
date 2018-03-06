@@ -11,14 +11,15 @@
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&key=AIzaSyB5ngnBJFz1SBjnhwmEbdR6egLpFTvbcrA"></script>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.21/themes/base/jquery-ui.css" />
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,700,300'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css'>
+    <link rel='stylesheet prefetch' href='https://rawgit.com/marvelapp/devices.css/master/assets/devices.min.css'>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'cable', 'data-turbolinks-track': 'reload' %>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js'></script>
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
-    <div class="wrapper">
-      <div id="header">
-        <%= render partial: "layouts/header" %>  
-      </div>
+  <body>
+    <div class="page">
       <% unless flash.empty? %>
         <script type="text/javascript">
           <% flash.each do |f| %>
@@ -27,16 +28,46 @@
           <% end %>
         </script>
       <% end %>
-      <%= yield %>
-      <footer class="main-footer">
-        <strong>Copyright &copy; 2016-2017</strong>
-      </footer>
+      <div class="">
+        <div class="screen">
+          <div class="screen-container">
+            <div class="status-bar hidden">
+              <div class="time hidden"></div>
+            </div>
+            <div class="chat">
+              <div class="chat-container">
+                <%= render partial: "layouts/header" %>
+                <%= yield %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <style type="text/css">
-      .main-footer,
-      .content-wrapper{
-        margin-left: 0px;
-      }
-    </style>
+    <div class="modal fade" id="startChat" data-backdrop="static" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Chat</h4>
+          </div>
+          <div class="modal-body">
+            <strong>Zineya wants to chat...</strong>
+            <div class="row">
+              <div class="col-md-6">
+                <a href="#" id="accept" class="btn btn-default">Accept</a>
+              </div>
+              <div class="col-md-6">
+                <a href="#" id="reject" class="btn btn-default">Reject</a>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </body>
 </html>
