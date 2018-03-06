@@ -1,43 +1,53 @@
 <div class="message sent">
-  <% if message.display %>
-    <strong class="auto-message"><u>I thought about the message you sent. Here's what i think. </u></strong>
-  <%end%>
-  <span class="pull-left-width"><%= message.content %></span>
-  <div id="replied<%= message.id %>">
-    <% if message.replies.where(:visible => true).present? %>
-      <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
-      <% if admin_reply.present? %>
-        <%  replies = Array.new
-            replies.push(admin_reply)
-            replies.push(message.top_three&.first(2)&.first)
-            replies.push(message.top_three&.first(2)&.last) 
-          %>      
-      <%else%>
-        <% 
-          replies = message.top_three 
-          replies = Array.new if replies.nil?
-        %>
-      <% end %>
-
-      <% replies.each do |msg| %>
-        <% if msg.present? && !msg&.sender&.admin? %>
-          <div class="message received">
+    <% if message.display %>
+        <strong class="auto-message">
+                <u>I thought about the message you sent. Here's what i think. </u>
+            </strong>
+        <% end %>
             <span class="pull-left-width">
-              <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>"><%= msg.content %></a>
-            </span>
-            <span class="metadata-1">
-              <%= link_to_toggle_like_message(msg, user, "reply") %>
-              <%= link_to_toggle_report_message(msg, user, "reply") %>
-            </span>
+                    <%= message.content %>
+                </span>
+            <div id="replied<%= message.id %>">
+                <% if message.replies.where(:visible => true).present? %>
+                    <% admin_reply = message.replies.select{|s| s.sender.admin? }.first %>
+                        <% if admin_reply.present? %>
+                            <%  replies = Array.new
+                        replies.push(admin_reply)
+                        replies.push(message.top_three&.first(2)&.first)
+                        replies.push(message.top_three&.first(2)&.last) 
+                                            %>
+                                <%else%>
+                                    <% 
+                        replies = message.top_three 
+                        replies = Array.new if replies.nil?
+                    %>
+                                        <% end %>
+
+                                            <% replies.uniq.each do |msg| %>
+                                                <% if msg.present? %>
+                                                    <div class="message received">
+                                                        <span class="pull-left-width">
+                                                                <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat" id="<%= msg.id %>">
+                                                                    <%= msg.content %>
+                                                                </a>
+                                                            </span>
+                                                        <span class="metadata-1">
+                                                                <%= link_to_toggle_like_message(msg, user, "reply") %>
+                                                                    <%= link_to_toggle_report_message(msg, user, "reply") %>
+                                                            </span>
+                                                        <span class="metadata">
+                                                                <span class="time">
+                                                                    <%= msg.created_at.strftime(" %l:%M %P ") %>
+                                                                </span>
+                                                        </span>
+                                                    </div>
+                                                    <% end %>
+                                                        <% end %>
+                                                            <% end %>
+            </div>
             <span class="metadata">
-                <span class="time"><%= msg.created_at.strftime(" %l:%M %P ") %></span>
+                    <span class="time">
+                        <%= message.created_at.strftime(" %l:%M %P ") %>
+                    </span>
             </span>
-          </div>
-        <% end %>  
-      <% end %> 
-    <% end %>
-  </div>
-  <span class="metadata">
-    <span class="time"><%= message.created_at.strftime(" %l:%M %P ") %></span>
-  </span>
 </div>
