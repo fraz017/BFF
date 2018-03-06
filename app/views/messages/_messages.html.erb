@@ -3,9 +3,9 @@
   <% get_messages.group_by{|x| x.created_at.strftime("%A %d %B, %Y")}.each do |key, messages| %>
     <div class="conservation-time"><%= key %></div>
     <% messages.each do |message| %>
-      
+      <div id="new_message<%= message.id %>">
         <%= render partial: "message", :locals => { message: message , :user => current_user} %>
-        
+      </div>
     <% end %> 
   <%end%>
 <% end %>

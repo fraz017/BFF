@@ -4,10 +4,13 @@ App.messages = App.cable.subscriptions.create('MessagesChannel', {
     $("#replyModal").modal("hide");
     console.log(data);
     if (data.reply == true){
-      return $("#room-"+data.id).html(data.message);
+      return $("#room-"+data.id+ " #new_message"+data.message_id).html(data.message);
     }
     else{      
-      return $("#room-"+data.id).append(data.message);
+      var div = '<div id="new_message'+data.message_id+'">'+
+                data.message +
+                '</div>'
+      return $("#room-"+data.id).append(div);
     }
 
   }

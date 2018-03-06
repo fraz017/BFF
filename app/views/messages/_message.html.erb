@@ -1,4 +1,4 @@
-<div id="new_message<%= message.id %>">
+
   <% if message.sender_id == user.id %>
     <%= render :partial => "messages/sender", locals: { message: message, user: user } %>
   <% else %>
@@ -19,7 +19,7 @@
       <%= render :partial => "messages/receiver", locals: { message: message, user: user } %>
     <% end %>  
   <% end %>
-</div>
+
 <script type="text/javascript">
   $(".post-reply").click(function(){
     $(".reply-message-modal span").html($("#received"+$(this).attr("id")+" span").html());
