@@ -16,6 +16,20 @@ class RoomsController < ApplicationController
     @room.save
   end
 
+  def admin_create
+    binding.pry
+    @room = Room.find_or_create_by(room_params)
+    @room.user = current_user
+    msg = Message.find_by(id: params[:message_id])
+    @room.chat_with = msg.sender.id
+    msg.sender.add_messaging_score(30)
+    @user = msg.sender
+    @room.save
+    respond_to do |format|
+      format.js { render "rooms/create.js.erb" }
+    end
+  end
+
   def index
     @room = Room.new
     @rooms = Room.all
@@ -28,8 +42,7 @@ class RoomsController < ApplicationController
 
   private
 
-    def room_params
-      params.require(:room).permit(:title)
-    end
-
+  def room_params
+    params.require(:room).permit(:title)
+  end
 end
