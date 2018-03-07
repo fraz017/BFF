@@ -21,7 +21,7 @@ class SingleMessagesController < ApplicationController
 
   def personal_chats
     @room = Room.find_by(id: params[:id])
-    if (@room.user == current_user || (@room.chat_with == current_user.id && @room.accepted))
+    if @room.present? && (@room.user == current_user || (@room.chat_with == current_user.id && @room.accepted))
        @room
     else
       redirect_to root_url  

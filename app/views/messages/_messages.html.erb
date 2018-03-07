@@ -9,20 +9,3 @@
     <% end %> 
   <%end%>
 <% end %>
-<script type="text/javascript">
-  $(".start-chat").click(function(){
-    var message_id = $(this).attr("id");
-    title = message_id
-    $.ajax({
-      method: "POST",
-      url: "/rooms",
-      data: { room:{ title: title}, message_id: message_id},
-      dataType: "script"
-    })
-    .done(function( msg ) {
-      setTimeout(function(){
-        refreshPartial();
-      }, 1000);
-    });
-  });
-</script>
