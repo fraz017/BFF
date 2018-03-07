@@ -19,10 +19,15 @@ class RoomsController < ApplicationController
   def admin_create
     @room = Room.find_or_create_by(room_params)
     @room.user = current_user
-    msg = Message.find_by(id: params[:message_id])
-    @room.chat_with = msg.sender.id
-    msg.sender.add_messaging_score(30)
-    @user = msg.sender
+    if params[:user_id].present?
+      @user = User.find_by(id: params[:user_id]) 
+      @room.chat_with = @user.id
+    else
+      msg = Message.find_by(id: params[:message_id])
+      @room.chat_with = msg.sender.id
+      msg.sender.add_messaging_score(30)
+      @user = msg.sender
+    end
     @room.save
     respond_to do |format|
       format.js { render "rooms/create.js.erb" }

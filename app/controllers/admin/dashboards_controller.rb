@@ -3,7 +3,7 @@ class Admin::DashboardsController < Admin::AppController
   # layout "application", only: [:messages]
   def dashboard
     @search = UserSearch.new(params)
-    @users = @search.result.where.not(:role_cd => 0).paginate(page: params[:page], per_page: 5)
+    @users = @search.result.where.not(:role_cd => 0).paginate(page: params[:page], per_page: 25)
   end
 
   def logs

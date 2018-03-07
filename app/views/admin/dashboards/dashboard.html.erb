@@ -219,6 +219,7 @@
                   <td>
                     <%= link_to "View Profile", "/admin/profile/#{user.id}", {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#profileModal', :class => "btn btn-sm btn-primary custom-primary"} %>
                     <%= link_to "Change Role", "/admin/change_role/#{user.id}", {:remote => true, :class => "btn btn-sm btn-primary custom-primary"} %>
+                    <a href="javascipt:void(0)" data-toggle="tooltip" title="Start Conversation ?" class="start-chat btn btn-default" id="user_<%= user.id %>">Start Chat</a>
                   </td>
                   <td>
                     <%= form_tag(admin_block_unblock_path, method: "post") do %>
@@ -300,5 +301,23 @@
 </style>
 
 <script type="text/javascript">
-  $(".box-widget").animate({ scrollTop: $(".box-widget")[0].scrollHeight}, 1000);
+  $(".start-chat").click(function() {
+    var message_id = $(this).attr("id");
+    title = message_id
+    $.ajax({
+      method: "POST",
+      url: "/admin/create.js",
+      data: jQuery.param({
+        room: {
+          title: title
+        },
+        user_id: message_id.match(/\d+/)
+      })
+    })
+    .done(function(msg) {
+      setTimeout(function() {
+        refreshPartial();
+      }, 1000);
+    });
+  });
 </script>
