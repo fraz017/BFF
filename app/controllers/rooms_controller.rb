@@ -17,7 +17,6 @@ class RoomsController < ApplicationController
   end
 
   def admin_create
-    binding.pry
     @room = Room.find_or_create_by(room_params)
     @room.user = current_user
     msg = Message.find_by(id: params[:message_id])
