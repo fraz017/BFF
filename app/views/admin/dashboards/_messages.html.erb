@@ -6,7 +6,7 @@
         <% if message.sender.role_cd == 0 %>
             <div class="message received">
                 <span class="pull-left-width">
-          <span>Hello, <%= user.email %></span>
+          <span>Hello, <%= @user.email %></span>
                 <br>
                 <%= message.content %>
                     <br/>

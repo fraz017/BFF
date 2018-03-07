@@ -10,7 +10,8 @@ App.messages = App.cable.subscriptions.create('MessagesChannel', {
       var div = '<div id="new_message'+data.message_id+'">'+
                 data.message +
                 '</div>'
-      return $("#room-"+data.id).append(div);
+      $("#room-"+data.id).append(div);
+      return $(".conversation-container .admin").append(div);
     }
 
   }
