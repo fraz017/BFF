@@ -1,5 +1,20 @@
 <div class="conversation">
-  <div class="conversation-container admin">
-    <%= render "messages" %>
-  </div>
+    <div class="conversation-container admin">
+        <%= render "messages" %>
+    </div>
 </div>
+<style>
+    .admin .metadata-1 {
+        width: auto;
+    }
+    
+    .admin .cat-right {
+        margin-left: 5px;
+    }
+    
+    @media (max-width: 768px) {
+        .conversation {
+            height: calc(100vh - 55px);
+        }
+    }
+</style>
