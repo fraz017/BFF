@@ -20,7 +20,7 @@ class RoomsController < ApplicationController
     @room = Room.find_or_create_by(room_params)
     @room.user = current_user
     if params[:user_id].present?
-      @user = User.find_by(id: params[:user_id]) 
+      @user = User.find_by(id: params[:user_id])
       @room.chat_with = @user.id
     else
       msg = Message.find_by(id: params[:message_id])

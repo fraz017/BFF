@@ -705,10 +705,10 @@ body {
         padding: 0 15px;
     }
     .conversation {
-        height: calc(100vh - 115px);
+        height: calc(100vh - 55px);
     }
     .conversation .conversation-container {
-        height: calc(100vh - 175px);
+        height: calc(100vh - 115px);
     }
     .conversation-compose {
         margin-bottom: 0;
