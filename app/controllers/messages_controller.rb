@@ -5,6 +5,7 @@ class MessagesController < ApplicationController
   before_action :authenticate_user!
   before_action :check_profile, :if => proc { |c| !request.xhr? }
 
+  # suggestions for messages
   def index
     @messages = Message.where("content ilike ? and visible = ?", "%#{params[:term]}%", true)
     @messages = @messages.where("content ilike '%?%'")
@@ -14,6 +15,9 @@ class MessagesController < ApplicationController
     end
   end
 
+  # Post a Message in Chat
+  # Update Score
+  # Activate Replies Job
   def post_message
     params.permit!
     @message = Message.create(content: params[:message], sender_id: current_user.id)
@@ -42,6 +46,7 @@ class MessagesController < ApplicationController
     end
   end
 
+  # Post a reply on message
   def post_reply
     params.permit!
     @message = Message.find(params[:message_id])
@@ -58,19 +63,7 @@ class MessagesController < ApplicationController
     MessageBroadcastJob.perform_now(@message.sender, @message, @message.sender.chat_room.id, true)
   end
 
-  def save_category
-    if params[:message_id].present? && params[:category].present?
-      category = Category.new
-      category.message_id = params[:message_id]
-      category.name = params[:category]
-      category.save
-      result = true
-    else
-      result = false
-    end
-    render json: {success: true}
-  end
-
+  # Report / Unreport Message or Reply
   def report
     if params[:message_id].present?
       @reported = true
@@ -109,6 +102,7 @@ class MessagesController < ApplicationController
     end
   end
 
+  # Like / Unlike Message or Reply
   def like
     if params[:message_id].present?
       message = Message.find_by_id params[:message_id] if params[:type].blank?

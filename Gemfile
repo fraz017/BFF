@@ -35,18 +35,18 @@ gem 'forty_facets'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'delayed_job_active_record'
-gem 'devise'
-gem 'omniauth'
-gem 'omniauth-facebook'
-gem 'roo'
+gem 'devise' # For authentication
+gem 'omniauth' 
+gem 'omniauth-facebook' # for facebook authentication
+gem 'roo' # abuse filter file reader
 gem "iconv", "~> 1.0.3"
 gem 'therubyracer', git: 'https://github.com/cowboyd/therubyracer.git'
 
-gem 'fuzzy_match', '~> 2.1'
-
+gem 'fuzzy_match', '~> 2.1' # to match similar words
+gem 'rails-erd', require: false, group: :development
 gem 'simple_enum'
 
-gem 'will_paginate', '~> 3.1.0'
+gem 'will_paginate', '~> 3.1.0' # for pagination 
 gem 'will_paginate-bootstrap'
 gem 'redis', "~> 3.0" 
 gem 'em-hiredis'
@@ -64,7 +64,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
-
+  # for deployment
   gem 'capistrano', '~> 3.7', '>= 3.7.1'
   gem 'capistrano-rails', '~> 1.2'
   gem 'capistrano-passenger', '~> 0.2.0'

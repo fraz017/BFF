@@ -6,6 +6,7 @@ class RoomsController < ApplicationController
     @room = Room.new
   end
 
+  # Create personal chat room
   def create
     @room = Room.find_or_create_by(room_params)
     @room.user = current_user
@@ -16,6 +17,7 @@ class RoomsController < ApplicationController
     @room.save
   end
 
+  # Create personal chat room with admin
   def admin_create
     @room = Room.find_or_create_by(room_params)
     @room.user = current_user

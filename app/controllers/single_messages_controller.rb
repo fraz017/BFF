@@ -1,6 +1,8 @@
 class SingleMessagesController < ApplicationController
   before_action :authenticate_user!
   # before_action :authenticate_admin!
+
+  # create personal chat message
   def create
   	message = SingleMessage.new(message_params)
     message.user = current_user
@@ -19,6 +21,7 @@ class SingleMessagesController < ApplicationController
     end
   end
 
+  # opens personal chat tab for zineya
   def personal_chats
     @room = Room.find_by(id: params[:id])
     if @room.present? && (@room.user == current_user || (@room.chat_with == current_user.id && @room.accepted))
@@ -28,6 +31,7 @@ class SingleMessagesController < ApplicationController
     end
   end
 
+  # Accepts zineya perosnal chat request
   def accept
     @room = Room.find_by(id: params[:id])
     @room.accepted = true
@@ -35,6 +39,7 @@ class SingleMessagesController < ApplicationController
     redirect_to "/personal_chats/#{@room.id}"
   end
 
+  # Rejects zineya perosnal chat request
   def reject
     @room = Room.find_by(id: params[:id])
     @room.accepted = false

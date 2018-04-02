@@ -1,10 +1,12 @@
 class UsersController < ApplicationController
 	before_action :authenticate_user!
 
+  # View profile
   def profile
   	@user = current_user
   end
 
+  # update profile
   def update
   	@user = User.find(params[:id])
   	@user.complete_profile = true
@@ -23,6 +25,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # submit feedback
   def feedback
     if params[:rating].present? && params[:message].present?
       feed = Feedback.new

@@ -1,7 +1,7 @@
 class Room < ApplicationRecord
   belongs_to :user
   has_many :single_messages, dependent: :destroy
-  has_many :users, through: :messages
+  # has_many :users, through: :messages
   validates :title, presence: true, uniqueness: true, case_sensitive: false
   before_validation :sanitize, :set_name
 
