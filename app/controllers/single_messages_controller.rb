@@ -13,7 +13,7 @@ class SingleMessagesController < ApplicationController
       elsif message&.room&.single_messages&.count == 1
         ActionCable.server.broadcast "redirects_#{message.opposite_user(current_user)}", room_id: message.room.id
       elsif !message.room.accepted
-        flash = "Zineya is busy at the moment" 
+        flash = "3wrongs is busy at the moment" 
       end
       ActionCable.server.broadcast "single_messages_#{current_user.id}", message: render_sender(message), room_id: message.room.id, flash: flash
       ActionCable.server.broadcast "single_messages_#{message.opposite_user(current_user)}", message: render_receiver(message), room_id: message.room.id
@@ -21,7 +21,7 @@ class SingleMessagesController < ApplicationController
     end
   end
 
-  # opens personal chat tab for zineya
+  # opens personal chat tab for 3wrongs
   def personal_chats
     @room = Room.find_by(id: params[:id])
     if @room.present? && (@room.user == current_user || (@room.chat_with == current_user.id && @room.accepted))
@@ -31,7 +31,7 @@ class SingleMessagesController < ApplicationController
     end
   end
 
-  # Accepts zineya perosnal chat request
+  # Accepts 3wrongs perosnal chat request
   def accept
     @room = Room.find_by(id: params[:id])
     @room.accepted = true
@@ -39,7 +39,7 @@ class SingleMessagesController < ApplicationController
     redirect_to "/personal_chats/#{@room.id}"
   end
 
-  # Rejects zineya perosnal chat request
+  # Rejects 3wrongs perosnal chat request
   def reject
     @room = Room.find_by(id: params[:id])
     @room.accepted = false

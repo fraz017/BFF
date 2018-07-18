@@ -77,7 +77,7 @@ class Admin::DashboardsController < Admin::AppController
   def broadcast_message
   end
 
-  # broadcast message to zineya users
+  # broadcast message to 3wrongs users
   def send_message
     @message = Message.create(content: params[:message], sender_id: current_user.id)
     User.all.each do |user|

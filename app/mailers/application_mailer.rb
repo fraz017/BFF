@@ -4,6 +4,6 @@ class ApplicationMailer < ActionMailer::Base
 
   def send_feedback(feedback)
   	@feedback = feedback
-    mail(:to => "fraz.ahsan17@gmail.com", :subject => "Zineya Feedback")
+    mail(:to => "bilal@zineya.com", :subject => "3wrongs Feedback")
   end
 end

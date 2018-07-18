@@ -1,9 +1,9 @@
 development:
-  app_id: '402242343464282'
-  app_secret: '069cd90c3288670c99104d2e18df39c6'
+  app_id: '270593390367436'
+  app_secret: '4039f8bc030756e1f7cae6268d4d637b'
   callback_url: 'http://localhost:3000/auth/facebook/callback'
 
 production:
-  app_id: '402242343464282'
-  app_secret: '069cd90c3288670c99104d2e18df39c6'
-  callback_url: 'http://ec2-35-163-146-62.us-west-2.compute.amazonaws.com/auth/facebook/callback'  
+  app_id: '270593390367436'
+  app_secret: '4039f8bc030756e1f7cae6268d4d637b'
+  callback_url: 'https://app.3wrongs.com/auth/facebook/callback'  

@@ -1,18 +1,18 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.10.0"
 
-set :application, "zineya"
+set :application, "3wrongs"
 set :repo_url, "https://github.com/fraz017/BFF"
 
-set :branch, 'master'
-set :user,            'ubuntu'
+set :branch, '3wrongs'
+set :user, 'ubuntu'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, "/var/www/my_app_name"
-set :deploy_to, "/www/zineya"
+set :deploy_to, "/www/3wrongs"
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
