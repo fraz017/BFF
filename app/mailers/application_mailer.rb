@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'no-reply@zineya.com'
+  default from: 'Zineya<contact@elanist.com>'
   layout 'mailer'
 
   def send_feedback(feedback)

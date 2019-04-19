@@ -88,11 +88,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :authentication => :login,
-    :address => "host36.registrar-servers.com",
+    :address => "host66.registrar-servers.com",
     :port => 465,
-    :domain => "zineya.com",
-    :user_name => "app@zineya.com",
-    :password => "imgreat123",
+    :domain => "elanist.com",
+    :user_name => "contact@elanist.com",
+    :password => "ferrari100",
     :ssl => true
   }
 end
