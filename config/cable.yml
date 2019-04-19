@@ -5,5 +5,4 @@ test:
   adapter: async
 
 production:
-  adapter: redis
-  url: redis://zineya.twiwlx.0001.usw2.cache.amazonaws.com:6379
+  adapter: async
